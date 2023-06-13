@@ -15,7 +15,6 @@ import su.puzzle.pay.plasmo_api.PlasmoApi;
 import su.puzzle.pay.Utils;
 
 import java.io.*;
-import java.net.*;
 
 public class PaymentScreen extends BaseUIModelScreen<FlowLayout> {
         private String toCard;
