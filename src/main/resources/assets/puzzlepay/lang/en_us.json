@@ -4,11 +4,11 @@
     "gui.puzzlepay.text.amount": "Diamonds amount: §b%d§r",
     "gui.puzzlepay.text.comment": "Transfer comment: §6%s§r",
     "gui.puzzlepay.button.transfer": "Transfer",
-    "gui.puzzlepay.button.ok": "Ok",
-    "gui.puzzlepay.button.cancel": "Cancel",
+    "gui.puzzlepay.button.ok": "✔ Ok",
+    "gui.puzzlepay.button.cancel": "❌ Cancel",
     "gui.puzzlepay.button.set_token": "Set Plasmo RP token",
-    "gui.puzzlepay.text.oauth2.link": "Authentication in Puzzle Pay",
-    "gui.puzzlepay.text.oauth2.title": "To start authentication, click on this text and follow the link",
+    "gui.puzzlepay.text.oauth2.link": "← Link",
+    "gui.puzzlepay.text.oauth2.description": "To start authentication, click on the link button",
     "gui.puzzlepay.placeholder.from_card": "From",
     "gui.puzzlepay.placeholder.to_card": "To",
     "gui.puzzlepay.placeholder.amount": "Amount",
@@ -19,5 +19,7 @@
     "gui.puzzlepay.text.successful_transfer": "Successfully transferred from \"%s\" to \"%s\" %d diamonds",
     "gui.puzzlepay.text.error_amount_must_be_integer": "Field \"Amount\" must be an integer number",
     "category.puzzlepay.puzzlepay": "Puzzle Pay buttons",
+    "gui.puzzlepay.text.oauth2.title": "Plasmo RP authorization",
+    "gui.puzzlepay.text.oauth2.wait_title": "Waiting for authorization trough browser...",
     "key.puzzlepay.open_transfer_gui": "Open transfer screen"
 }

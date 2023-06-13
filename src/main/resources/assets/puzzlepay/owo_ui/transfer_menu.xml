@@ -115,8 +115,8 @@
                     </surface>
 
                     <sizing>
-                        <horizontal method="fill">
-                            25
+                        <horizontal method="fixed">
+                            300
                         </horizontal>
                     </sizing>
 
