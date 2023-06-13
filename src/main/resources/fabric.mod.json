@@ -5,14 +5,15 @@
   "name": "Puzzle Pay",
   "description": "Mod for payments on Plasmo RP server.",
   "authors": [
-    "MeiNanziiii"
+    "MeiNanziiii",
+    "kechunez"
   ],
   "contact": {
     "homepage": "https://github.com/Puzzle/PuzzlePay",
     "sources": "https://github.com/Puzzle/PuzzlePay"
   },
   "license": "MIT License",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/puzzlepay/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -31,8 +32,5 @@
     "fabric-key-binding-api-v1": "*",
     "minecraft": "~1.20",
     "java": ">=17"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }

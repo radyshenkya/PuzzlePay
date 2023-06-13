@@ -33,7 +33,7 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
         rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
 
         MutableText text = Text.literal("gui.puzzlepay.text.oauth2.link");
-        text.setStyle(text.getStyle().withFormatting(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://rp.plo.su/oauth2?client_id=dZkmuEPjmuX5pkvM3Sz2FLXKCS34GaF4KFnfPsE5QUWjEjbS&redirect_uri=http://localhost:6969/auth&response_type=token&scope=bank%3Abalance%20bank%3Abanker%20bank%3Abanker%3Acard%20bank%3Abill%20bank%3Ahistory%20bank%3Amanage%20bank%3Asearch%20bank%3Atransfer")));
+        text.setStyle(text.getStyle().withFormatting(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://puzzlemc.site/pay/oauth2")));
 
         rootComponent.child(
                 Containers.verticalFlow(Sizing.content(), Sizing.content())
