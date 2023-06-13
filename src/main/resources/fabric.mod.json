@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "puzzlepay",
+  "version": "${version}",
+  "name": "Puzzle Pay",
+  "description": "Mod for payments on Plasmo RP server.",
+  "authors": [
+    "MeiNanziiii"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Puzzle/PuzzlePay",
+    "sources": "https://github.com/Puzzle/PuzzlePay"
+  },
+  "license": "MIT License",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "su.puzzle.pay.PuzzlePayMod"
+    ],
+    "client": [
+      "su.puzzle.pay.PuzzlePayClient"
+    ]
+  },
+  "mixins": [
+    "puzzlepay.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "fabric-key-binding-api-v1": "*",
+    "minecraft": "~1.20",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

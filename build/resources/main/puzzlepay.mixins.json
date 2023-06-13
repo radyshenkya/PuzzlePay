@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "su.puzzle.pay.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "PuzzlePayMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

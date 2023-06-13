@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "su/puzzle/pay/mixin/PuzzlePayMixin": {
+      "init()V": "Lnet/minecraft/class_442;method_25426()V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "su/puzzle/pay/mixin/PuzzlePayMixin": {
+        "init()V": "Lnet/minecraft/class_442;method_25426()V"
+      }
+    }
+  }
+}
