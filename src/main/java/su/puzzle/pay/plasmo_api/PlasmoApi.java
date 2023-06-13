@@ -46,7 +46,7 @@ public class PlasmoApi {
         requestJsonBody.addProperty("amount", amount);
         requestJsonBody.addProperty("message", message);
 
-        // Если перевод не удался то выпадет ApiCallException, поэтому ничего не делаем
+        // Если перевод не удался, то выпадет ApiCallException, поэтому ничего не делаем
         request("/bank/transfer", "POST", requestJsonBody);
     }
 
