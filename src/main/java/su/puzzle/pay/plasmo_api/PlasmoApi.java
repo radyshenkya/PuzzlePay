@@ -26,7 +26,14 @@ public class PlasmoApi {
         }
     }
 
+    public static JsonObject getUser() throws ApiCallException {
+        return request("/user", "GET");
+    }
+
     public static void newTransfer(String from, String to, int amount, String message) throws ApiCallException {
+        // Вот эта штука при ошибке возвращает Unauthorized (bad token), если ее убрать то при 401 ответе будет писаться просто Unauthorized
+        PuzzlePayMod.LOGGER.info(getUser().toString());
+
         // Plasmo Error: Status-code: 400. Error message: Мать хокаге перевернулась в
         // гробу и эта проверка добавилась автоматически
         if (Objects.equals(from, to))
@@ -65,11 +72,13 @@ public class PlasmoApi {
                 connection.setRequestProperty("Authorization", String.format("Bearer %s", PlasmoApi.token));
             }
 
-            try (OutputStream outStream = connection.getOutputStream()) {
-                outStream.write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
-            } catch (Exception e) {
-                PuzzlePayMod.LOGGER.warn(e.getMessage());
-                throw new ApiCallException("Error while sending request", e);
+            if (requestBody != null) {
+                try (OutputStream outStream = connection.getOutputStream()) {
+                    outStream.write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
+                } catch (Exception e) {
+                    PuzzlePayMod.LOGGER.warn(e.getMessage());
+                    throw new ApiCallException("Error while sending request", e);
+                }
             }
 
             // Получить ответ от connection'а
@@ -94,5 +103,9 @@ public class PlasmoApi {
             PuzzlePayMod.LOGGER.warn(e.getMessage());
             throw new ApiCallException(e.getMessage(), e);
         }
+    }
+
+    public static JsonObject request(String endpoint, String method) throws ApiCallException {
+        return request(endpoint, method, null);
     }
 }
