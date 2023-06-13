@@ -32,8 +32,8 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
         rootComponent.horizontalAlignment(HorizontalAlignment.CENTER);
         rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
 
-        MutableText text = Text.literal("gui.puzzlepay.text.oauth2.link");
-        text.setStyle(text.getStyle().withFormatting(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://puzzlemc.site/pay/oauth2")));
+        MutableText text = Text.translatable("gui.puzzlepay.text.oauth2.link");
+        text.setStyle(text.getStyle().withFormatting(Formatting.BLUE).withUnderline(true).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://puzzlemc.site/pay/oauth2")));
 
         rootComponent.child(
                 Containers.verticalFlow(Sizing.content(), Sizing.content())
@@ -41,20 +41,17 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
                                 Components.label(Text.translatable("gui.puzzlepay.text.oauth2.title"))
                         )
                         .child(
-                                Components.label(Text.translatable("gui.puzzlepay.text.oauth2.description"))
+                                Components.label(text)
                                         .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                        .margins(Insets.top(10))
+                                        .margins(Insets.top(5))
                                         .horizontalSizing(Sizing.fill(100))
                         )
                         .child(
-                                Components.label(text)
-                                        .margins(Insets.top(5))
-                        )
-                        .child(
-                                Components.button(Text.translatable("gui.puzzlepay.text.oauth2.button.close"), button -> {
+                                Components.button(Text.translatable("gui.puzzlepay.button.cancel"), button -> {
                                     server.stop();
                                     MinecraftClient.getInstance().setScreen(null);
                                 })
+                                        .margins(Insets.top(5))
                         )
                         .verticalAlignment(VerticalAlignment.CENTER)
                         .horizontalAlignment(HorizontalAlignment.CENTER)
