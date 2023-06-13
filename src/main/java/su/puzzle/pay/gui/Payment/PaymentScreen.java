@@ -87,7 +87,6 @@ public class PaymentScreen extends BaseUIModelScreen<FlowLayout> {
                 rootComponent.childById(ButtonComponent.class, "set-token-button").onPress(button -> {
                         try {
                                 AuthHttpServer server = new AuthHttpServer();
-                                server.start();
                                 MinecraftClient.getInstance().setScreen(new Oauth2Screen(server));
                         } catch (IOException e) {
                                 throw new RuntimeException(e);

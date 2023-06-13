@@ -1,0 +1,84 @@
+<owo-ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/wisp-forest/owo-lib/1.20/owo-ui.xsd">
+<components>
+    <flow-layout direction="vertical">
+        <children>
+            <flow-layout direction="vertical">
+                <children>
+                    <label>
+                        <text translate="true">gui.puzzlepay.text.oauth2.title</text>
+                        <sizing>
+                            <horizontal method="content"></horizontal>
+                        </sizing>
+                        <margins>
+                            <bottom>10</bottom>
+                        </margins>
+                    </label>
+
+                    <label>
+                        <text translate="true">gui.puzzlepay.text.oauth2.description</text>
+                        <sizing>
+                            <horizontal method="content"></horizontal>
+                        </sizing>
+                        <color>gray</color>
+                        <margins>
+                            <bottom>10</bottom>
+                        </margins>
+                    </label>
+
+                    <flow-layout direction="horizontal">
+                        <children>
+                            <button id="oauth-button">
+                                <sizing>
+                                    <horizontal method="fixed">120</horizontal>
+                                </sizing>
+                                <text translate="true">gui.puzzlepay.text.oauth2.link</text>
+                            </button>
+                            <box>
+                                <color>#FF696969</color>
+                                <sizing>
+                                    <vertical method="fixed">14</vertical>
+                                    <horizontal method="fixed">1</horizontal>
+                                </sizing>
+                                <margins>
+                                    <horizontal>5</horizontal>
+                                </margins>
+                            </box>
+                            <button id="cancel-button">
+                                <sizing>
+                                    <horizontal method="fixed">120</horizontal>
+                                </sizing>
+                                <text translate="true">gui.puzzlepay.button.cancel</text>
+                            </button>
+                        </children>
+                        <sizing>
+                            <horizontal method="content"></horizontal>
+                        </sizing>
+
+                        <vertical-alignment>center</vertical-alignment>
+                        <horizontal-alignment>center</horizontal-alignment>
+                    </flow-layout>
+                </children>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+
+                <padding>
+                    <all>15</all>
+                </padding>
+
+                <surface>
+                    <panel dark="true"/>
+                </surface>
+            </flow-layout>
+        </children>
+
+        <vertical-alignment>center</vertical-alignment>
+        <horizontal-alignment>center</horizontal-alignment>
+
+        <surface>
+            <vanilla-translucent/>
+        </surface>
+    </flow-layout>
+</components>
+</owo-ui>

@@ -2,59 +2,37 @@ package su.puzzle.pay.gui.Oauth2;
 
 import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
-import io.wispforest.owo.ui.container.*;
-import io.wispforest.owo.ui.core.*;
+import io.wispforest.owo.ui.container.FlowLayout;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
 import net.minecraft.util.*;
-import org.jetbrains.annotations.*;
+import su.puzzle.pay.PuzzlePayMod;
+import su.puzzle.pay.gui.Message.MessageScreen;
 
-public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
+public class Oauth2Screen extends BaseUIModelScreen<FlowLayout> {
     public AuthHttpServer server;
 
-    @Override
-    public boolean shouldCloseOnEsc() {
-        return false;
-    }
-
     public Oauth2Screen(AuthHttpServer server) {
+        super(FlowLayout.class, DataSource.asset(new Identifier("puzzlepay:oauth")));
         this.server = server;
     }
 
     @Override
-    protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
-        return OwoUIAdapter.create(this, Containers::verticalFlow);
-    }
-
-    @Override
     protected void build(FlowLayout rootComponent) {
-        rootComponent.verticalAlignment(VerticalAlignment.CENTER);
-        rootComponent.horizontalAlignment(HorizontalAlignment.CENTER);
-        rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
+        rootComponent.childById(ButtonComponent.class, "oauth-button").onPress(button -> {
+            try {
+                Util.getOperatingSystem().open("https://puzzlemc.site/pay/oauth2");
+                server.start();
+           } catch (Exception e) {
+                e.printStackTrace();
+                PuzzlePayMod.LOGGER.error("Cannot open browser! Error: " + e.getMessage());
+                MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("gui.puzzlepay.text.error_message_name"), Text.literal("Cannot open browser!")));
+            }
+        });
 
-        MutableText text = Text.translatable("gui.puzzlepay.text.oauth2.link");
-        text.setStyle(text.getStyle().withFormatting(Formatting.BLUE).withUnderline(true).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://puzzlemc.site/pay/oauth2")));
-
-        rootComponent.child(
-                Containers.verticalFlow(Sizing.content(), Sizing.content())
-                        .child(
-                                Components.label(Text.translatable("gui.puzzlepay.text.oauth2.title"))
-                        )
-                        .child(
-                                Components.label(text)
-                                        .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                        .margins(Insets.top(5))
-                                        .horizontalSizing(Sizing.fill(100))
-                        )
-                        .child(
-                                Components.button(Text.translatable("gui.puzzlepay.button.cancel"), button -> {
-                                    server.stop();
-                                    MinecraftClient.getInstance().setScreen(null);
-                                })
-                                        .margins(Insets.top(5))
-                        )
-                        .verticalAlignment(VerticalAlignment.CENTER)
-                        .horizontalAlignment(HorizontalAlignment.CENTER)
-        );
+        rootComponent.childById(ButtonComponent.class, "cancel-button").onPress(button -> {
+            server.stop();
+            MinecraftClient.getInstance().setScreen(null);
+        });
     }
 }
