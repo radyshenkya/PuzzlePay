@@ -65,12 +65,8 @@ public class PlasmoApi {
             connection.setDoOutput(true);
             connection.setDoInput(true);
 
-            if (method != "GET") {
-                assertTokenNotNull();
-
-                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-                connection.setRequestProperty("Authorization", String.format("Bearer %s", PlasmoApi.token));
-            }
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            connection.setRequestProperty("Authorization", String.format("Bearer %s", PlasmoApi.token));
 
             if (requestBody != null) {
                 try (OutputStream outStream = connection.getOutputStream()) {
