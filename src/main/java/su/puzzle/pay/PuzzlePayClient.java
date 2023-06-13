@@ -13,17 +13,27 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
+import su.puzzle.pay.gui.Oauth2.*;
 import su.puzzle.pay.gui.Payment.PaymentScreen;
+import su.puzzle.pay.gui.Oauth2.AuthHttpServer;
 import su.puzzle.pay.PuzzlePayConfig;
+
+import java.io.*;
 
 public class PuzzlePayClient implements ClientModInitializer {
     public static final PuzzlePayConfig config = PuzzlePayConfig.createAndLoad();
     private static KeyBinding transferGuiKeyBinding;
+    public AuthHttpServer server;
 
     @Override
     public void onInitializeClient() {
         registerKeys();
         registerCallbacks();
+        try {
+            server = new AuthHttpServer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void registerKeys() {

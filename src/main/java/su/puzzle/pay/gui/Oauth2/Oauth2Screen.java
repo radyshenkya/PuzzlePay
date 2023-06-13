@@ -8,30 +8,24 @@ import net.minecraft.text.*;
 import net.minecraft.util.*;
 import su.puzzle.pay.PuzzlePayMod;
 import su.puzzle.pay.gui.Message.MessageScreen;
+import su.puzzle.pay.PuzzlePayClient;
+
+import java.io.*;
 
 public class Oauth2Screen extends BaseUIModelScreen<FlowLayout> {
-    public AuthHttpServer server;
-
-    public Oauth2Screen(AuthHttpServer server) {
+    public Oauth2Screen() throws IOException {
         super(FlowLayout.class, DataSource.asset(new Identifier("puzzlepay:oauth")));
-        this.server = server;
     }
 
     @Override
     protected void build(FlowLayout rootComponent) {
         rootComponent.childById(ButtonComponent.class, "oauth-button").onPress(button -> {
-            try {
-                Util.getOperatingSystem().open("https://puzzlemc.site/pay/oauth2");
-                server.start();
-           } catch (Exception e) {
-                e.printStackTrace();
-                PuzzlePayMod.LOGGER.error("Cannot open browser! Error: " + e.getMessage());
-                MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("gui.puzzlepay.text.error_message_name"), Text.literal("Cannot open browser!")));
-            }
+            PuzzlePayClient.server.start();
+            Util.getOperatingSystem().open("https://puzzlemc.site/pay/oauth2");
+            MinecraftClient.getInstance().setScreen(new Oauth2WaitScreen());
         });
 
         rootComponent.childById(ButtonComponent.class, "cancel-button").onPress(button -> {
-            server.stop();
             MinecraftClient.getInstance().setScreen(null);
         });
     }

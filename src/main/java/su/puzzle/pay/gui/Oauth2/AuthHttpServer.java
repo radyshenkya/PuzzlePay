@@ -15,10 +15,8 @@ import java.nio.charset.StandardCharsets;
 public class AuthHttpServer {
     private static final String SUCCESS_REDIRECT_URL = "https://puzzlemc.site/pay/successful?nickname=%s";
     public HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 6969), 0);
-    public boolean started = false;
 
-    public AuthHttpServer() throws IOException {
-    }
+    public AuthHttpServer() throws IOException {}
 
     public void start() {
         server.createContext("/oauth2", exchange -> {
@@ -30,7 +28,6 @@ public class AuthHttpServer {
 
             MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new MessageScreen(Text.literal("OAuth2"), Text.literal("authed"))));
             server.stop(0);
-            started = false;
         });
 
         server.createContext("/auth", httpExchange -> {
@@ -46,19 +43,14 @@ public class AuthHttpServer {
                 PuzzlePayMod.LOGGER.warn(e.getMessage());
                 sendResponseString(httpExchange, HttpStatus.SC_INTERNAL_SERVER_ERROR, "Internal server error");
                 server.stop(0);
-                started = false;
             }
         });
 
         server.start();
-        started = true;
     }
 
     public void stop() {
-        if (started) {
-            server.stop(0);
-            started = false;
-        }
+        server.stop(0);
     }
 
     public static void sendResponseString(HttpExchange httpExchange, int code, String response) throws IOException {

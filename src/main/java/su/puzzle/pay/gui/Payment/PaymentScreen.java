@@ -17,9 +17,9 @@ import su.puzzle.pay.Utils;
 import java.io.*;
 
 public class PaymentScreen extends BaseUIModelScreen<FlowLayout> {
-        private String toCard;
-        private int amount;
-        private String transferMessage;
+        private final String toCard;
+        private final int amount;
+        private final String transferMessage;
 
         public PaymentScreen(String cardName, int amount, String paymentComment) {
                 super(FlowLayout.class, DataSource.asset(new Identifier("puzzlepay:transfer_menu")));
@@ -85,8 +85,7 @@ public class PaymentScreen extends BaseUIModelScreen<FlowLayout> {
 
                 rootComponent.childById(ButtonComponent.class, "set-token-button").onPress(button -> {
                         try {
-                                AuthHttpServer server = new AuthHttpServer();
-                                MinecraftClient.getInstance().setScreen(new Oauth2Screen(server));
+                                MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                         } catch (IOException e) {
                                 throw new RuntimeException(e);
                         }
