@@ -23,7 +23,7 @@ import java.io.*;
 public class PuzzlePayClient implements ClientModInitializer {
     public static final PuzzlePayConfig config = PuzzlePayConfig.createAndLoad();
     private static KeyBinding transferGuiKeyBinding;
-    public AuthHttpServer server;
+    public static AuthHttpServer server;
 
     @Override
     public void onInitializeClient() {
