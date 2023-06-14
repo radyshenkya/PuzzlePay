@@ -14,11 +14,21 @@ import java.nio.charset.StandardCharsets;
 
 public class AuthHttpServer {
     private static final String SUCCESS_REDIRECT_URL = "https://puzzlemc.site/pay/successful?nickname=%s";
-    public HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 6969), 0);
+    public HttpServer server;
 
-    public AuthHttpServer() throws IOException {}
+    public AuthHttpServer() throws IOException {
+    }
 
     public void start() {
+        // Из-за server.stop() наш httpserver меняет свой стейт на кринжовый,
+        // и если вызвать server.start() еще раз, то он вываливается с ошибкой IllegalState,
+        // якобы сервер уже стопнули, он заанбиндился от порта, а мы его стартуем.
+        // Поэтому создаем сервер прямо тут
+        try {
+            server = HttpServer.create(new InetSocketAddress("localhost", 6969), 0);
+        } catch (Exception e) {
+            PuzzlePayMod.LOGGER.warn("Cannot create server. Error: " + e.getMessage());
+        }
         server.createContext("/oauth2", exchange -> {
             exchange.getResponseHeaders().add("Location", String.format(SUCCESS_REDIRECT_URL, MinecraftClient.getInstance().getSession().getUsername()));
             sendResponseString(exchange, HttpStatus.SC_MOVED_TEMPORARILY, "Redirecting...");
@@ -50,7 +60,10 @@ public class AuthHttpServer {
     }
 
     public void stop() {
-        server.stop(0);
+        if (server != null) {
+            server.stop(0);
+            server = null;
+        }
     }
 
     public static void sendResponseString(HttpExchange httpExchange, int code, String response) throws IOException {
