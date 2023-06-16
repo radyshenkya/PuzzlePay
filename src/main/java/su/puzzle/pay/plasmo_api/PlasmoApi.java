@@ -3,14 +3,17 @@ package su.puzzle.pay.plasmo_api;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import su.puzzle.pay.PuzzlePayMod;
+import su.puzzle.pay.plasmo_api.exceptions.ApiCallException;
+import su.puzzle.pay.plasmo_api.types.*;
 
 public class PlasmoApi {
     public static final String API_URL = "https://rp.plo.su/api";
@@ -26,37 +29,27 @@ public class PlasmoApi {
         }
     }
 
-    public static JsonObject getUser() throws ApiCallException {
-        return request("/user", "GET");
+    public static Response<BankCardsResponse> getAllCards() throws ApiCallException {
+        Type type = new TypeToken<Response<BankCardsResponse>>() {}.getType();
+        Response<BankCardsResponse> resp = request("/bank/cards", "GET", type, (Object) null);
+        return resp;
     }
 
-    public static void newTransfer(String from, String to, int amount, String message) throws ApiCallException {
-        // Вот эта штука при ошибке возвращает Unauthorized (bad token), если ее убрать то при 401 ответе будет писаться просто Unauthorized
-        PuzzlePayMod.LOGGER.info(getUser().toString());
-
-        // Plasmo Error: Status-code: 400. Error message: Мать хокаге перевернулась в
-        // гробу и эта проверка добавилась автоматически
-        if (Objects.equals(from, to))
-            throw new ApiCallException("Cannot transfer to the same card", null);
-
-        // Составить JSON объект
-        JsonObject requestJsonBody = new JsonObject();
-        requestJsonBody.addProperty("from", from);
-        requestJsonBody.addProperty("to", to);
-        requestJsonBody.addProperty("amount", amount);
-        requestJsonBody.addProperty("message", message);
-
-        // Если перевод не удался, то выпадет ApiCallException, поэтому ничего не делаем
-        request("/bank/transfer", "POST", requestJsonBody);
+    public static Response<Object> transfer(int amount, String from, String message, String to)
+            throws ApiCallException {
+        TransferRequest req = new TransferRequest(amount, from, message, to);
+        Type type = new TypeToken<Response<Object>>() {}.getType();
+        Response<Object> resp = request("/bank/transfer", "POST", type, req);
+        return resp;
     }
 
-    protected static void assertPlasmoApiResponse(JsonObject response) throws ApiCallException {
-        if (!response.get("status").getAsBoolean()) {
-            throw new ApiCallException(response.get("error").getAsJsonObject().get("msg").getAsString(), null);
-        }
+    public static Response<ProfileResponse> getUser() throws ApiCallException {
+        Type type = new TypeToken<Response<ProfileResponse>>() {}.getType();
+        Response<ProfileResponse> resp = request("/user", "GET", type, (Object) null);
+        return resp;
     }
 
-    public static JsonObject request(String endpoint, String method, JsonObject requestBody) throws ApiCallException {
+    public static String request(String endpoint, String method, String requestBody) throws ApiCallException {
         try {
             URL url = new URL(API_URL.concat(endpoint));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -71,7 +64,7 @@ public class PlasmoApi {
 
             if (requestBody != null) {
                 try (OutputStream outStream = connection.getOutputStream()) {
-                    outStream.write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
+                    outStream.write(requestBody.getBytes(StandardCharsets.UTF_8));
                 } catch (Exception e) {
                     PuzzlePayMod.LOGGER.warn(e.getMessage());
                     throw new ApiCallException("Error while sending request", e);
@@ -87,13 +80,7 @@ public class PlasmoApi {
                 responseBody = new String(connection.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
             }
 
-            // Конвертировать ответ в JsonObject
-            JsonObject responseBodyJson = (new Gson()).fromJson(responseBody, JsonObject.class);
-
-            // Проверить его на кайфовость
-            assertPlasmoApiResponse(responseBodyJson);
-
-            return responseBodyJson;
+            return responseBody;
         } catch (ApiCallException apiCallException) {
             throw apiCallException;
         } catch (Exception e) {
@@ -102,7 +89,26 @@ public class PlasmoApi {
         }
     }
 
-    public static JsonObject request(String endpoint, String method) throws ApiCallException {
-        return request(endpoint, method, null);
+    public static JsonObject request(String endpoint, String method, JsonObject requestBody) throws ApiCallException {
+        Gson gson = new Gson();
+        if (requestBody != null)
+            return gson.fromJson(request(endpoint, method, (new Gson()).toJson(requestBody)), JsonObject.class);
+        else
+            return gson.fromJson(request(endpoint, method, (String) null), JsonObject.class);
+    }
+
+    public static <B, T> T request(String endpoint, String method, Type responseType, B requestBody) throws ApiCallException {
+        Gson gson = new Gson();
+        String requestBodyString = null;
+
+        if (requestBody != null)
+            requestBodyString = gson.toJson(requestBody, requestBody.getClass());
+
+        String response = request(endpoint, method, requestBodyString);
+        return gson.fromJson(response, responseType);
+    }
+
+    public static <T> T request(String endpoint, String method, Type responseType) throws ApiCallException {
+        return request(endpoint, method, responseType, (Object) null);
     }
 }

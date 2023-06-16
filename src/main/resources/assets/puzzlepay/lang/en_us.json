@@ -21,6 +21,7 @@
     "gui.puzzlepay.text.error": "Error: %s",
     "gui.puzzlepay.text.successful_transfer": "Successfully transferred from \"%s\" to \"%s\" %d diamonds",
     "gui.puzzlepay.text.error_amount_must_be_integer": "Field \"Amount\" must be an integer number",
+    "gui.puzzlepay.text.error_same_card": "Cannot transfer to the same card",
     "category.puzzlepay.puzzlepay": "Puzzle Pay buttons",
     "key.puzzlepay.open_transfer_gui": "Open transfer screen"
 }

@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api;
+package su.puzzle.pay.plasmo_api.exceptions;
 
 public class ApiCallException extends Exception {
     public final String message;

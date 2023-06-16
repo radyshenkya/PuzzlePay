@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import org.apache.http.HttpStatus;
 import su.puzzle.pay.*;
 import su.puzzle.pay.gui.Message.*;
+import su.puzzle.pay.plasmo_api.PlasmoApi;
 
 import java.io.*;
 import java.net.*;
@@ -35,6 +36,7 @@ public class AuthHttpServer {
 
             String token = exchange.getRequestURI().toString().split("=")[1].split("&")[0];
             PuzzlePayClient.config.plasmoRpToken(token);
+            PlasmoApi.setToken(token);
 
             MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("gui.puzzlepay.text.success_message_name"), Text.translatable("gui.puzzlepay.text.oauth2.success"))));
             server.stop(0);
