@@ -1,8 +1,8 @@
-# Plasmo Pay Mod
-**Plasmo Pay** - мод для *Minecraft [Fabric](https://fabricmc.net/) 1.19.2*, который добавляет возможность переводить алмазы с карт [Plasmo RP](https://rp.plo.su/) не заходя на сайт.
+# Puzzle Pay Mod
+**Puzzle Pay** - мод для *Minecraft [Fabric](https://fabricmc.net/) 1.20.1*, который добавляет возможность переводить алмазы с карт [Plasmo RP](https://rp.plo.su/) не заходя на сайт.
 
 # Установка
-Нужно скачать с вкладки [releases](https://github.com/radyshenkya/puzzle-pay/releases) последнюю версию мода, и закинуть ее в папку **.minecraft/mods**
+Нужно скачать с вкладки [releases](https://github.com/Puzzlee-Studio/PuzzlePay/releases) последнюю версию мода, и закинуть ее в папку **.minecraft/mods**
 (как и для всех остальных модов в майнкрафтике.)
 
 # Использование
