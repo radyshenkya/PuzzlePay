@@ -13,10 +13,13 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
-import su.puzzle.pay.gui.Oauth2.*;
 import su.puzzle.pay.gui.Payment.PaymentScreen;
+import su.puzzle.pay.plasmo_api.PlasmoApi;
+import su.puzzle.pay.plasmo_api.types.BankCard;
+import su.puzzle.pay.plasmo_api.types.BankCardsResponse;
+import su.puzzle.pay.plasmo_api.types.Response;
+import su.puzzle.pay.gui.Home.HomeScreen;
 import su.puzzle.pay.gui.Oauth2.AuthHttpServer;
-import su.puzzle.pay.PuzzlePayConfig;
 
 import java.io.*;
 
@@ -29,6 +32,7 @@ public class PuzzlePayClient implements ClientModInitializer {
     public void onInitializeClient() {
         registerKeys();
         registerCallbacks();
+        initApi();
         try {
             server = new AuthHttpServer();
         } catch (IOException e) {
@@ -36,13 +40,12 @@ public class PuzzlePayClient implements ClientModInitializer {
         }
     }
 
+    private void initApi() {
+        PlasmoApi.setToken(PuzzlePayClient.config.plasmoRpToken());
+    }
+
     private void registerKeys() {
-        transferGuiKeyBinding = KeyBindingHelper.registerKeyBinding(
-                new KeyBinding(
-                        "key.puzzlepay.open_transfer_gui",
-                        InputUtil.Type.KEYSYM,
-                        GLFW.GLFW_KEY_U,
-                        "category.puzzlepay.puzzlepay"));
+        transferGuiKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.puzzlepay.open_transfer_gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "category.puzzlepay.puzzlepay"));
     }
 
     private void registerCallbacks() {
@@ -93,8 +96,6 @@ public class PuzzlePayClient implements ClientModInitializer {
     }
 
     private void openTransferGui(String cardNumber, int amount, String comment) {
-        MinecraftClient.getInstance()
-                .setScreen(
-                        new PaymentScreen(cardNumber, amount, comment));
+        MinecraftClient.getInstance().setScreen(new PaymentScreen(cardNumber, amount, comment));
     }
 }
