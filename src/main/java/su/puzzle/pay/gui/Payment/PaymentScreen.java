@@ -10,10 +10,9 @@ import net.minecraft.util.Identifier;
 import su.puzzle.pay.PuzzlePayClient;
 import su.puzzle.pay.gui.Message.MessageScreen;
 import su.puzzle.pay.gui.Oauth2.*;
-import su.puzzle.pay.plasmo_api.exceptions.*;
-import su.puzzle.pay.plasmo_api.PlasmoApi;
+import su.puzzle.pay.api.exceptions.*;
+import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.Utils;
-import su.puzzle.pay.plasmo_api.types.TransferRequest;
 
 import java.io.*;
 

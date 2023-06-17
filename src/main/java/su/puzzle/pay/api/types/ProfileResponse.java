@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api.types;
+package su.puzzle.pay.api.types;
 
 import java.util.Map;
 import java.util.List;
@@ -28,4 +28,4 @@ public record ProfileResponse(
             List<ProfileTeam> teams,
             String uuid,
             List<ProfileWarn> warns
-        ) {}
+) {}

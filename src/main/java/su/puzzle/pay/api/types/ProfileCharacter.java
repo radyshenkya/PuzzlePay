@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api.types;
+package su.puzzle.pay.api.types;
 
 public record ProfileCharacter(
             String description,
@@ -6,4 +6,4 @@ public record ProfileCharacter(
             String name,
             String role,
             String skin_format
-        ) {}
+) {}

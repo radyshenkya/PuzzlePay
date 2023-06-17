@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api;
+package su.puzzle.pay.api;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +12,8 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import su.puzzle.pay.PuzzlePayMod;
-import su.puzzle.pay.plasmo_api.exceptions.ApiCallException;
-import su.puzzle.pay.plasmo_api.types.*;
+import su.puzzle.pay.api.exceptions.ApiCallException;
+import su.puzzle.pay.api.types.*;
 
 public class PlasmoApi {
     public static final String API_URL = "https://rp.plo.su/api";
@@ -24,29 +24,25 @@ public class PlasmoApi {
     }
 
     public static void assertTokenNotNull() {
-        if (PlasmoApi.token == null || PlasmoApi.token == "") {
+        if (PlasmoApi.token == null || PlasmoApi.token.equals("")) {
             throw new IllegalArgumentException("PlasmoApi.token must be set!");
         }
     }
 
     public static Response<BankCardsResponse> getAllCards() throws ApiCallException {
         Type type = new TypeToken<Response<BankCardsResponse>>() {}.getType();
-        Response<BankCardsResponse> resp = request("/bank/cards", "GET", type, (Object) null);
-        return resp;
+        return request("/bank/cards", "GET", type, null);
     }
 
-    public static Response<Object> transfer(int amount, String from, String message, String to)
-            throws ApiCallException {
+    public static Response<Object> transfer(int amount, String from, String message, String to) throws ApiCallException {
         TransferRequest req = new TransferRequest(amount, from, message, to);
         Type type = new TypeToken<Response<Object>>() {}.getType();
-        Response<Object> resp = request("/bank/transfer", "POST", type, req);
-        return resp;
+        return request("/bank/transfer", "POST", type, req);
     }
 
     public static Response<ProfileResponse> getUser() throws ApiCallException {
         Type type = new TypeToken<Response<ProfileResponse>>() {}.getType();
-        Response<ProfileResponse> resp = request("/user", "GET", type, (Object) null);
-        return resp;
+        return request("/user", "GET", type, null);
     }
 
     public static String request(String endpoint, String method, String requestBody) throws ApiCallException {
@@ -109,6 +105,6 @@ public class PlasmoApi {
     }
 
     public static <T> T request(String endpoint, String method, Type responseType) throws ApiCallException {
-        return request(endpoint, method, responseType, (Object) null);
+        return request(endpoint, method, responseType, null);
     }
 }

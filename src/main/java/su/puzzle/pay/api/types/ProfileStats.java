@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api.types;
+package su.puzzle.pay.api.types;
 
 public record ProfileStats(
             int all,
@@ -11,4 +11,4 @@ public record ProfileStats(
             int week,
             String world,
             int yesterday
-        ) {}
+) {}

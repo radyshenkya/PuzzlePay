@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api.types;
+package su.puzzle.pay.api.types;
 
 public record BankCard(
         String bank,
@@ -13,5 +13,5 @@ public record BankCard(
         int permissions,
         boolean text_inverted,
         int value,
-        boolean value_hidden) {
-}
+        boolean value_hidden
+) {}

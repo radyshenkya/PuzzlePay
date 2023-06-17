@@ -1,6 +1,6 @@
-package su.puzzle.pay.plasmo_api.exceptions;
+package su.puzzle.pay.api.exceptions;
 
-import su.puzzle.pay.plasmo_api.types.Error;
+import su.puzzle.pay.api.types.Error;
 
 public class ApiResponseException extends Exception {
     public final Error error;

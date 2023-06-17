@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 import org.apache.http.HttpStatus;
 import su.puzzle.pay.*;
 import su.puzzle.pay.gui.Message.*;
-import su.puzzle.pay.plasmo_api.PlasmoApi;
+import su.puzzle.pay.api.PlasmoApi;
 
 import java.io.*;
 import java.net.*;
@@ -17,8 +17,7 @@ public class AuthHttpServer {
     private static final String SUCCESS_REDIRECT_URL = "https://puzzlemc.site/pay/successful?nickname=%s";
     public HttpServer server;
 
-    public AuthHttpServer() throws IOException {
-    }
+    public AuthHttpServer() throws IOException {}
 
     public void start() {
         // Из-за server.stop() наш httpserver меняет свой стейт на кринжовый,

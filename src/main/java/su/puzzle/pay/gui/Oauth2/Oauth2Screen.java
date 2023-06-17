@@ -4,10 +4,7 @@ import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
 import io.wispforest.owo.ui.container.FlowLayout;
 import net.minecraft.client.*;
-import net.minecraft.text.*;
 import net.minecraft.util.*;
-import su.puzzle.pay.PuzzlePayMod;
-import su.puzzle.pay.gui.Message.MessageScreen;
 import su.puzzle.pay.PuzzlePayClient;
 
 import java.io.*;

@@ -14,11 +14,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import su.puzzle.pay.gui.Payment.PaymentScreen;
-import su.puzzle.pay.plasmo_api.PlasmoApi;
-import su.puzzle.pay.plasmo_api.types.BankCard;
-import su.puzzle.pay.plasmo_api.types.BankCardsResponse;
-import su.puzzle.pay.plasmo_api.types.Response;
-import su.puzzle.pay.gui.Home.HomeScreen;
+import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.gui.Oauth2.AuthHttpServer;
 
 import java.io.*;

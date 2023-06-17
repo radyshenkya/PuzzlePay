@@ -6,15 +6,16 @@
   "description": "Mod for payments on Plasmo RP server.",
   "authors": [
     "MeiNanziiii",
-    "kechunez"
+    "kechunez",
+    "Inesra"
   ],
   "contact": {
-    "homepage": "https://github.com/Puzzle/PuzzlePay",
+    "homepage": "https://puzzlemc.site/pay",
     "sources": "https://github.com/Puzzle/PuzzlePay"
   },
   "license": "MIT License",
   "icon": "assets/puzzlepay/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "su.puzzle.pay.PuzzlePayMod"
@@ -23,9 +24,6 @@
       "su.puzzle.pay.PuzzlePayClient"
     ]
   },
-  "mixins": [
-    "puzzlepay.mixins.json"
-  ],
   "depends": {
     "fabricloader": ">=0.14.21",
     "fabric-api": "*",

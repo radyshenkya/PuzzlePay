@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api.types;
+package su.puzzle.pay.api.types;
 
 public record PlayerDayStat(
             String description,
@@ -6,4 +6,4 @@ public record PlayerDayStat(
             String name,
             String role,
             String skin_format
-        ) {}
+) {}

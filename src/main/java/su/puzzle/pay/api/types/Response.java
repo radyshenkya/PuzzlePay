@@ -1,6 +1,6 @@
-package su.puzzle.pay.plasmo_api.types;
+package su.puzzle.pay.api.types;
 
-import su.puzzle.pay.plasmo_api.exceptions.ApiResponseException;
+import su.puzzle.pay.api.exceptions.ApiResponseException;
 
 public class Response<T> {
     public T data;

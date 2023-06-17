@@ -1,4 +1,4 @@
-package su.puzzle.pay.plasmo_api.types;
+package su.puzzle.pay.api.types;
 
 public record ProfileTeam(
             String banner,
@@ -11,4 +11,4 @@ public record ProfileTeam(
             String owner,
             boolean recruit,
             String url
-        ) {}
+) {}
