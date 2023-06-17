@@ -4,7 +4,9 @@ import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
 import io.wispforest.owo.ui.container.FlowLayout;
 import net.minecraft.client.*;
+import net.minecraft.text.*;
 import net.minecraft.util.*;
+import org.spongepowered.asm.mixin.*;
 import su.puzzle.pay.PuzzlePayClient;
 
 import java.io.*;

@@ -13,9 +13,11 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
+import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.gui.Payment.PaymentScreen;
 import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.gui.Oauth2.AuthHttpServer;
+import su.puzzle.pay.gui.bank.*;
 
 import java.io.*;
 
@@ -48,7 +50,12 @@ public class PuzzlePayClient implements ClientModInitializer {
         // For transfer dialog keybind
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (transferGuiKeyBinding.wasPressed()) {
-                openTransferGui("", 1, "");
+                // openTransferGui("", 1, "");
+                try {
+                    MinecraftClient.getInstance().setScreen(new BankScreen(null));
+                } catch (ApiCallException | ApiResponseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 

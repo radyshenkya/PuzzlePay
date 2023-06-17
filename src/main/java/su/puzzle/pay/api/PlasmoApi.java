@@ -40,6 +40,13 @@ public class PlasmoApi {
         return request("/bank/transfer", "POST", type, req);
     }
 
+    // TODO: пофиксить это говно, в .setRequestMethod() нет "PATCH"
+    /* public static Response<Object> updateUserActiveCard(BankCard card) throws ApiCallException {
+        PatchCard req = new PatchCard("EB-" + card.id());
+        Type type = new TypeToken<Response<Object>>() {}.getType();
+        return request("/bank/cards/active", "PATH", type, req);
+    } */
+
     public static Response<ProfileResponse> getUser() throws ApiCallException {
         Type type = new TypeToken<Response<ProfileResponse>>() {}.getType();
         return request("/user", "GET", type, null);
