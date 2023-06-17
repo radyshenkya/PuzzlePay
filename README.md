@@ -1,3 +1,1 @@
-# Puzzle Pay
-
-кпидс лох
+![](https://i.imgur.com/TpbhODp.png)
