@@ -7,7 +7,7 @@ import io.wispforest.owo.ui.core.*;
 import net.minecraft.text.*;
 import org.jetbrains.annotations.*;
 
-public class BankScreen extends BaseOwoScreen<FlowLayout> {
+public class InterpolScreen extends BaseOwoScreen<FlowLayout> {
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
         return OwoUIAdapter.create(this, Containers::verticalFlow);
@@ -18,10 +18,10 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
         rootComponent.child(
                         Containers.verticalFlow(Sizing.content(), Sizing.content())
                                 .child(
-                                        new NavigationBar(0).navbar
+                                        new NavigationBar(3).navbar
                                 )
                 )
-                .child(Components.label(Text.literal("BankScreen")))
+                .child(Components.label(Text.literal("InterpolScreen")))
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
 }

@@ -51,11 +51,7 @@ public class PuzzlePayClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (transferGuiKeyBinding.wasPressed()) {
                 // openTransferGui("", 1, "");
-                try {
-                    MinecraftClient.getInstance().setScreen(new BankScreen(null));
-                } catch (ApiCallException | ApiResponseException e) {
-                    throw new RuntimeException(e);
-                }
+                new ScreenRouter().route(0);
             }
         });
 

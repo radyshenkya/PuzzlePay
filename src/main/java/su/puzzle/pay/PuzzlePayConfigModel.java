@@ -6,5 +6,4 @@ import io.wispforest.owo.config.annotation.Config;
 public class PuzzlePayConfigModel {
     public String plasmoRpToken = "";
     public String lastUsedBankCard = "";
-    public int latestPageIndex = 0;
 }
