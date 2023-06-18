@@ -7,6 +7,7 @@ import io.wispforest.owo.ui.core.Insets;
 import net.fabricmc.loader.api.*;
 import net.minecraft.text.*;
 import su.puzzle.pay.*;
+import su.puzzle.pay.api.exceptions.*;
 
 import java.util.*;
 import java.util.List;
@@ -19,16 +20,32 @@ public class NavigationBar {
 
     public NavigationBar(int pageIndex) {
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.main"), button -> {
-            router.route(0);
+            try {
+                router.route(0);
+            } catch (ApiCallException | ApiResponseException e) {
+                throw new RuntimeException(e);
+            }
         }).active(pageIndex != 0).margins(Insets.left(14)));
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.transactions"), button -> {
-            router.route(1);
+            try {
+                router.route(1);
+            } catch (ApiCallException | ApiResponseException e) {
+                throw new RuntimeException(e);
+            }
         }).active(pageIndex != 1).margins(Insets.left(4)));
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.banker"), button -> {
-            router.route(2);
+            try {
+                router.route(2);
+            } catch (ApiCallException | ApiResponseException e) {
+                throw new RuntimeException(e);
+            }
         }).active(pageIndex != 2).margins(Insets.left(4)));
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.interpol"), button -> {
-            router.route(3);
+            try {
+                router.route(3);
+            } catch (ApiCallException | ApiResponseException e) {
+                throw new RuntimeException(e);
+            }
         }).active(pageIndex != 3).margins(Insets.left(4)));
 
         navbar = Containers.verticalFlow(Sizing.content(), Sizing.content())
