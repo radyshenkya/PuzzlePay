@@ -44,7 +44,7 @@ public class PlasmoApi {
     /* public static Response<Object> updateUserActiveCard(BankCard card) throws ApiCallException {
         PatchCard req = new PatchCard("EB-" + card.id());
         Type type = new TypeToken<Response<Object>>() {}.getType();
-        return request("/bank/cards/active", "PATH", type, req);
+        return request("/bank/cards/active", "PATCH", type, req);
     } */
 
     public static Response<ProfileResponse> getUser() throws ApiCallException {

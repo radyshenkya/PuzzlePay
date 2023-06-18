@@ -8,7 +8,6 @@ import net.fabricmc.loader.api.*;
 import net.minecraft.text.*;
 import org.jetbrains.annotations.*;
 import su.puzzle.pay.*;
-import su.puzzle.pay.api.*;
 import su.puzzle.pay.api.exceptions.*;
 
 import java.util.*;
@@ -16,44 +15,53 @@ import java.util.*;
 public class BankScreen extends BaseOwoScreen<FlowLayout> {
     private final List<Component> buttons = new ArrayList<>();
     private final List<Component> pages = new ArrayList<>();
-    private final CollapsibleContainer cardList;
     private Component page;
     private int currentPage;
 
     public BankScreen(Integer pageIndex) throws ApiCallException, ApiResponseException {
-        this.currentPage = pageIndex == null ? 0 : pageIndex;
-        cardList = Containers.collapsible(Sizing.content(), Sizing.content(), Text.literal("Cards"), true);
-        PlasmoApi.getAllCards().unwrap().cards().forEach((card) -> {
-            cardList.child(Components.label(Text.literal(card.name())));
-        });
+        this.currentPage = pageIndex == null ? PuzzlePayClient.config.latestPageIndex() : pageIndex;
+        pages.add(new MainPage().mainPage);
+        pages.add(new TransactionPage().transactionPage);
+        pages.add(new MainPage().mainPage);
+        pages.add(new TransactionPage().transactionPage);
+        this.page = pages.get(this.currentPage);
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.main"), button -> {
             for (Component btn : buttons) {
                 ((ButtonComponent) btn).active(true);
             }
+            page = pages.get(0);
             currentPage = 0;
+            PuzzlePayClient.config.latestPageIndex(0);
             ((ButtonComponent) buttons.get(0)).active(false);
-        }).active(false).margins(Insets.left(14)));
+        }).margins(Insets.left(14)));
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.transactions"), button -> {
             for (Component btn : buttons) {
                 ((ButtonComponent) btn).active(true);
             }
+            page = pages.get(1);
             currentPage = 1;
+            PuzzlePayClient.config.latestPageIndex(1);
             ((ButtonComponent) buttons.get(1)).active(false);
-        }).active(true).margins(Insets.left(4)));
+        }).margins(Insets.left(4)));
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.banker"), button -> {
             for (Component btn : buttons) {
                 ((ButtonComponent) btn).active(true);
             }
+            page = pages.get(2);
             currentPage = 2;
+            PuzzlePayClient.config.latestPageIndex(2);
             ((ButtonComponent) buttons.get(2)).active(false);
-        }).active(true).margins(Insets.left(4)));
+        }).margins(Insets.left(4)));
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.interpol"), button -> {
             for (Component btn : buttons) {
                 ((ButtonComponent) btn).active(true);
             }
+            page = pages.get(3);
             currentPage = 3;
+            PuzzlePayClient.config.latestPageIndex(3);
             ((ButtonComponent) buttons.get(3)).active(false);
-        }).active(true).margins(Insets.left(4)));
+        }).margins(Insets.left(4)));
+        ((ButtonComponent) buttons.get(this.currentPage)).active(false);
     }
 
     @Override
@@ -88,7 +96,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                         Containers.verticalScroll(
                                 Sizing.content(),
                                 Sizing.fill(100),
-                                    cardList
+                                    page
                                 )
                 )
                 .surface(Surface.VANILLA_TRANSLUCENT);
