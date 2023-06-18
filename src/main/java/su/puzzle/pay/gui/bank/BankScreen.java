@@ -44,7 +44,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                                 )
                 )
                 .child(
-                        Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 3)
+                        Containers.grid(Sizing.fill(100), Sizing.fill(80), 1, 3)
                                 .child(
                                         Containers.verticalFlow(Sizing.content(), Sizing.content())
                                                 .child(
