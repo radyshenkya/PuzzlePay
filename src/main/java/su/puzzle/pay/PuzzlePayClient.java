@@ -51,7 +51,11 @@ public class PuzzlePayClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (transferGuiKeyBinding.wasPressed()) {
                 // openTransferGui("", 1, "");
-                new ScreenRouter().route(0);
+                try {
+                    new ScreenRouter().route(0);
+                } catch (ApiCallException | ApiResponseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
