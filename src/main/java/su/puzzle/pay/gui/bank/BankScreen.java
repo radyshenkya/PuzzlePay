@@ -20,7 +20,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
     public BankScreen(BankCard thisCard) throws ApiCallException, ApiResponseException {
         this.thisCard = thisCard;
         PlasmoApi.getAllCards().unwrap().cards().forEach((card) -> {
-            cardList.button(Text.literal(card.name() + "\n§8EB-" + card.id()), button -> {
+            cardList.button(Text.literal(card.name() + "\n§8EB-" + card.id() + " " + card.value()), button -> {
                         try {
                             MinecraftClient.getInstance().setScreen(new BankScreen(card));
                         } catch (ApiCallException | ApiResponseException e) {
