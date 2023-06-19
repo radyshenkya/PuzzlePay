@@ -18,7 +18,7 @@ import su.puzzle.pay.api.exceptions.ApiCallException;
 import su.puzzle.pay.api.types.*;
 
 public class PlasmoApi {
-    public static final String API_URL = "https://rp.plo.su/api";
+    public static final String API_URL = "https://plasmorp.com/api";
     public static String token = null;
 
     private static HttpClient httpClient = HttpClient.newHttpClient();
