@@ -18,7 +18,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
 
     public BankScreen(BankCard thisCard) throws ApiCallException, ApiResponseException {
         this.thisCard = thisCard;
-        cardList = new CustomDropdownComponent(Sizing.fill(25), Sizing.content(),
+        cardList = new CustomDropdownComponent(Sizing.content(), Sizing.content(),
                 Text.literal(this.thisCard == null ? "Выберите карту" : "EB-" + this.thisCard.id()), false);
 
         PlasmoApi.getAllCards().unwrap().cards().forEach((card) -> {
