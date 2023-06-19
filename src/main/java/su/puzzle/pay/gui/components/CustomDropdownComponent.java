@@ -12,8 +12,8 @@ import io.wispforest.owo.ui.util.*;
 import net.minecraft.text.Text;
 
 public class CustomDropdownComponent extends FlowLayout {
-    private static final String EXPANDED_DROPDOWN_CHAR = " ⏶";
-    private static final String UNEXPANDED_DROPDOWN_CHAR = " ⏷";
+    private static final String EXPANDED_DROPDOWN_CHAR = "⏶ ";
+    private static final String UNEXPANDED_DROPDOWN_CHAR = "⏷ ";
     protected final int TITLE_OUTLINE_COLOR = 0xffa0a0a0;
     protected final int OPTIONS_OUTLINE_COLOR = 0xff666666;
     protected final int BG_COLOR = 0xff000000;
