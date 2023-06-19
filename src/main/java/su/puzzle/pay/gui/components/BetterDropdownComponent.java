@@ -262,6 +262,7 @@ public class BetterDropdownComponent extends FlowLayout {
 
     protected static class Button extends LabelComponent implements BetterDropdownComponent.ResizeableComponent {
 
+        protected final int HIGHLIGHT_COLOR = 0x22FFFFFF;
         protected final BetterDropdownComponent parentDropdown;
         protected Consumer<BetterDropdownComponent> onClick;
 
@@ -297,7 +298,7 @@ public class BetterDropdownComponent extends FlowLayout {
                         this.y - margins.top(),
                         this.x + this.width + margins.right(),
                         this.y + this.height + margins.bottom(),
-                        0x44FFFFFF
+                        HIGHLIGHT_COLOR
                 );
             }
 
