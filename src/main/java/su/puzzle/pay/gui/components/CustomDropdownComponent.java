@@ -7,12 +7,8 @@ import io.wispforest.owo.ui.component.DropdownComponent;
 import io.wispforest.owo.ui.component.LabelComponent;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
-import io.wispforest.owo.ui.core.Component;
-import io.wispforest.owo.ui.core.HorizontalAlignment;
-import io.wispforest.owo.ui.core.Insets;
-import io.wispforest.owo.ui.core.Sizing;
-import io.wispforest.owo.ui.core.Surface;
-import io.wispforest.owo.ui.core.VerticalAlignment;
+import io.wispforest.owo.ui.core.*;
+import io.wispforest.owo.ui.util.*;
 import net.minecraft.text.Text;
 
 public class CustomDropdownComponent extends FlowLayout {
@@ -22,9 +18,9 @@ public class CustomDropdownComponent extends FlowLayout {
     protected final int OPTIONS_OUTLINE_COLOR = 0xff666666;
     protected final int BG_COLOR = 0xff000000;
     protected final Insets PADDING = Insets.of(5);
-    protected final DropdownComponent expandableDropdown;
+    protected final BetterDropdownComponent expandableDropdown;
     protected final FlowLayout contentLayout;
-    protected final DropdownComponent titleDropdown;
+    protected final BetterDropdownComponent titleDropdown;
     protected final Text title;
     protected final LabelComponent titleLabel;
     protected boolean expanded;
@@ -37,13 +33,13 @@ public class CustomDropdownComponent extends FlowLayout {
 
         contentLayout = Containers.verticalFlow(horizontalSizing, verticalSizing);
 
-        expandableDropdown = Components.dropdown(horizontalSizing);
+        expandableDropdown = new BetterDropdownComponent(horizontalSizing);
         expandableDropdown.surface(Surface.flat(BG_COLOR));
         expandableDropdown.alignment(HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
         expandableDropdown.margins(Insets.top(-2));
         expandableDropdown.padding(Insets.of(0));
 
-        titleDropdown = Components.dropdown(horizontalSizing);
+        titleDropdown = new BetterDropdownComponent(horizontalSizing);
         titleDropdown.surface(Surface.flat(BG_COLOR));
         titleDropdown.button(title, (comp) -> {
             this.expanded = !this.expanded;
@@ -71,7 +67,7 @@ public class CustomDropdownComponent extends FlowLayout {
         super.child(contentLayout);
     }
 
-    public CustomDropdownComponent button(Text text, Consumer<DropdownComponent> onClick) {
+    public CustomDropdownComponent button(Text text, Consumer<BetterDropdownComponent> onClick) {
         expandableDropdown.button(text, dropdown -> {
             this.expanded(false);
             onClick.accept(dropdown);
