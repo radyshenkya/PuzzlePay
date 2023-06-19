@@ -14,7 +14,7 @@ import net.minecraft.text.Text;
 public class CustomDropdownComponent extends FlowLayout {
     private static final String EXPANDED_DROPDOWN_CHAR = " ⏶";
     private static final String UNEXPANDED_DROPDOWN_CHAR = " ⏷";
-	protected final int TITLE_OUTLINE_COLOR = 0xffa0a0a0;
+    protected final int TITLE_OUTLINE_COLOR = 0xffa0a0a0;
     protected final int OPTIONS_OUTLINE_COLOR = 0xff666666;
     protected final int BG_COLOR = 0xff000000;
     protected final Insets PADDING = Insets.of(5);
@@ -22,6 +22,7 @@ public class CustomDropdownComponent extends FlowLayout {
     protected final FlowLayout contentLayout;
     protected final BetterDropdownComponent titleDropdown;
     protected final Text title;
+    protected final LabelComponent arrowLabel;
     protected final LabelComponent titleLabel;
     protected boolean expanded;
 
@@ -40,8 +41,10 @@ public class CustomDropdownComponent extends FlowLayout {
         expandableDropdown.padding(Insets.of(0));
 
         titleDropdown = new BetterDropdownComponent(horizontalSizing);
+        titleDropdown.zIndex(10);
         titleDropdown.surface(Surface.flat(BG_COLOR));
-        titleDropdown.button(title, (comp) -> {
+        titleDropdown.horizontalSizing(horizontalSizing);
+        titleDropdown.button(Text.literal(title.getString() + "  "), (comp) -> {
             this.expanded = !this.expanded;
             updateExpandableDropdown();
         });
@@ -53,12 +56,22 @@ public class CustomDropdownComponent extends FlowLayout {
         child.margins(PADDING);
         dropdownLayout.removeChild(child);
 
-        FlowLayout layout = Containers.horizontalFlow(Sizing.content(), Sizing.content());
+        FlowLayout layout = Containers.horizontalFlow(Sizing.fill(100), Sizing.content());
+
+        if (horizontalSizing.isContent()) {
+            layout = Containers.horizontalFlow(horizontalSizing, Sizing.content());
+        }
+
         layout.child(child);
-        child.horizontalSizing(Sizing.content());
+        child.horizontalSizing(horizontalSizing);
         layout.surface(Surface.outline(TITLE_OUTLINE_COLOR));
 
         dropdownLayout.child(layout);
+
+        // Arrow
+        arrowLabel = Components.label(Text.literal(""));
+        arrowLabel.positioning(Positioning.relative(95, 50));
+        titleDropdown.child(arrowLabel);
 
         contentLayout.child(titleDropdown);
 
@@ -81,6 +94,7 @@ public class CustomDropdownComponent extends FlowLayout {
 
         FlowLayout layout = Containers.verticalFlow(Sizing.content(), Sizing.content());
         layout.child(child);
+        layout.padding(Insets.of(1));
         layout.margins(Insets.top(-1));
         child.horizontalSizing(Sizing.fill(100));
         layout.surface(Surface.outline(OPTIONS_OUTLINE_COLOR));
@@ -103,10 +117,10 @@ public class CustomDropdownComponent extends FlowLayout {
         expandableDropdown.horizontalSizing(Sizing.fixed(titleDropdown.width()));
 
         if (!expanded) {
-            titleLabel.text(Text.literal(title.getString() + UNEXPANDED_DROPDOWN_CHAR));
+            arrowLabel.text(Text.literal(UNEXPANDED_DROPDOWN_CHAR));
             contentLayout.removeChild(expandableDropdown);
         } else {
-            titleLabel.text(Text.literal(title.getString() + EXPANDED_DROPDOWN_CHAR));
+            arrowLabel.text(Text.literal(EXPANDED_DROPDOWN_CHAR));
             contentLayout.child(expandableDropdown);
         }
     }
