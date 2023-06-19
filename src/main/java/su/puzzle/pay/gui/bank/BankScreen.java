@@ -13,20 +13,22 @@ import su.puzzle.pay.api.types.*;
 import su.puzzle.pay.gui.components.CustomDropdownComponent;
 
 public class BankScreen extends BaseOwoScreen<FlowLayout> {
-    public CustomDropdownComponent cardList = new CustomDropdownComponent(Sizing.content(), Sizing.content(),
-            Text.literal("Выберите карту"), false);
+    public CustomDropdownComponent cardList;
     public BankCard thisCard;
 
     public BankScreen(BankCard thisCard) throws ApiCallException, ApiResponseException {
         this.thisCard = thisCard;
+        cardList = new CustomDropdownComponent(Sizing.fill(25), Sizing.content(),
+                Text.literal(this.thisCard == null ? "Выберите карту" : "EB-" + this.thisCard.id()), false);
+
         PlasmoApi.getAllCards().unwrap().cards().forEach((card) -> {
             cardList.button(Text.literal(card.name() + "\n§8EB-" + card.id() + " " + card.value()), button -> {
-                        try {
-                            MinecraftClient.getInstance().setScreen(new BankScreen(card));
-                        } catch (ApiCallException | ApiResponseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+                try {
+                    MinecraftClient.getInstance().setScreen(new BankScreen(card));
+                } catch (ApiCallException | ApiResponseException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         });
     }
 
