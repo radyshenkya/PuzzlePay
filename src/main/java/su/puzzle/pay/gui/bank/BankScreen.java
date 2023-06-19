@@ -14,22 +14,76 @@ import su.puzzle.pay.gui.components.CustomDropdownComponent;
 
 public class BankScreen extends BaseOwoScreen<FlowLayout> {
     public CustomDropdownComponent cardList;
-    public BankCard thisCard;
+    public ScrollContainer<Component> historyList;
+    public BankCard thisCard = null;
 
-    public BankScreen(BankCard thisCard) throws ApiCallException, ApiResponseException {
-        this.thisCard = thisCard;
+    public BankScreen() throws ApiCallException, ApiResponseException {
+        BankCardsResponse cards = PlasmoApi.getAllCards().unwrap();
+        for (BankCard card : cards.cards()) {
+            if (("EB-" + card.id()).equals(cards.active_card())) {
+                this.thisCard = card;
+            }
+        }
         cardList = new CustomDropdownComponent(Sizing.fixed(160), Sizing.content(),
                 Text.literal(this.thisCard == null ? "Выберите карту" : "EB-" + this.thisCard.id()), false);
 
-        PlasmoApi.getAllCards().unwrap().cards().forEach((card) -> {
+        cards.cards().forEach((card) -> {
             cardList.button(Text.literal(card.name() + "\n§8EB-" + card.id() + " " + card.value()), button -> {
                 try {
-                    MinecraftClient.getInstance().setScreen(new BankScreen(card));
+                    PlasmoApi.updateUserActiveCard(card);
+                    MinecraftClient.getInstance().setScreen(new BankScreen());
                 } catch (ApiCallException | ApiResponseException e) {
                     throw new RuntimeException(e);
                 }
             });
         });
+
+        FlowLayout layout = Containers.verticalFlow(Sizing.content(), Sizing.content());
+        layout.horizontalAlignment(HorizontalAlignment.CENTER);
+        layout.verticalAlignment(VerticalAlignment.CENTER);
+        if (this.thisCard != null) {
+            FlowLayout historyLayout = Containers.verticalFlow(Sizing.content(), Sizing.content());
+            historyLayout.horizontalAlignment(HorizontalAlignment.CENTER);
+            historyLayout.verticalAlignment(VerticalAlignment.TOP);
+            PlasmoApi.getCardHistory(this.thisCard).unwrap().list().forEach((history) -> {
+                historyLayout.child(
+                        Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                                .child(
+                                        Containers.verticalFlow(Sizing.fill(80), Sizing.content())
+                                                .child(
+                                                        Components.label(Text.literal(history.card().holder().isBlank() ? "Удален" : history.card().holder()))
+                                                )
+                                                .child(
+                                                        Components.label(Text.literal("EB-" + history.card().id() + " — " + (history.card().name().isBlank() ? "Удалена" : history.card().name())))
+                                                )
+                                                .child(
+                                                        !history.message().isBlank() ? Components.label(Text.literal("§8" + history.message())) : Components.box(Sizing.fixed(0), Sizing.fixed(0))
+                                                )
+                                                .horizontalAlignment(HorizontalAlignment.LEFT)
+                                                .verticalAlignment(VerticalAlignment.CENTER)
+                                )
+                                .child(
+                                        Containers.verticalFlow(Sizing.fill(20), Sizing.content())
+                                                .child(
+                                                        Components.label(Text.literal(history.amount() < 0 ? "§c" + history.amount() : "§a" + history.amount()))
+                                                )
+                                                .horizontalAlignment(HorizontalAlignment.RIGHT)
+                                                .verticalAlignment(VerticalAlignment.CENTER)
+                                )
+                                .margins(Insets.of(6))
+                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                .verticalAlignment(VerticalAlignment.CENTER)
+                        )
+                        .child(
+                                Components.box(Sizing.fill(80), Sizing.fixed(1))
+                                        .color(Color.ofArgb(1275068415))
+                        );
+            });
+            layout.child(historyLayout);
+        }
+        historyList = Containers.verticalScroll(Sizing.fill(100), Sizing.fill(100), layout);
+        historyList.horizontalAlignment(HorizontalAlignment.CENTER);
+        historyList.verticalAlignment(VerticalAlignment.CENTER);
     }
 
     @Override
@@ -44,7 +98,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                         .child(
                                 new NavigationBar(0).navbar))
                 .child(
-                        Containers.grid(Sizing.fill(100), Sizing.fill(80), 1, 3)
+                        Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 3)
                                 .child(
                                         Containers.verticalFlow(Sizing.content(), Sizing.content())
                                                 .child(
@@ -59,6 +113,19 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                                                                         : "EB-" + this.thisCard.id()))),
                                         0,
                                         1)
+                                .child(
+                                        Containers.verticalFlow(Sizing.fill(30), Sizing.fill(100))
+                                                .child(
+                                                        this.thisCard == null ?
+                                                        Components.label(Text.literal("Выберите карту")) :
+                                                        historyList
+                                                )
+                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                .verticalAlignment(VerticalAlignment.CENTER)
+                                                .surface(Surface.flat(1409286144)),
+                                        0,
+                                        2
+                                )
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
                                 .verticalAlignment(VerticalAlignment.TOP))
                 .surface(Surface.VANILLA_TRANSLUCENT);

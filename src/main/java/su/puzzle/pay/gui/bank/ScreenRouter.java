@@ -10,7 +10,7 @@ public class ScreenRouter {
             case (1) -> new TransactionScreen();
             case (2) -> new BankerScreen();
             case (3) -> new InterpolScreen();
-            default -> new BankScreen(null);
+            default -> new BankScreen();
         };
         MinecraftClient.getInstance().setScreen(screen);
     }
