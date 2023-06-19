@@ -50,7 +50,7 @@ public class PlasmoApi {
     public static Response<BankCardHistoryResponse> getCardHistory(BankCard card) throws ApiCallException {
         Type type = new TypeToken<Response<BankCardHistoryResponse>>() {
         }.getType();
-        return request("/bank/cards/" + "EB-" + card.id() + "/history?count=24", "GET", type);
+        return request("/bank/cards/" + card.getNormalId() + "/history?count=24", "GET", type);
     }
 
     public static Response<BankCardHistoryResponse> getCardHistory(String card_id) throws ApiCallException {
@@ -60,7 +60,7 @@ public class PlasmoApi {
     }
 
     public static Response<Object> updateUserActiveCard(BankCard card) throws ApiCallException {
-        PatchCard req = new PatchCard("EB-" + card.id());
+        PatchCard req = new PatchCard(card.getNormalId());
         Type type = new TypeToken<Response<Object>>() {
         }.getType();
         return request("/bank/cards/active", "PATCH", type, req);

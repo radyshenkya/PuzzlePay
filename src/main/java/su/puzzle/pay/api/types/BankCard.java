@@ -14,4 +14,8 @@ public record BankCard(
         boolean text_inverted,
         int value,
         boolean value_hidden
-) {}
+) {
+    public String getNormalId() {
+        return "EB-" + String.format("%04d", id);
+    }
+}

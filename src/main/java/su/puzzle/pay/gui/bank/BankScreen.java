@@ -20,15 +20,15 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
     public BankScreen() throws ApiCallException, ApiResponseException {
         BankCardsResponse cards = PlasmoApi.getAllCards().unwrap();
         for (BankCard card : cards.cards()) {
-            if (("EB-" + card.id()).equals(cards.active_card())) {
+            if (card.getNormalId().equals(cards.active_card())) {
                 this.thisCard = card;
             }
         }
         cardList = new CustomDropdownComponent(Sizing.fixed(160), Sizing.content(),
-                Text.literal(this.thisCard == null ? "Выберите карту" : "EB-" + this.thisCard.id()), false);
+                Text.literal(this.thisCard == null ? "Выберите карту" : this.thisCard.getNormalId()), false);
 
         cards.cards().forEach((card) -> {
-            cardList.button(Text.literal(card.name() + "\n§8EB-" + card.id() + " " + card.value()), button -> {
+            cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " " + card.value()), button -> {
                 try {
                     PlasmoApi.updateUserActiveCard(card);
                     MinecraftClient.getInstance().setScreen(new BankScreen());
@@ -54,7 +54,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                                                         Components.label(Text.literal(history.card().holder().isBlank() ? "Удален" : history.card().holder()))
                                                 )
                                                 .child(
-                                                        Components.label(Text.literal("EB-" + history.card().id() + " — " + (history.card().name().isBlank() ? "Удалена" : history.card().name())))
+                                                        Components.label(Text.literal(history.card().getNormalId() + " — " + (history.card().name().isBlank() ? "Удалена" : history.card().name())))
                                                 )
                                                 .child(
                                                         !history.message().isBlank() ? Components.label(Text.literal("§8" + history.message())) : Components.box(Sizing.fixed(0), Sizing.fixed(0))
@@ -110,7 +110,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                                                 .child(
                                                         Components.label(
                                                                 Text.literal(this.thisCard == null ? "Выберите карту"
-                                                                        : "EB-" + this.thisCard.id()))),
+                                                                        : this.thisCard.getNormalId()))),
                                         0,
                                         1)
                                 .child(
