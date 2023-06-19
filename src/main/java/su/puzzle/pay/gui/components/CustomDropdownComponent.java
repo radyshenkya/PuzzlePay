@@ -2,13 +2,13 @@ package su.puzzle.pay.gui.components;
 
 import java.util.function.Consumer;
 
+import io.wispforest.owo.ui.component.BoxComponent;
 import io.wispforest.owo.ui.component.Components;
-import io.wispforest.owo.ui.component.DropdownComponent;
 import io.wispforest.owo.ui.component.LabelComponent;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
+import io.wispforest.owo.ui.container.ScrollContainer;
 import io.wispforest.owo.ui.core.*;
-import io.wispforest.owo.ui.util.*;
 import net.minecraft.text.Text;
 
 public class CustomDropdownComponent extends FlowLayout {
@@ -19,6 +19,7 @@ public class CustomDropdownComponent extends FlowLayout {
     protected final int BG_COLOR = 0xff000000;
     protected final Insets PADDING = Insets.of(5);
     protected final BetterDropdownComponent expandableDropdown;
+    protected final ScrollContainer<FlowLayout> expandableDropdownScroll;
     protected final FlowLayout contentLayout;
     protected final BetterDropdownComponent titleDropdown;
     protected final Text title;
@@ -32,13 +33,23 @@ public class CustomDropdownComponent extends FlowLayout {
         this.title = title;
         this.expanded = expanded;
 
-        contentLayout = Containers.verticalFlow(horizontalSizing, verticalSizing);
+        contentLayout = Containers.verticalFlow(horizontalSizing, Sizing.content());
 
         expandableDropdown = new BetterDropdownComponent(horizontalSizing);
         expandableDropdown.surface(Surface.flat(BG_COLOR));
         expandableDropdown.alignment(HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
         expandableDropdown.margins(Insets.top(-2));
         expandableDropdown.padding(Insets.of(0));
+
+
+        if (verticalSizing.isContent())
+            expandableDropdownScroll = Containers.verticalScroll(horizontalSizing, Sizing.fixed(80),
+                    expandableDropdown);
+        else
+            expandableDropdownScroll = Containers.verticalScroll(horizontalSizing, verticalSizing,
+                    expandableDropdown);
+
+        expandableDropdownScroll.scrollbarThiccness(0);
 
         titleDropdown = new BetterDropdownComponent(horizontalSizing);
         titleDropdown.zIndex(10);
@@ -118,10 +129,10 @@ public class CustomDropdownComponent extends FlowLayout {
 
         if (!expanded) {
             arrowLabel.text(Text.literal(UNEXPANDED_DROPDOWN_CHAR));
-            contentLayout.removeChild(expandableDropdown);
+            contentLayout.removeChild(expandableDropdownScroll);
         } else {
             arrowLabel.text(Text.literal(EXPANDED_DROPDOWN_CHAR));
-            contentLayout.child(expandableDropdown);
+            contentLayout.child(expandableDropdownScroll);
         }
     }
 }
