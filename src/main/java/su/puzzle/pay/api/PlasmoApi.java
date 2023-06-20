@@ -47,16 +47,16 @@ public class PlasmoApi {
         return request("/bank/transfer", "POST", type, req);
     }
 
-    public static Response<BankCardHistoryResponse> getCardHistory(BankCard card) throws ApiCallException {
+    public static Response<BankCardHistoryResponse> getCardHistory(BankCard card, int count) throws ApiCallException {
         Type type = new TypeToken<Response<BankCardHistoryResponse>>() {
         }.getType();
-        return request("/bank/cards/" + card.getNormalId() + "/history?count=24", "GET", type);
+        return request("/bank/cards/" + card.getNormalId() + "/history?count=" + count, "GET", type);
     }
 
-    public static Response<BankCardHistoryResponse> getCardHistory(String card_id) throws ApiCallException {
+    public static Response<BankCardHistoryResponse> getCardHistory(String card_id, int count) throws ApiCallException {
         Type type = new TypeToken<Response<BankCardHistoryResponse>>() {
         }.getType();
-        return request("/bank/cards/" + "EB-" + card_id + "/history?count=24", "GET", type);
+        return request("/bank/cards/" + "EB-" + card_id + "/history?count=" + count, "GET", type);
     }
 
     public static Response<Object> updateUserActiveCard(BankCard card) throws ApiCallException {

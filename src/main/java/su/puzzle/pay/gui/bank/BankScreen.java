@@ -12,10 +12,81 @@ import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
 import su.puzzle.pay.gui.components.CustomDropdownComponent;
 
+import java.util.*;
+
 public class BankScreen extends BaseOwoScreen<FlowLayout> {
     public CustomDropdownComponent cardList;
-    public ScrollContainer<Component> historyList;
+    public ScrollContainer<Component> historyScroll;
     public BankCard thisCard = null;
+    public int count = 10;
+
+    public void getNextHistory(FlowLayout layout) throws ApiCallException, ApiResponseException {
+        ButtonComponent button = Components.button(Text.literal("Показать больше..."), onClick -> {});
+        button.onPress(buttonComponent -> {
+            try {
+                this.count += 10;
+                getNextHistory(layout);
+                button.remove();
+            } catch (ApiCallException | ApiResponseException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        button.horizontalSizing(Sizing.fill(80)).margins(Insets.of(6));
+        BankCardHistoryResponse history = PlasmoApi.getCardHistory(this.thisCard, this.count).unwrap();
+
+        if (history.total() >= 1 && this.count <= 100) {
+            history.list().subList(this.count - 10, Math.min(this.count, history.total())).forEach((bankCardHistory) -> {
+                layout.child(
+                                Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                                        .child(
+                                                Containers.verticalFlow(Sizing.fill(80), Sizing.content())
+                                                        .child(
+                                                                Components.label(Text.literal(bankCardHistory.card().holder().isBlank() ? "Удален" : bankCardHistory.card().holder()))
+                                                        )
+                                                        .child(
+                                                                Components.label(Text.literal(bankCardHistory.card().getNormalId() + " — " + (bankCardHistory.card().name().isBlank() ? "Удалена" : bankCardHistory.card().name())))
+                                                        )
+                                                        .child(
+                                                                !bankCardHistory.message().isBlank() ? Components.label(Text.literal("§8" + bankCardHistory.message())) : Components.box(Sizing.fixed(0), Sizing.fixed(0))
+                                                        )
+                                                        .horizontalAlignment(HorizontalAlignment.LEFT)
+                                                        .verticalAlignment(VerticalAlignment.CENTER)
+                                        )
+                                        .child(
+                                                Containers.verticalFlow(Sizing.fill(20), Sizing.content())
+                                                        .child(
+                                                                Components.label(Text.literal(bankCardHistory.amount() < 0 ? "§c" + bankCardHistory.amount() : "§a" + bankCardHistory.amount()))
+                                                        )
+                                                        .horizontalAlignment(HorizontalAlignment.RIGHT)
+                                                        .verticalAlignment(VerticalAlignment.CENTER)
+                                        )
+                                        .margins(Insets.of(6))
+                                        .horizontalAlignment(HorizontalAlignment.CENTER)
+                                        .verticalAlignment(VerticalAlignment.CENTER)
+                        )
+                        .child(
+                                Components.box(Sizing.fill(80), Sizing.fixed(1))
+                                        .color(Color.ofArgb(1275068415))
+                        );
+            });
+        } else {
+            if (history.total() <= 0) {
+                layout.child(
+                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                                .child(
+                                        Components.label(Text.literal("Вы не совершали платежи. Обратитесь к банкиру, чтобы положить алмазы на счет.")).horizontalTextAlignment(HorizontalAlignment.CENTER).horizontalSizing(Sizing.fill(80))
+                                )
+                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                .verticalAlignment(VerticalAlignment.CENTER)
+                );
+            }
+        }
+        if ((history.total() > this.count) && (this.count < 100)) {
+            layout.child(
+                    button
+            );
+        }
+    }
 
     public BankScreen() throws ApiCallException, ApiResponseException {
         BankCardsResponse cards = PlasmoApi.getAllCards().unwrap();
@@ -24,11 +95,11 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                 this.thisCard = card;
             }
         }
-        cardList = new CustomDropdownComponent(Sizing.fixed(160), Sizing.content(),
-                Text.literal(this.thisCard == null ? "Выберите карту" : this.thisCard.getNormalId()), false);
-
+        cardList = new CustomDropdownComponent(Sizing.fill(100), Sizing.content(),
+                Text.literal(this.thisCard == null ? "Выберите карту" : this.thisCard.name() + "\n§8" + this.thisCard.getNormalId() + " — " + this.thisCard.holder()), false);
+        cardList.margins(Insets.top(8));
         cards.cards().forEach((card) -> {
-            cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " " + card.value()), button -> {
+            cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
                 try {
                     PlasmoApi.updateUserActiveCard(card);
                     MinecraftClient.getInstance().setScreen(new BankScreen());
@@ -38,52 +109,11 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
             });
         });
 
-        FlowLayout layout = Containers.verticalFlow(Sizing.content(), Sizing.content());
-        layout.horizontalAlignment(HorizontalAlignment.CENTER);
-        layout.verticalAlignment(VerticalAlignment.CENTER);
-        if (this.thisCard != null) {
-            FlowLayout historyLayout = Containers.verticalFlow(Sizing.content(), Sizing.content());
-            historyLayout.horizontalAlignment(HorizontalAlignment.CENTER);
-            historyLayout.verticalAlignment(VerticalAlignment.TOP);
-            PlasmoApi.getCardHistory(this.thisCard).unwrap().list().forEach((history) -> {
-                historyLayout.child(
-                        Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
-                                .child(
-                                        Containers.verticalFlow(Sizing.fill(80), Sizing.content())
-                                                .child(
-                                                        Components.label(Text.literal(history.card().holder().isBlank() ? "Удален" : history.card().holder()))
-                                                )
-                                                .child(
-                                                        Components.label(Text.literal(history.card().getNormalId() + " — " + (history.card().name().isBlank() ? "Удалена" : history.card().name())))
-                                                )
-                                                .child(
-                                                        !history.message().isBlank() ? Components.label(Text.literal("§8" + history.message())) : Components.box(Sizing.fixed(0), Sizing.fixed(0))
-                                                )
-                                                .horizontalAlignment(HorizontalAlignment.LEFT)
-                                                .verticalAlignment(VerticalAlignment.CENTER)
-                                )
-                                .child(
-                                        Containers.verticalFlow(Sizing.fill(20), Sizing.content())
-                                                .child(
-                                                        Components.label(Text.literal(history.amount() < 0 ? "§c" + history.amount() : "§a" + history.amount()))
-                                                )
-                                                .horizontalAlignment(HorizontalAlignment.RIGHT)
-                                                .verticalAlignment(VerticalAlignment.CENTER)
-                                )
-                                .margins(Insets.of(6))
-                                .horizontalAlignment(HorizontalAlignment.CENTER)
-                                .verticalAlignment(VerticalAlignment.CENTER)
-                        )
-                        .child(
-                                Components.box(Sizing.fill(80), Sizing.fixed(1))
-                                        .color(Color.ofArgb(1275068415))
-                        );
-            });
-            layout.child(historyLayout);
-        }
-        historyList = Containers.verticalScroll(Sizing.fill(100), Sizing.fill(100), layout);
-        historyList.horizontalAlignment(HorizontalAlignment.CENTER);
-        historyList.verticalAlignment(VerticalAlignment.CENTER);
+        FlowLayout layout = Containers.verticalFlow(Sizing.fill(100), Sizing.content());
+        layout.horizontalAlignment(HorizontalAlignment.CENTER).verticalAlignment(VerticalAlignment.TOP);
+        getNextHistory(layout);
+        historyScroll = Containers.verticalScroll(Sizing.fill(100), Sizing.fill(100), layout);
+        historyScroll.horizontalAlignment(HorizontalAlignment.CENTER).verticalAlignment(VerticalAlignment.TOP);
     }
 
     @Override
@@ -96,15 +126,24 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
         rootComponent.child(
                 Containers.verticalFlow(Sizing.content(), Sizing.content())
                         .child(
-                                new NavigationBar(0).navbar))
+                                new NavigationBar(0).navbar
+                        )
+                )
                 .child(
                         Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 3)
                                 .child(
-                                        Containers.verticalFlow(Sizing.content(), Sizing.content())
+                                        Containers.verticalFlow(Sizing.fill(30), Sizing.fill(100))
                                                 .child(
-                                                        cardList),
+                                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(80))
+                                                                .child(
+                                                                        cardList
+                                                                )
+                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                                .verticalAlignment(VerticalAlignment.TOP)
+                                                ),
                                         0,
-                                        0)
+                                        0
+                                )
                                 .child(
                                         Containers.verticalFlow(Sizing.content(), Sizing.content())
                                                 .child(
@@ -112,22 +151,27 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                                                                 Text.literal(this.thisCard == null ? "Выберите карту"
                                                                         : this.thisCard.getNormalId()))),
                                         0,
-                                        1)
+                                        1
+                                )
                                 .child(
                                         Containers.verticalFlow(Sizing.fill(30), Sizing.fill(100))
                                                 .child(
-                                                        this.thisCard == null ?
-                                                        Components.label(Text.literal("Выберите карту")) :
-                                                        historyList
+                                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(80))
+                                                                .child(
+                                                                        this.thisCard == null ?
+                                                                                Components.label(Text.literal("Выберите карту")) :
+                                                                                historyScroll
+                                                                )
+                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                                .verticalAlignment(VerticalAlignment.TOP)
                                                 )
-                                                .horizontalAlignment(HorizontalAlignment.CENTER)
-                                                .verticalAlignment(VerticalAlignment.CENTER)
-                                                .surface(Surface.flat(1409286144)),
+                                                .surface(Surface.flat(838860800)),
                                         0,
                                         2
                                 )
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                .verticalAlignment(VerticalAlignment.TOP))
+                                .verticalAlignment(VerticalAlignment.TOP)
+                )
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
 }
