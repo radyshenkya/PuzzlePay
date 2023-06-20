@@ -95,9 +95,9 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                 this.thisCard = card;
             }
         }
-        cardList = new CustomDropdownComponent(Sizing.fill(100), Sizing.content(),
+        cardList = new CustomDropdownComponent(Sizing.fill(100), Sizing.fill(80),
                 Text.literal(this.thisCard == null ? "Выберите карту" : this.thisCard.name() + "\n§8" + this.thisCard.getNormalId() + " — " + this.thisCard.holder()), false);
-        cardList.margins(Insets.top(8));
+        cardList.margins(Insets.both(0, 8));
         cards.cards().forEach((card) -> {
             cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
                 try {
@@ -130,13 +130,25 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                         )
                 )
                 .child(
-                        Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 3)
+                        Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 2)
                                 .child(
-                                        Containers.verticalFlow(Sizing.fill(30), Sizing.fill(100))
+                                        Containers.verticalFlow(Sizing.fill(45), Sizing.fill(100))
                                                 .child(
                                                         Containers.verticalFlow(Sizing.fill(100), Sizing.fill(80))
                                                                 .child(
                                                                         cardList
+                                                                )
+                                                                .child(
+                                                                        Containers.verticalFlow(Sizing.fill(100), Sizing.content())
+                                                                                .child(
+                                                                                        Components.label(Text.literal("Карта " + thisCard.getNormalId()))
+                                                                                                .horizontalTextAlignment(HorizontalAlignment.CENTER)
+                                                                                                .horizontalSizing(Sizing.fill(80))
+                                                                                                .margins(Insets.both(0, 8))
+                                                                                )
+                                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                                                .verticalAlignment(VerticalAlignment.TOP)
+                                                                                .surface(Surface.flat(838860800))
                                                                 )
                                                                 .horizontalAlignment(HorizontalAlignment.CENTER)
                                                                 .verticalAlignment(VerticalAlignment.TOP)
@@ -145,20 +157,11 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                                         0
                                 )
                                 .child(
-                                        Containers.verticalFlow(Sizing.content(), Sizing.content())
-                                                .child(
-                                                        Components.label(
-                                                                Text.literal(this.thisCard == null ? "Выберите карту"
-                                                                        : this.thisCard.getNormalId()))),
-                                        0,
-                                        1
-                                )
-                                .child(
-                                        Containers.verticalFlow(Sizing.fill(30), Sizing.fill(100))
+                                        Containers.verticalFlow(Sizing.fill(45), Sizing.fill(100))
                                                 .child(
                                                         Containers.verticalFlow(Sizing.fill(100), Sizing.fill(80))
                                                                 .child(
-                                                                        this.thisCard == null ?
+                                                                        thisCard == null ?
                                                                                 Components.label(Text.literal("Выберите карту")) :
                                                                                 historyScroll
                                                                 )
@@ -167,7 +170,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> {
                                                 )
                                                 .surface(Surface.flat(838860800)),
                                         0,
-                                        2
+                                        1
                                 )
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
                                 .verticalAlignment(VerticalAlignment.TOP)

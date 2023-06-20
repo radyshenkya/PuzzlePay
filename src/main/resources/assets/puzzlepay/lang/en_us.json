@@ -24,8 +24,6 @@
     "gui.puzzlepay.text.error_same_card": "Cannot transfer to the same card",
     "category.puzzlepay.puzzlepay": "Puzzle Pay buttons",
     "key.puzzlepay.open_transfer_gui": "Open transfer screen",
-    "gui.puzzlepay.bank.tab.main": "Главная",
-    "gui.puzzlepay.bank.tab.transactions": "Перевод",
-    "gui.puzzlepay.bank.tab.banker": "Страница банкира",
-    "gui.puzzlepay.bank.tab.interpol": "Страница интерпола"
+    "gui.puzzlepay.bank.tab.main": " ⌂ Main ",
+    "gui.puzzlepay.bank.tab.transactions": " ⇄ Transfer "
 }

@@ -23,5 +23,7 @@
     "gui.puzzlepay.text.error_amount_must_be_integer": "Поле \"Сумма\" должно содержать в себе только цифры",
     "gui.puzzlepay.text.error_same_card": "Нельзя переводить на одну и ту же карту",
     "category.puzzlepay.puzzlepay": "Puzzle Pay кнопки",
-    "key.puzzlepay.open_transfer_gui": "Открыть окно перевода"
+    "key.puzzlepay.open_transfer_gui": "Открыть окно перевода",
+    "gui.puzzlepay.bank.tab.main": " ⌂ Главная ",
+    "gui.puzzlepay.bank.tab.transactions": " ⇄ Перевод "
 }
