@@ -35,7 +35,6 @@ public class CustomDropdownComponent extends FlowLayout {
         contentLayout = Containers.verticalFlow(horizontalSizing, Sizing.content());
 
         expandableDropdown = new BetterDropdownComponent(horizontalSizing);
-        expandableDropdown.allowOverflow(true);
         expandableDropdown.surface(Surface.flat(BG_COLOR));
         expandableDropdown.alignment(HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
         expandableDropdown.margins(Insets.top(-2));
