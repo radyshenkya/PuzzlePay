@@ -27,7 +27,7 @@ public class CustomDropdownComponent extends FlowLayout {
     protected boolean expanded;
 
     public CustomDropdownComponent(Sizing horizontalSizing, Sizing verticalSizing, Text title, boolean expanded) {
-        super(horizontalSizing, verticalSizing, Algorithm.HORIZONTAL);
+        super(horizontalSizing, Sizing.content(), Algorithm.HORIZONTAL);
 
         this.title = title;
         this.expanded = expanded;
@@ -84,10 +84,13 @@ public class CustomDropdownComponent extends FlowLayout {
         titleDropdown.child(arrowLabel);
 
         contentLayout.child(titleDropdown);
+        contentLayout.allowOverflow(true);
+        contentLayout.zIndex(5);
 
         updateExpandableDropdown();
 
         super.child(contentLayout);
+        super.allowOverflow(true);
     }
 
     public CustomDropdownComponent button(Text text, Consumer<BetterDropdownComponent> onClick) {
@@ -132,6 +135,7 @@ public class CustomDropdownComponent extends FlowLayout {
         } else {
             arrowLabel.text(Text.literal(EXPANDED_DROPDOWN_CHAR));
             contentLayout.child(expandableDropdownScroll);
+            expandableDropdownScroll.positioning(Positioning.layout());
         }
     }
 }

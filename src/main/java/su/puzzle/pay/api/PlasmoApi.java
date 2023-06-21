@@ -79,6 +79,12 @@ public class PlasmoApi {
         return request("/user", "GET", type, null);
     }
 
+    public static Response<TokenInfoResponse> getTokenInfo() throws ApiCallException {
+        Type type = new TypeToken<Response<TokenInfoResponse>>() {
+        }.getType();
+        return request("/oauth2/token", "GET", type, null);
+    }
+
     public static String request(String endpoint, String method, String requestBody) throws ApiCallException {
         try {
             assertTokenNotNull();
