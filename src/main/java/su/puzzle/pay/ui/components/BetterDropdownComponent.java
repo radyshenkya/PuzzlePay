@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui.components;
+package su.puzzle.pay.ui.components;
 
 import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;

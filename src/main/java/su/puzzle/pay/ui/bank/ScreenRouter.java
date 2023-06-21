@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui.bank;
+package su.puzzle.pay.ui.bank;
 
 import net.minecraft.client.*;
 import net.minecraft.client.gui.screen.*;

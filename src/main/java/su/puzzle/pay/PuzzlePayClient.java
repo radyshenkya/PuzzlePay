@@ -9,8 +9,8 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.PlasmoApi;
-import su.puzzle.pay.gui.oauth2.AuthHttpServer;
-import su.puzzle.pay.gui.bank.*;
+import su.puzzle.pay.ui.oauth2.AuthHttpServer;
+import su.puzzle.pay.ui.bank.*;
 
 import java.io.*;
 

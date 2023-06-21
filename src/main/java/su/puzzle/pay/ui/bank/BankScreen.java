@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui.bank;
+package su.puzzle.pay.ui.bank;
 
 import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
@@ -10,9 +10,7 @@ import org.jetbrains.annotations.*;
 import su.puzzle.pay.api.*;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
-import su.puzzle.pay.gui.components.CustomDropdownComponent;
-
-import java.util.*;
+import su.puzzle.pay.ui.components.CustomDropdownComponent;
 
 public class BankScreen extends BaseOwoScreen<FlowLayout> {
     public CustomDropdownComponent cardList;

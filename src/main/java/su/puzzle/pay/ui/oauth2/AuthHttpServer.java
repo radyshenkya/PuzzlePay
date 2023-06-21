@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui.oauth2;
+package su.puzzle.pay.ui.oauth2;
 
 import com.sun.net.httpserver.*;
 import net.minecraft.client.*;
@@ -6,7 +6,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 import org.apache.http.HttpStatus;
 import su.puzzle.pay.*;
-import su.puzzle.pay.gui.*;
+import su.puzzle.pay.ui.*;
 import su.puzzle.pay.api.PlasmoApi;
 
 import java.io.*;
@@ -37,7 +37,7 @@ public class AuthHttpServer {
             PuzzlePayClient.config.plasmoRpToken(token);
             PlasmoApi.setToken(token);
 
-            MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("gui.puzzlepay.text.success_message_name"), Text.translatable("gui.puzzlepay.text.oauth2.success"))));
+            MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.success_message_name"), Text.translatable("ui.puzzlepay.text.oauth2.success"))));
             server.stop(0);
         });
 

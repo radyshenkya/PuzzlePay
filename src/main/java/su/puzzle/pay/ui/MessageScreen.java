@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui;
+package su.puzzle.pay.ui;
 
 import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
@@ -39,7 +39,7 @@ public class MessageScreen extends BaseOwoScreen<FlowLayout> {
                                         .margins(Insets.top(5))
                         )
                         .child(
-                                Components.button(Text.translatable("gui.puzzlepay.button.ok"), button -> {
+                                Components.button(Text.translatable("ui.puzzlepay.button.ok"), button -> {
                                     MinecraftClient.getInstance().setScreen(null);
                                 }).margins(Insets.top(5)).horizontalSizing(Sizing.fill(100))
                         )

@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui.bank;
+package su.puzzle.pay.ui.bank;
 
 import io.wispforest.owo.ui.component.*;
 import io.wispforest.owo.ui.container.*;
@@ -10,8 +10,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.*;
 import su.puzzle.pay.*;
 import su.puzzle.pay.api.exceptions.*;
-import su.puzzle.pay.gui.components.*;
-import su.puzzle.pay.gui.oauth2.*;
+import su.puzzle.pay.ui.oauth2.*;
 
 import java.util.*;
 import java.util.List;
@@ -23,14 +22,14 @@ public class NavigationBar {
 
     public NavigationBar(int pageIndex) {
         List<Component> buttons = new ArrayList<>();
-        buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.main"), button -> {
+        buttons.add(Components.button(Text.translatable("ui.puzzlepay.bank.tab.main"), button -> {
             try {
                 router.route(0);
             } catch (ApiCallException | ApiResponseException e) {
                 throw new RuntimeException(e);
             }
         }).active(pageIndex != 0).margins(Insets.left(14)));
-        buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.transactions"), button -> {
+        buttons.add(Components.button(Text.translatable("ui.puzzlepay.bank.tab.transactions"), button -> {
             try {
                 router.route(1);
             } catch (ApiCallException | ApiResponseException e) {
@@ -38,14 +37,14 @@ public class NavigationBar {
             }
         }).active(pageIndex != 1).margins(Insets.left(4)));
         // TODO: в будущем сделать хрени для банкиров и интерполяций
-        /* buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.banker"), button -> {
+        /* buttons.add(Components.button(Text.translatable("ui.puzzlepay.bank.tab.banker"), button -> {
             try {
                 router.route(2);
             } catch (ApiCallException | ApiResponseException e) {
                 throw new RuntimeException(e);
             }
         }).active(pageIndex != 2).margins(Insets.left(4)));
-        buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.interpol"), button -> {
+        buttons.add(Components.button(Text.translatable("ui.puzzlepay.bank.tab.interpol"), button -> {
             try {
                 router.route(3);
             } catch (ApiCallException | ApiResponseException e) {

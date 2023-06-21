@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui.bank;
+package su.puzzle.pay.ui.bank;
 
 import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
@@ -7,7 +7,7 @@ import io.wispforest.owo.ui.core.*;
 import net.minecraft.text.*;
 import org.jetbrains.annotations.*;
 
-public class InterpolScreen extends BaseOwoScreen<FlowLayout> {
+public class TransactionScreen extends BaseOwoScreen<FlowLayout> {
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
         return OwoUIAdapter.create(this, Containers::verticalFlow);
@@ -18,10 +18,10 @@ public class InterpolScreen extends BaseOwoScreen<FlowLayout> {
         rootComponent.child(
                         Containers.verticalFlow(Sizing.content(), Sizing.content())
                                 .child(
-                                        new NavigationBar(3).navbar
+                                        new NavigationBar(1).navbar
                                 )
                 )
-                .child(Components.label(Text.literal("InterpolScreen")))
+                .child(Components.label(Text.literal("TransactionScreen")))
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
 }

@@ -1,8 +1,7 @@
-package su.puzzle.pay.gui.components;
+package su.puzzle.pay.ui.components;
 
 import java.util.function.Consumer;
 
-import io.wispforest.owo.ui.component.BoxComponent;
 import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.component.LabelComponent;
 import io.wispforest.owo.ui.container.Containers;
