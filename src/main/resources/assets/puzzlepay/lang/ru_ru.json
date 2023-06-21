@@ -1,15 +1,15 @@
 {
     "gui.puzzlepay.button.ok": "✔ Ок",
     "gui.puzzlepay.button.cancel": "❌ Отмена",
+    "gui.puzzlepay.button.link": "← Начать",
     "gui.puzzlepay.button.set_token": "Установить токен",
     "gui.puzzlepay.text.oauth2.success": "Авторизация прошла успешно",
-    "gui.puzzlepay.text.oauth2.link": "← Начать",
     "gui.puzzlepay.text.oauth2.title": "Авторизация Plasmo RP",
     "gui.puzzlepay.text.oauth2.wait_title": "Завершите авторизацию в браузере...",
     "gui.puzzlepay.text.oauth2.description": "Для начала авторизации нажмите на кнопку \"Начать\"",
     "gui.puzzlepay.text.success_message_name": "Успех",
-    "category.puzzlepay.puzzlepay": "Puzzle Pay кнопки",
-    "key.puzzlepay.open_transfer_gui": "Открыть окно перевода",
     "gui.puzzlepay.bank.tab.main": " ⌂ Главная ",
-    "gui.puzzlepay.bank.tab.transactions": " ⇄ Перевод "
+    "gui.puzzlepay.bank.tab.transactions": " ⇄ Перевод ",
+    "category.puzzlepay.puzzlepay": "Puzzle Pay кнопки",
+    "key.puzzlepay.open_transfer_gui": "Открыть окно перевода"
 }

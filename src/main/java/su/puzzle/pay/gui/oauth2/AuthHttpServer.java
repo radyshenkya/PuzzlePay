@@ -1,4 +1,4 @@
-package su.puzzle.pay.gui.Oauth2;
+package su.puzzle.pay.gui.oauth2;
 
 import com.sun.net.httpserver.*;
 import net.minecraft.client.*;
@@ -6,7 +6,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 import org.apache.http.HttpStatus;
 import su.puzzle.pay.*;
-import su.puzzle.pay.gui.Message.*;
+import su.puzzle.pay.gui.*;
 import su.puzzle.pay.api.PlasmoApi;
 
 import java.io.*;

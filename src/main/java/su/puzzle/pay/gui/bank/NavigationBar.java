@@ -5,21 +5,24 @@ import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
 import io.wispforest.owo.ui.core.Insets;
 import net.fabricmc.loader.api.*;
+import net.minecraft.client.*;
 import net.minecraft.text.*;
 import net.minecraft.util.*;
 import su.puzzle.pay.*;
 import su.puzzle.pay.api.exceptions.*;
+import su.puzzle.pay.gui.components.*;
+import su.puzzle.pay.gui.oauth2.*;
 
 import java.util.*;
 import java.util.List;
 
 public class NavigationBar {
-    private final List<Component> buttons = new ArrayList<>();
     private final ScreenRouter router = new ScreenRouter();
 
     public Component navbar;
 
     public NavigationBar(int pageIndex) {
+        List<Component> buttons = new ArrayList<>();
         buttons.add(Components.button(Text.translatable("gui.puzzlepay.bank.tab.main"), button -> {
             try {
                 router.route(0);
@@ -80,6 +83,11 @@ public class NavigationBar {
                                                                 throw new RuntimeException(e);
                                                             }
                                                         }).sizing(Sizing.fixed(20))
+                                                )
+                                                .child(
+                                                        Components.button(Text.literal("耀翿翿"), button -> {
+                                                            MinecraftClient.getInstance().setScreen(new Oauth2Screen());
+                                                        }).sizing(Sizing.fixed(20)).margins(Insets.left(4))
                                                 )
                                                 .horizontalAlignment(HorizontalAlignment.RIGHT)
                                                 .verticalAlignment(VerticalAlignment.CENTER)

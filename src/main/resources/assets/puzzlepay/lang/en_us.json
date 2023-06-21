@@ -1,15 +1,15 @@
 {
     "gui.puzzlepay.button.ok": "✔ Ok",
     "gui.puzzlepay.button.cancel": "❌ Cancel",
+    "gui.puzzlepay.button.link": "← Link",
     "gui.puzzlepay.button.set_token": "Set Plasmo RP token",
     "gui.puzzlepay.text.oauth2.success": "Successfully authorized",
-    "gui.puzzlepay.text.oauth2.link": "← Link",
     "gui.puzzlepay.text.oauth2.title": "Plasmo RP authorization",
     "gui.puzzlepay.text.oauth2.wait_title": "Waiting for authorization trough browser...",
     "gui.puzzlepay.text.oauth2.description": "To start authentication, click on the link button",
     "gui.puzzlepay.text.success_message_name": "Success",
-    "category.puzzlepay.puzzlepay": "Puzzle Pay buttons",
-    "key.puzzlepay.open_transfer_gui": "Open transfer screen",
     "gui.puzzlepay.bank.tab.main": " ⌂ Main ",
-    "gui.puzzlepay.bank.tab.transactions": " ⇄ Transfer "
+    "gui.puzzlepay.bank.tab.transactions": " ⇄ Transfer ",
+    "category.puzzlepay.puzzlepay": "Puzzle Pay buttons",
+    "key.puzzlepay.open_transfer_gui": "Open transfer screen"
 }
