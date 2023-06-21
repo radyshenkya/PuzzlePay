@@ -84,7 +84,7 @@ public class NavigationBar {
                                                         }).sizing(Sizing.fixed(20))
                                                 )
                                                 .child(
-                                                        Components.button(Text.literal("耀翿翿"), button -> {
+                                                        Components.button(Text.literal("Auth"), button -> {
                                                             MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                                                         }).sizing(Sizing.fixed(20)).margins(Insets.left(4))
                                                 )

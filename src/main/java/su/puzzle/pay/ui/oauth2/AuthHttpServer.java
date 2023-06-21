@@ -8,20 +8,29 @@ import org.apache.http.HttpStatus;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.*;
 import su.puzzle.pay.api.PlasmoApi;
+import su.puzzle.pay.api.exceptions.ApiCallException;
+import su.puzzle.pay.api.exceptions.ApiResponseException;
+import su.puzzle.pay.api.types.TokenInfoResponse;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class AuthHttpServer {
-    private static final String SUCCESS_REDIRECT_URL = "https://puzzlemc.site/pay/successful?nickname=%s";
     public HttpServer server;
 
-    public AuthHttpServer() throws IOException {}
+    private static final String SUCCESS_REDIRECT_URL = "https://puzzlemc.site/pay/successful?nickname=%s";
+
+    public AuthHttpServer() throws IOException {
+    }
 
     public void start() {
         // Из-за server.stop() наш httpserver меняет свой стейт на кринжовый,
-        // и если вызвать server.start() еще раз, то он вываливается с ошибкой IllegalState,
+        // и если вызвать server.start() еще раз, то он вываливается с ошибкой
+        // IllegalState,
         // якобы сервер уже стопнули, он заанбиндился от порта, а мы его стартуем.
         // Поэтому создаем сервер прямо тут
         try {
@@ -30,14 +39,19 @@ public class AuthHttpServer {
             PuzzlePayMod.LOGGER.warn("Cannot create server. Error: " + e.getMessage());
         }
         server.createContext("/oauth2", exchange -> {
-            exchange.getResponseHeaders().add("Location", String.format(SUCCESS_REDIRECT_URL, MinecraftClient.getInstance().getSession().getUsername()));
+            exchange.getResponseHeaders().add("Location",
+                    String.format(SUCCESS_REDIRECT_URL, MinecraftClient.getInstance().getSession().getUsername()));
             sendResponseString(exchange, HttpStatus.SC_MOVED_TEMPORARILY, "Redirecting...");
 
             String token = exchange.getRequestURI().toString().split("=")[1].split("&")[0];
-            PuzzlePayClient.config.plasmoRpToken(token);
-            PlasmoApi.setToken(token);
 
-            MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.success_message_name"), Text.translatable("ui.puzzlepay.text.oauth2.success"))));
+            PlasmoApi.setToken(token);
+            PuzzlePayClient.config.plasmoRpToken(token);
+
+            MinecraftClient.getInstance()
+                    .execute(() -> MinecraftClient.getInstance()
+                            .setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.success_message_name"),
+                                    Text.translatable("ui.puzzlepay.text.oauth2.success"))));
             server.stop(0);
         });
 
@@ -47,8 +61,10 @@ public class AuthHttpServer {
             }
 
             try {
-                InputStream is = MinecraftClient.getInstance().getResourceManager().getResource(new Identifier("puzzlepay", "url_rebuild.html")).get().getInputStream();
-                sendResponseString(httpExchange, HttpStatus.SC_OK, new String(is.readAllBytes(), StandardCharsets.UTF_8));
+                InputStream is = MinecraftClient.getInstance().getResourceManager()
+                        .getResource(new Identifier("puzzlepay", "url_rebuild.html")).get().getInputStream();
+                sendResponseString(httpExchange, HttpStatus.SC_OK,
+                        new String(is.readAllBytes(), StandardCharsets.UTF_8));
                 is.close();
             } catch (Exception e) {
                 PuzzlePayMod.LOGGER.warn(e.getMessage());

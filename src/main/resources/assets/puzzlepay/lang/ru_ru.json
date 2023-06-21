@@ -8,8 +8,11 @@
     "ui.puzzlepay.text.oauth2.wait_title": "Завершите авторизацию в браузере...",
     "ui.puzzlepay.text.oauth2.description": "Для начала авторизации нажмите на кнопку \"Начать\"",
     "ui.puzzlepay.text.success_message_name": "Успех",
+    "ui.puzzlepay.text.error_message": "Ошибка",
     "ui.puzzlepay.bank.tab.main": " ⌂ Главная ",
     "ui.puzzlepay.bank.tab.transactions": " ⇄ Перевод ",
+    "ui.puzzlepay.bank.tab.no_transactions_message": "Вы не совершали платежи. Обратитесь к банкиру, чтобы положить алмазы на счет.",
+    "ui.puzzlepay.bank.tab.choose_card": "Выберите карту",
     "category.puzzlepay.puzzlepay": "Puzzle Pay кнопки",
     "key.puzzlepay.open_transfer_gui": "Открыть окно перевода"
 }
