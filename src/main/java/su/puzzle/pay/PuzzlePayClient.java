@@ -11,7 +11,6 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import su.puzzle.pay.api.exceptions.*;
-import su.puzzle.pay.api.types.Response;
 import su.puzzle.pay.api.types.TokenInfoResponse;
 import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.ui.oauth2.AuthHttpServer;
@@ -28,7 +27,7 @@ public class PuzzlePayClient implements ClientModInitializer {
     private static KeyBinding transferGuiKeyBinding;
     public static AuthHttpServer server;
 
-    public static final HashSet<String> NEEDED_SCOPES = new HashSet<String>(Arrays.asList(
+    public static final HashSet<String> NEEDED_SCOPES = new HashSet<>(Arrays.asList(
             // "bank:balance",
             // "bank:search",
             // "bank:history",
@@ -39,7 +38,7 @@ public class PuzzlePayClient implements ClientModInitializer {
             // "bank:banker:card",
             "bank:penalties"
             // "bank:penalties:card"
-            ));
+    ));
 
     @Override
     public void onInitializeClient() {
@@ -68,19 +67,20 @@ public class PuzzlePayClient implements ClientModInitializer {
                 try {
                     TokenInfoResponse tokenCheck = PlasmoApi.getTokenInfo().unwrap();
 
-                    HashSet<String> scopes = new HashSet<String>(tokenCheck.scopes());
+                    HashSet<String> scopes = new HashSet<>(tokenCheck.scopes());
 
-                    scopes.forEach(scope -> System.out.println(scope));
+                    scopes.forEach(System.out::println);
 
                     if (scopes.containsAll(NEEDED_SCOPES) && NEEDED_SCOPES.containsAll(scopes))
                         new ScreenRouter().route(0);
                     else
                         new ScreenRouter().route(4);
                 } catch (ApiResponseException e) {
-                    if (e.error.code == HttpStatus.SC_UNAUTHORIZED || e.error.code == 0)
+                    if (e.error.code == HttpStatus.SC_UNAUTHORIZED || e.error.code == 0){
                         MinecraftClient.getInstance().setScreen(new Oauth2Screen());
-
-                    MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.error.msg)));
+                    } else {
+                        MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.error.msg)));
+                    }
                 } catch (ApiCallException e) {
                     MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.message)));
                 }
