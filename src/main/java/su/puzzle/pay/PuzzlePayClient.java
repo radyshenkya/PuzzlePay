@@ -1,6 +1,5 @@
 package su.puzzle.pay;
 
-import org.apache.http.HttpStatus;
 import org.lwjgl.glfw.GLFW;
 
 import net.fabricmc.api.ClientModInitializer;
@@ -9,13 +8,11 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.TokenInfoResponse;
 import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.ui.oauth2.AuthHttpServer;
 import su.puzzle.pay.ui.oauth2.Oauth2Screen;
-import su.puzzle.pay.ui.MessageScreen;
 import su.puzzle.pay.ui.bank.*;
 
 import java.io.*;
@@ -75,14 +72,8 @@ public class PuzzlePayClient implements ClientModInitializer {
                         new ScreenRouter().route(0);
                     else
                         new ScreenRouter().route(4);
-                } catch (ApiResponseException e) {
-                    if (e.error.code == HttpStatus.SC_UNAUTHORIZED || e.error.code == 0){
-                        MinecraftClient.getInstance().setScreen(new Oauth2Screen());
-                    } else {
-                        MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.error.msg)));
-                    }
-                } catch (ApiCallException e) {
-                    MinecraftClient.getInstance().setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.message)));
+                } catch (ApiResponseException | ApiCallException e) {
+                    MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                 }
             }
         });
