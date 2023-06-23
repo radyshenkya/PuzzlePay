@@ -20,8 +20,9 @@ import su.puzzle.pay.api.types.*;
 public class PlasmoApi {
     public static final String API_URL = "https://plasmorp.com/api";
     public static String token = null;
+    private static final Gson gson = new Gson();
 
-    private static HttpClient httpClient = HttpClient.newHttpClient();
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
 
     public static void setToken(String token) {
         PlasmoApi.token = token;
@@ -53,30 +54,11 @@ public class PlasmoApi {
         return request("/bank/cards/" + card.getNormalId() + "/history?count=" + count, "GET", type);
     }
 
-    public static Response<BankCardHistoryResponse> getCardHistory(String card_id, int count) throws ApiCallException {
-        Type type = new TypeToken<Response<BankCardHistoryResponse>>() {
-        }.getType();
-        return request("/bank/cards/" + "EB-" + card_id + "/history?count=" + count, "GET", type);
-    }
-
-    public static Response<Object> updateUserActiveCard(BankCard card) throws ApiCallException {
+    public static void updateUserActiveCard(BankCard card) throws ApiCallException {
         PatchCard req = new PatchCard(card.getNormalId());
         Type type = new TypeToken<Response<Object>>() {
         }.getType();
-        return request("/bank/cards/active", "PATCH", type, req);
-    }
-
-    public static Response<Object> updateUserActiveCard(String card_id) throws ApiCallException {
-        PatchCard req = new PatchCard(card_id);
-        Type type = new TypeToken<Response<Object>>() {
-        }.getType();
-        return request("/bank/cards/active", "PATCH", type, req);
-    }
-
-    public static Response<ProfileResponse> getUser() throws ApiCallException {
-        Type type = new TypeToken<Response<ProfileResponse>>() {
-        }.getType();
-        return request("/user", "GET", type, null);
+        request("/bank/cards/active", "PATCH", type, req);
     }
 
     public static Response<TokenInfoResponse> getTokenInfo() throws ApiCallException {
@@ -92,13 +74,8 @@ public class PlasmoApi {
             Builder request = HttpRequest.newBuilder()
                     .uri(new URI(API_URL.concat(endpoint)))
                     .header("Content-Type", "application/json; charset=UTF-8")
-                    .header("Authorization", String.format("Bearer %s", PlasmoApi.token));
-
-            if (requestBody == null) {
-                request.method(method, BodyPublishers.noBody());
-            } else {
-                request.method(method, BodyPublishers.ofString(requestBody));
-            }
+                    .header("Authorization", String.format("Bearer %s", PlasmoApi.token))
+                    .method(method, requestBody == null ? BodyPublishers.noBody() : BodyPublishers.ofString(requestBody));
 
             HttpResponse<String> response = httpClient.send(request.build(), BodyHandlers.ofString());
 
@@ -110,16 +87,14 @@ public class PlasmoApi {
     }
 
     public static JsonObject request(String endpoint, String method, JsonObject requestBody) throws ApiCallException {
-        Gson gson = new Gson();
         if (requestBody != null)
-            return gson.fromJson(request(endpoint, method, (new Gson()).toJson(requestBody)), JsonObject.class);
+            return gson.fromJson(request(endpoint, method, gson.toJson(requestBody)), JsonObject.class);
         else
             return gson.fromJson(request(endpoint, method, (String) null), JsonObject.class);
     }
 
     public static <B, T> T request(String endpoint, String method, Type responseType, B requestBody)
             throws ApiCallException {
-        Gson gson = new Gson();
         String requestBodyString = null;
 
         if (requestBody != null)
