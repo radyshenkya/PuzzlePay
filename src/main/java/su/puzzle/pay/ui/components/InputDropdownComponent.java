@@ -2,7 +2,7 @@ package su.puzzle.pay.ui.components;
 
 import net.minecraft.text.Text;
 
-import java.util.function.Consumer;
+import org.apache.commons.lang3.StringUtils;
 
 import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.component.TextBoxComponent;
@@ -13,9 +13,12 @@ import io.wispforest.owo.ui.core.Sizing;
 
 public class InputDropdownComponent extends CustomDropdownComponent {
     protected TextBoxComponent textBox;
+    protected int inputFieldLimit;
 
-    public InputDropdownComponent(Sizing horizontalSizing, Sizing verticalSizing, Text title, boolean expanded) {
+    public InputDropdownComponent(Sizing horizontalSizing, Sizing verticalSizing, Text title, boolean expanded, int limit) {
         super(horizontalSizing, verticalSizing, title, expanded);
+
+        inputFieldLimit = limit;
 
         arrowLabel.zIndex(30);
 
@@ -29,7 +32,16 @@ public class InputDropdownComponent extends CustomDropdownComponent {
     }
 
     public InputDropdownComponent onInputChange(OnChanged onChange) {
-        textBox.onChanged().subscribe(onChange);
+        textBox.onChanged().subscribe(text -> {
+            if (text.length() > inputFieldLimit) {
+                int cursor = textBox.getCursor();
+                textBox.text(StringUtils.truncate(text, inputFieldLimit));
+                textBox.setCursor(cursor);
+                return;
+            }
+
+            onChange.onChanged(text);
+        });
         return this;
     }
 
