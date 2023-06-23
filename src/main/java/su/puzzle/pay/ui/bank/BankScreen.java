@@ -11,7 +11,8 @@ import su.puzzle.pay.api.*;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
 import su.puzzle.pay.ui.MessageScreen;
-import su.puzzle.pay.ui.bank.ScreenRouter.Context;
+import su.puzzle.pay.ui.router.Context;
+import su.puzzle.pay.ui.router.Route;
 import su.puzzle.pay.ui.components.CustomDropdownComponent;
 
 public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
@@ -20,7 +21,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
     public BankCard thisCard = null;
     public int count = 10;
 
-    protected ScreenRouter.Context context;
+    protected Context context;
     protected Props props;
 
     public void getNextHistory(FlowLayout layout) throws ApiCallException, ApiResponseException {
@@ -104,7 +105,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
 
     public BankScreen() {};
 
-    public BankScreen(ScreenRouter.Context context, Props props) throws ApiCallException, ApiResponseException {
+    public BankScreen(Context context, Props props) throws ApiCallException, ApiResponseException {
         this.context = context;
         this.props = props != null ? props : this.props;
 
@@ -123,7 +124,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
             cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
                         try {
                             PlasmoApi.updateUserActiveCard(card);
-                            context.screenRouter().route(context.currentIndex());
+                            context.screenRouter().route(context.currentScreenName());
                         } catch (ApiCallException e) {
                             throw new RuntimeException(e);
                         }

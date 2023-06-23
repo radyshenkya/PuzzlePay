@@ -1,4 +1,4 @@
-package su.puzzle.pay.ui.bank;
+package su.puzzle.pay.ui.router;
 
 import java.util.LinkedHashMap;
 
@@ -17,8 +17,5 @@ public class ScreenRouter {
 
     public <T> void route(String name, T props) {
         routes.get(name).route(new Context(name, this), props);
-    }
-
-    public record Context(String currentIndex, ScreenRouter screenRouter) {
     }
 }

@@ -6,17 +6,18 @@ import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
-import su.puzzle.pay.ui.bank.ScreenRouter.Context;
+import su.puzzle.pay.ui.router.Context;
+import su.puzzle.pay.ui.router.Route;
 
 import org.jetbrains.annotations.*;
 
 public class InterpolScreen extends BaseOwoScreen<FlowLayout> implements Route {
-    protected ScreenRouter.Context context;
+    protected Context context;
     protected Props props = new Props();
     
     public InterpolScreen() {}
 
-    public InterpolScreen(ScreenRouter.Context context, Props props) {
+    public InterpolScreen(Context context, Props props) {
         this.context = context;
         this.props = props != null ? props : this.props;
     }

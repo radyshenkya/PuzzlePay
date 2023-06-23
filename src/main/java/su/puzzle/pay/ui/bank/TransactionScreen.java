@@ -6,19 +6,20 @@ import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
-import su.puzzle.pay.ui.bank.ScreenRouter.Context;
+import su.puzzle.pay.ui.router.Context;
+import su.puzzle.pay.ui.router.Route;
 import su.puzzle.pay.ui.components.InputDropdownComponent;
 
 import org.jetbrains.annotations.*;
 
 public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Route {
-    protected ScreenRouter.Context context;
+    protected Context context;
     protected Props props = new Props();
 
     public TransactionScreen() {
     }
 
-    public TransactionScreen(ScreenRouter.Context context, Props props) {
+    public TransactionScreen(Context context, Props props) {
         this.context = context;
         this.props = props != null ? props : this.props;
     }

@@ -8,6 +8,7 @@ import net.fabricmc.loader.api.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
 import net.minecraft.util.*;
+import su.puzzle.pay.ui.router.Context;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.oauth2.*;
 
@@ -17,13 +18,13 @@ import java.util.List;
 public class NavigationBar {
     public Component navbar;
 
-    public NavigationBar(ScreenRouter.Context context) {
+    public NavigationBar(Context context) {
         List<Component> buttons = new ArrayList<>();
         
         context.screenRouter().routes.forEach((name, route) -> {
             buttons.add(Components.button(Text.translatable(name), button -> {
                 context.screenRouter().route(name);
-            }).active(context.currentIndex() != name).margins(Insets.left(14)));
+            }).active(context.currentScreenName() != name).margins(Insets.left(14)));
         });
 
 
@@ -50,7 +51,7 @@ public class NavigationBar {
                                         Containers.horizontalFlow(Sizing.fill(25), Sizing.content())
                                                 .child(
                                                         Components.button(Text.literal("↓").formatted(Formatting.UNDERLINE), button -> {
-                                                            context.screenRouter().route(context.currentIndex());
+                                                            context.screenRouter().route(context.currentScreenName());
                                                         }).sizing(Sizing.fixed(20))
                                                 )
                                                 .child(

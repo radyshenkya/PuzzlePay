@@ -14,6 +14,7 @@ import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.ui.oauth2.AuthHttpServer;
 import su.puzzle.pay.ui.oauth2.Oauth2Screen;
 import su.puzzle.pay.ui.bank.*;
+import su.puzzle.pay.ui.router.ScreenRouter;
 
 import java.io.*;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class PuzzlePayClient implements ClientModInitializer {
             "bank:banker",
             // "bank:banker:card",
             "bank:penalties"
-            // "bank:penalties:card"
+    // "bank:penalties:card"
     ));
 
     @Override
@@ -60,8 +61,9 @@ public class PuzzlePayClient implements ClientModInitializer {
     private void initScreens() {
         screenRouter = new ScreenRouter();
 
-        screenRouter.add_route(ScreenRouteNames.MAIN, new BankScreen());
-        screenRouter.add_route(ScreenRouteNames.TRANSACTION, new TransactionScreen());
+        screenRouter
+                .add_route(ScreenRouteNames.MAIN, new BankScreen())
+                .add_route(ScreenRouteNames.TRANSACTION, new TransactionScreen());
     }
 
     private void initApi() {
