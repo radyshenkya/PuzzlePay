@@ -23,6 +23,12 @@ public class PuzzlePayClient implements ClientModInitializer {
     public static final su.puzzle.pay.PuzzlePayConfig config = su.puzzle.pay.PuzzlePayConfig.createAndLoad();
     private static KeyBinding transferGuiKeyBinding;
     public static AuthHttpServer server;
+    public static ScreenRouter screenRouter;
+
+    public class ScreenRouteNames {
+        public static final String MAIN = "ui.puzzlepay.bank.tab.main";
+        public static final String TRANSACTION = "ui.puzzlepay.bank.tab.transactions";
+    }
 
     public static final HashSet<String> NEEDED_SCOPES = new HashSet<>(Arrays.asList(
             // "bank:balance",
@@ -42,11 +48,20 @@ public class PuzzlePayClient implements ClientModInitializer {
         registerKeys();
         registerCallbacks();
         initApi();
+        initScreens();
+
         try {
             server = new AuthHttpServer();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void initScreens() {
+        screenRouter = new ScreenRouter();
+
+        screenRouter.add_route(ScreenRouteNames.MAIN, new BankScreen());
+        screenRouter.add_route(ScreenRouteNames.TRANSACTION, new TransactionScreen());
     }
 
     private void initApi() {
@@ -69,9 +84,9 @@ public class PuzzlePayClient implements ClientModInitializer {
                     scopes.forEach(System.out::println);
 
                     if (scopes.containsAll(NEEDED_SCOPES) && NEEDED_SCOPES.containsAll(scopes))
-                        new ScreenRouter().route(0);
+                        screenRouter.route(ScreenRouteNames.MAIN);
                     else
-                        new ScreenRouter().route(4);
+                        MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                 } catch (ApiResponseException | ApiCallException e) {
                     MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                 }

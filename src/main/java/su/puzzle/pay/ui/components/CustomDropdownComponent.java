@@ -40,7 +40,6 @@ public class CustomDropdownComponent extends FlowLayout {
         expandableDropdown.margins(Insets.top(-2));
         expandableDropdown.padding(Insets.of(0));
 
-
         if (verticalSizing.isContent())
             expandableDropdownScroll = Containers.verticalScroll(horizontalSizing, Sizing.fixed(80),
                     expandableDropdown);
@@ -93,6 +92,12 @@ public class CustomDropdownComponent extends FlowLayout {
         super.allowOverflow(true);
     }
 
+    public CustomDropdownComponent title(Text text) {
+        titleLabel.text(text);
+
+        return this;
+    }
+
     public CustomDropdownComponent button(Text text, Consumer<BetterDropdownComponent> onClick) {
         expandableDropdown.button(text, dropdown -> {
             this.expanded(false);
@@ -117,6 +122,11 @@ public class CustomDropdownComponent extends FlowLayout {
         return this;
     }
 
+    public void removeEntries() {
+        FlowLayout dropdownLayout = ((FlowLayout) expandableDropdown.children().get(0));
+        dropdownLayout.clearChildren();
+    }
+
     public boolean expanded() {
         return expanded;
     }
@@ -127,7 +137,7 @@ public class CustomDropdownComponent extends FlowLayout {
     }
 
     protected void updateExpandableDropdown() {
-        expandableDropdown.horizontalSizing(Sizing.fixed(titleDropdown.width()));
+        expandableDropdown.horizontalSizing(Sizing.fixed(this.width()));
 
         if (!expanded) {
             arrowLabel.text(Text.literal(UNEXPANDED_DROPDOWN_CHAR));

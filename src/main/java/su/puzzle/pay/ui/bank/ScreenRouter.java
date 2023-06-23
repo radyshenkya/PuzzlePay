@@ -1,19 +1,24 @@
 package su.puzzle.pay.ui.bank;
 
-import net.minecraft.client.*;
-import net.minecraft.client.gui.screen.*;
-import su.puzzle.pay.api.exceptions.*;
-import su.puzzle.pay.ui.oauth2.Oauth2Screen;
+import java.util.LinkedHashMap;
 
 public class ScreenRouter {
-    public void route(int pageIndex) throws ApiCallException, ApiResponseException {
-        Screen screen = switch (pageIndex) {
-            case (1) -> new TransactionScreen();
-            case (2) -> new BankerScreen();
-            case (3) -> new InterpolScreen();
-            case (4) -> new Oauth2Screen();
-            default -> new BankScreen();
-        };
-        MinecraftClient.getInstance().setScreen(screen);
+    public LinkedHashMap<String, Route> routes = new LinkedHashMap<>();
+
+    public ScreenRouter add_route(String name, Route route) {
+        routes.put(name, route);
+
+        return this;
+    }
+
+    public void route(String name) {
+        routes.get(name).route(new Context(name, this));
+    }
+
+    public <T> void route(String name, T props) {
+        routes.get(name).route(new Context(name, this), props);
+    }
+
+    public record Context(String currentIndex, ScreenRouter screenRouter) {
     }
 }
