@@ -2,12 +2,14 @@ package su.puzzle.pay.api;
 
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.List;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -32,6 +34,13 @@ public class PlasmoApi {
         if (PlasmoApi.token == null || PlasmoApi.token.equals("")) {
             throw new IllegalStateException("Token must be set!");
         }
+    }
+
+    public static Response<List<BankCard>> searchCards(String query) throws ApiCallException {
+        Type type = new TypeToken<Response<List<BankCard>>>() {
+        }.getType();
+
+        return request("/bank/search/cards?value=" + encodeURLQuery(query), "GET", type, null);
     }
 
     public static Response<BankCardsResponse> getAllCards() throws ApiCallException {
@@ -79,6 +88,8 @@ public class PlasmoApi {
 
             HttpResponse<String> response = httpClient.send(request.build(), BodyHandlers.ofString());
 
+            //System.out.println(response.body());
+
             return response.body();
         } catch (Exception e) {
             PuzzlePayMod.LOGGER.warn(e.getMessage());
@@ -106,5 +117,13 @@ public class PlasmoApi {
 
     public static <T> T request(String endpoint, String method, Type responseType) throws ApiCallException {
         return request(endpoint, method, responseType, null);
+    }
+
+    public static String encodeURLQuery(String query) {
+        try {
+            return URLEncoder.encode(query, "UTF-8").replace("+", "%20");
+        } catch (Exception e) {
+            return query;
+        }
     }
 }

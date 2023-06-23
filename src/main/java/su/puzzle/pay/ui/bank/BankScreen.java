@@ -44,41 +44,41 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
             history.list().subList(this.count - 10, Math.min(this.count, history.total()))
                     .forEach((bankCardHistory) -> {
                         layout.child(
-                                Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
-                                        .child(
-                                                Containers.verticalFlow(Sizing.fill(80), Sizing.content())
-                                                        .child(
-                                                                Components.label(Text.literal(
-                                                                        bankCardHistory.card().holder().isBlank()
-                                                                                ? "Удален"
-                                                                                : bankCardHistory.card().holder())))
-                                                        .child(
-                                                                Components.label(Text.literal(bankCardHistory.card()
-                                                                        .getNormalId()
-                                                                        + " — "
-                                                                        + (bankCardHistory.card().name().isBlank()
+                                        Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                                                .child(
+                                                        Containers.verticalFlow(Sizing.fill(80), Sizing.content())
+                                                                .child(
+                                                                        Components.label(Text.literal(
+                                                                                bankCardHistory.card().holder().isBlank()
+                                                                                        ? "Удален"
+                                                                                        : bankCardHistory.card().holder())))
+                                                                .child(
+                                                                        Components.label(Text.literal(bankCardHistory.card()
+                                                                                .getNormalId()
+                                                                                + " — "
+                                                                                + (bankCardHistory.card().name().isBlank()
                                                                                 ? "Удалена"
                                                                                 : bankCardHistory.card().name()))))
-                                                        .child(
-                                                                !bankCardHistory.message().isBlank()
-                                                                        ? Components.label(Text.literal(
+                                                                .child(
+                                                                        !bankCardHistory.message().isBlank()
+                                                                                ? Components.label(Text.literal(
                                                                                 "§8" + bankCardHistory.message()))
-                                                                        : Components.box(Sizing.fixed(0),
+                                                                                : Components.box(Sizing.fixed(0),
                                                                                 Sizing.fixed(0)))
-                                                        .horizontalAlignment(HorizontalAlignment.LEFT)
-                                                        .verticalAlignment(VerticalAlignment.CENTER))
-                                        .child(
-                                                Containers.verticalFlow(Sizing.fill(20), Sizing.content())
-                                                        .child(
-                                                                Components
-                                                                        .label(Text.literal(bankCardHistory.amount() < 0
-                                                                                ? "§c" + bankCardHistory.amount()
-                                                                                : "§a" + bankCardHistory.amount())))
-                                                        .horizontalAlignment(HorizontalAlignment.RIGHT)
-                                                        .verticalAlignment(VerticalAlignment.CENTER))
-                                        .margins(Insets.of(6))
-                                        .horizontalAlignment(HorizontalAlignment.CENTER)
-                                        .verticalAlignment(VerticalAlignment.CENTER))
+                                                                .horizontalAlignment(HorizontalAlignment.LEFT)
+                                                                .verticalAlignment(VerticalAlignment.CENTER))
+                                                .child(
+                                                        Containers.verticalFlow(Sizing.fill(20), Sizing.content())
+                                                                .child(
+                                                                        Components
+                                                                                .label(Text.literal(bankCardHistory.amount() < 0
+                                                                                        ? "§c" + bankCardHistory.amount()
+                                                                                        : "§a" + bankCardHistory.amount())))
+                                                                .horizontalAlignment(HorizontalAlignment.RIGHT)
+                                                                .verticalAlignment(VerticalAlignment.CENTER))
+                                                .margins(Insets.of(6))
+                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                .verticalAlignment(VerticalAlignment.CENTER))
                                 .child(
                                         Components.box(Sizing.fill(80), Sizing.fixed(1))
                                                 .color(Color.ofArgb(0x4bffffff)));
@@ -103,7 +103,8 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
         }
     }
 
-    public BankScreen() {};
+    public BankScreen() {
+    }
 
     public BankScreen(Context context, Props props) throws ApiCallException, ApiResponseException {
         this.context = context;
@@ -122,13 +123,13 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
         cardList.margins(Insets.both(0, 8));
         cards.cards().forEach((card) -> {
             cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
-                        try {
-                            PlasmoApi.updateUserActiveCard(card);
-                            context.screenRouter().route(context.currentScreenName());
-                        } catch (ApiCallException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+                try {
+                    PlasmoApi.updateUserActiveCard(card);
+                    context.screenRouter().route(context.currentScreenName());
+                } catch (ApiCallException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         });
 
         FlowLayout layout = Containers.verticalFlow(Sizing.fill(100), Sizing.content());
@@ -146,9 +147,9 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
     @Override
     protected void build(FlowLayout rootComponent) {
         rootComponent.child(
-                Containers.verticalFlow(Sizing.content(), Sizing.content())
-                        .child(
-                                new NavigationBar(context).navbar))
+                        Containers.verticalFlow(Sizing.content(), Sizing.content())
+                                .child(
+                                        new NavigationBar(context).navbar))
                 .child(
                         Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 2)
                                 .child(
@@ -249,7 +250,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                     new MessageScreen(Text.translatable("ui.puzzlepay.text.erro_message"), Text.literal(e.message)));
         } catch (ApiResponseException e) {
             MinecraftClient.getInstance()
-                .setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.erro_message"),
+                    .setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.erro_message"),
                             Text.literal(String.valueOf(e.error.code) + ": " + e.error.msg)));
         }
     }
@@ -259,5 +260,6 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
         route(context, null);
     }
 
-    public record Props() {}
+    public record Props() {
+    }
 }

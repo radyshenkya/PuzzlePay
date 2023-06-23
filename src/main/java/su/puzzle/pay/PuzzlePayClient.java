@@ -26,7 +26,7 @@ public class PuzzlePayClient implements ClientModInitializer {
     public static AuthHttpServer server;
     public static ScreenRouter screenRouter;
 
-    public class ScreenRouteNames {
+    public static class ScreenRouteNames {
         public static final String MAIN = "ui.puzzlepay.bank.tab.main";
         public static final String TRANSACTION = "ui.puzzlepay.bank.tab.transactions";
     }
@@ -37,11 +37,10 @@ public class PuzzlePayClient implements ClientModInitializer {
             // "bank:history",
             // "bank:bill",
             // "bank:transfer",
-            "bank:manage",
-            "bank:banker",
+            "bank:manage", "bank:banker",
             // "bank:banker:card",
             "bank:penalties"
-    // "bank:penalties:card"
+            // "bank:penalties:card"
     ));
 
     @Override
@@ -61,9 +60,7 @@ public class PuzzlePayClient implements ClientModInitializer {
     private void initScreens() {
         screenRouter = new ScreenRouter();
 
-        screenRouter
-                .add_route(ScreenRouteNames.MAIN, new BankScreen())
-                .add_route(ScreenRouteNames.TRANSACTION, new TransactionScreen());
+        screenRouter.add_route(ScreenRouteNames.MAIN, new BankScreen()).add_route(ScreenRouteNames.TRANSACTION, new TransactionScreen());
     }
 
     private void initApi() {
@@ -71,8 +68,7 @@ public class PuzzlePayClient implements ClientModInitializer {
     }
 
     private void registerKeys() {
-        transferGuiKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.puzzlepay.open_transfer_gui",
-                InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "category.puzzlepay.puzzlepay"));
+        transferGuiKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.puzzlepay.open_transfer_gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "category.puzzlepay.puzzlepay"));
     }
 
     private void registerCallbacks() {
@@ -87,8 +83,7 @@ public class PuzzlePayClient implements ClientModInitializer {
 
                     if (scopes.containsAll(NEEDED_SCOPES) && NEEDED_SCOPES.containsAll(scopes))
                         screenRouter.route(ScreenRouteNames.MAIN);
-                    else
-                        MinecraftClient.getInstance().setScreen(new Oauth2Screen());
+                    else MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                 } catch (ApiResponseException | ApiCallException e) {
                     MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                 }
