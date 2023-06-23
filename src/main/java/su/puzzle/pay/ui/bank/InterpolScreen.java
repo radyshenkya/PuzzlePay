@@ -4,10 +4,24 @@ import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
 import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
+import su.puzzle.pay.ui.router.Context;
+import su.puzzle.pay.ui.router.Route;
+
 import org.jetbrains.annotations.*;
 
-public class InterpolScreen extends BaseOwoScreen<FlowLayout> {
+public class InterpolScreen extends BaseOwoScreen<FlowLayout> implements Route {
+    protected Context context;
+    protected Props props = new Props();
+    
+    public InterpolScreen() {}
+
+    public InterpolScreen(Context context, Props props) {
+        this.context = context;
+        this.props = props != null ? props : this.props;
+    }
+
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
         return OwoUIAdapter.create(this, Containers::verticalFlow);
@@ -18,10 +32,24 @@ public class InterpolScreen extends BaseOwoScreen<FlowLayout> {
         rootComponent.child(
                         Containers.verticalFlow(Sizing.content(), Sizing.content())
                                 .child(
-                                        new NavigationBar(3).navbar
+                                        new NavigationBar(context).navbar
                                 )
                 )
                 .child(Components.label(Text.literal("InterpolScreen")))
                 .surface(Surface.VANILLA_TRANSLUCENT);
+    }
+
+	@Override
+	public void route(Context context, Object props) {
+        MinecraftClient.getInstance().setScreen(new InterpolScreen(context, (Props) props));
+	}
+
+	@Override
+	public void route(Context context) {
+        route(context, null);
+	}
+
+    public record Props() {
+
     }
 }
