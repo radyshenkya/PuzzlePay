@@ -14,8 +14,9 @@ import org.jetbrains.annotations.*;
 public class BankerScreen extends BaseOwoScreen<FlowLayout> implements Route {
     protected Context context;
     protected Props props = new Props();
-    
-    public BankerScreen() {}
+
+    public BankerScreen() {
+    }
 
     public BankerScreen(Context context, Props props) {
         this.context = context;
@@ -31,23 +32,21 @@ public class BankerScreen extends BaseOwoScreen<FlowLayout> implements Route {
     protected void build(FlowLayout rootComponent) {
         rootComponent.child(
                         Containers.verticalFlow(Sizing.content(), Sizing.content())
-                                .child(
-                                        new NavigationBar(context).navbar
-                                )
+                                .child(new NavigationBar(context).navbar)
                 )
                 .child(Components.label(Text.literal("BankerScreen")))
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
 
-	@Override
-	public void route(Context context, Object props) {
+    @Override
+    public void route(Context context, Object props) {
         MinecraftClient.getInstance().setScreen(new BankerScreen(context, (Props) props));
-	}
+    }
 
-	@Override
-	public void route(Context context) {
+    @Override
+    public void route(Context context) {
         route(context, null);
-	}
+    }
 
     public record Props() {
 
