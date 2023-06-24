@@ -8,6 +8,7 @@ import net.fabricmc.loader.api.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
 import net.minecraft.util.*;
+import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.ui.router.Context;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.oauth2.*;
@@ -23,7 +24,11 @@ public class NavigationBar {
         
         context.screenRouter().routes.forEach((name, route) -> {
             buttons.add(Components.button(Text.translatable(name), button -> {
-                context.screenRouter().route(name);
+                try {
+                    context.screenRouter().route(name);
+                } catch (ApiCallException | ApiResponseException e) {
+                    throw new RuntimeException(e);
+                }
             }).active(context.currentScreenName() != name).margins(Insets.left(14)));
         });
 
@@ -51,7 +56,11 @@ public class NavigationBar {
                                         Containers.horizontalFlow(Sizing.fill(25), Sizing.content())
                                                 .child(
                                                         Components.button(Text.literal("↓").formatted(Formatting.UNDERLINE), button -> {
-                                                            context.screenRouter().route(context.currentScreenName());
+                                                            try {
+                                                                context.screenRouter().route(context.currentScreenName());
+                                                            } catch (ApiCallException | ApiResponseException e) {
+                                                                throw new RuntimeException(e);
+                                                            }
                                                         }).sizing(Sizing.fixed(20))
                                                 )
                                                 .child(
