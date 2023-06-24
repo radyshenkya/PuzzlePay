@@ -43,7 +43,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
     @Override
     protected void build(FlowLayout rootComponent) {
-        InputDropdownComponent toCardInput = new InputDropdownComponent(Sizing.fill(100), Sizing.fill(20), Text.literal("Карта не выбрана"), false);
+        InputDropdownComponent toCardInput = new InputDropdownComponent(Sizing.fill(100), Sizing.fill(20), Text.literal("Карта не выбрана"), false, 16);
 
         toCardInput.onInputChange(text -> {
             if (text.length() < 2) return;
