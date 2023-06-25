@@ -7,16 +7,18 @@ import io.wispforest.owo.ui.core.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
+import su.puzzle.pay.ui.router.Context;
+import su.puzzle.pay.ui.router.Route;
 
 import org.jetbrains.annotations.*;
 
-public class MessageScreen extends BaseOwoScreen<FlowLayout> {
-    private final Text name;
-    private final Text message;
+public class MessageScreen extends BaseOwoScreen<FlowLayout> implements Route {
+    protected Props props;
 
-    public MessageScreen(Text name, Text message) {
-        this.name = name;
-        this.message = message;
+    public MessageScreen() {}
+
+    public MessageScreen(Props props) {
+        this.props = props;
     }
 
     @Override
@@ -29,11 +31,11 @@ public class MessageScreen extends BaseOwoScreen<FlowLayout> {
         rootComponent.child(
                 Containers.verticalFlow(Sizing.fill(60), Sizing.content())
                         .child(
-                                Components.label(name)
+                                Components.label(props.title())
                                         .shadow(true)
                         )
                         .child(
-                                Components.label(message)
+                                Components.label(props.message())
                                         .horizontalTextAlignment(HorizontalAlignment.CENTER)
                                         .color(Color.ofRgb(Colors.GRAY))
                                         .margins(Insets.top(5))
@@ -51,4 +53,20 @@ public class MessageScreen extends BaseOwoScreen<FlowLayout> {
                 .verticalAlignment(VerticalAlignment.CENTER)
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
+
+    public static void openMessage(Text title, Text message) {
+        new MessageScreen().route(null, new Props(title, message));
+    }
+
+	@Override
+	public void route(Context context, Object props) {
+        MinecraftClient.getInstance().setScreen(new MessageScreen((Props) props));
+	}
+
+	@Override
+	public void route(Context context) {
+		throw new UnsupportedOperationException("Unimplemented method 'route'");
+	}
+
+    public record Props(Text title, Text message) {}
 }

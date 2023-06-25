@@ -24,11 +24,7 @@ public class NavigationBar {
         
         context.screenRouter().routes.forEach((name, route) -> {
             buttons.add(Components.button(Text.translatable(name), button -> {
-                try {
-                    context.screenRouter().route(name);
-                } catch (ApiCallException | ApiResponseException e) {
-                    throw new RuntimeException(e);
-                }
+                context.screenRouter().route(name);
             }).active(context.currentScreenName() != name).margins(Insets.left(14)));
         });
 
@@ -56,11 +52,7 @@ public class NavigationBar {
                                         Containers.horizontalFlow(Sizing.fill(25), Sizing.content())
                                                 .child(
                                                         Components.button(Text.literal("↓").formatted(Formatting.UNDERLINE), button -> {
-                                                            try {
-                                                                context.screenRouter().route(context.currentScreenName());
-                                                            } catch (ApiCallException | ApiResponseException e) {
-                                                                throw new RuntimeException(e);
-                                                            }
+                                                            context.screenRouter().route(context.currentScreenName());
                                                         }).sizing(Sizing.fixed(20))
                                                 )
                                                 .child(
