@@ -146,8 +146,6 @@ public class CustomDropdownComponent extends FlowLayout {
             arrowLabel.text(Text.literal(EXPANDED_DROPDOWN_CHAR));
             contentLayout.child(expandableDropdownScroll);
             expandableDropdownScroll.positioning(Positioning.layout());
-            // expandableDropdownScroll.positioning(Positioning.absolute(0, titleDropdown.height()));
-            // expandableDropdownScroll.focusGained();
         }
     }
 }

@@ -49,9 +49,8 @@ public class AuthHttpServer {
             PuzzlePayClient.config.plasmoRpToken(token);
 
             MinecraftClient.getInstance()
-                    .execute(() -> MinecraftClient.getInstance()
-                            .setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.success_message_name"),
-                                    Text.translatable("ui.puzzlepay.text.oauth2.success"))));
+                    .execute(() -> MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.success_message_name"),
+                                    Text.translatable("ui.puzzlepay.text.oauth2.success")));
             server.stop(0);
         });
 

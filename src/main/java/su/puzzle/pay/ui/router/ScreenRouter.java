@@ -1,7 +1,5 @@
 package su.puzzle.pay.ui.router;
 
-import su.puzzle.pay.api.exceptions.*;
-
 import java.util.LinkedHashMap;
 
 public class ScreenRouter {
@@ -13,11 +11,11 @@ public class ScreenRouter {
         return this;
     }
 
-    public void route(String name) throws ApiCallException, ApiResponseException {
+    public void route(String name) {
         routes.get(name).route(new Context(name, this));
     }
 
-    public <T> void route(String name, T props) throws ApiCallException, ApiResponseException {
+    public <T> void route(String name, T props) {
         routes.get(name).route(new Context(name, this), props);
     }
 }

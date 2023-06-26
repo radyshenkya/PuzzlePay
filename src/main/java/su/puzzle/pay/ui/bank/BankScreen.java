@@ -126,7 +126,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                 try {
                     PlasmoApi.updateUserActiveCard(card);
                     context.screenRouter().route(context.currentScreenName());
-                } catch (ApiCallException | ApiResponseException e) {
+                } catch (ApiCallException e) {
                     throw new RuntimeException(e);
                 }
             });
@@ -247,12 +247,9 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
         try {
             MinecraftClient.getInstance().setScreen(new BankScreen(context, (Props) props));
         } catch (ApiCallException e) {
-            MinecraftClient.getInstance().setScreen(
-                    new MessageScreen(Text.translatable("ui.puzzlepay.text.erro_message"), Text.literal(e.message)));
+                    MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.erro_message"), Text.literal(e.message));
         } catch (ApiResponseException e) {
-            MinecraftClient.getInstance()
-                    .setScreen(new MessageScreen(Text.translatable("ui.puzzlepay.text.erro_message"),
-                            Text.literal(e.error.code + ": " + e.error.msg)));
+                    MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.erro_message"), Text.literal(e.error.code + ": " + e.error.msg));
         }
     }
 
