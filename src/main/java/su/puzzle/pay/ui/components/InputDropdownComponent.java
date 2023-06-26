@@ -27,9 +27,8 @@ public class InputDropdownComponent extends CustomDropdownComponent {
         updateExpandableDropdown();
     }
 
-    public InputDropdownComponent onInputChange(OnChanged onChange) {
+    public void onInputChange(OnChanged onChange) {
         textBox.onChanged().subscribe(onChange);
-        return this;
     }
 
     @Override
