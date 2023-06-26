@@ -131,7 +131,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         rootComponent.child(
                         Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
                                 .child(
-                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(20))
+                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(30))
                                                 .child(
                                                         new NavigationBar(context).navbar
                                                 )
@@ -139,9 +139,9 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                                                 .verticalAlignment(VerticalAlignment.TOP)
                                 )
                                 .child(
-                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(80))
+                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(40))
                                                 .child(
-                                                        Containers.grid(Sizing.fill(72), Sizing.fill(50), 1, 3)
+                                                        Containers.grid(Sizing.fill(72), Sizing.fill(100), 1, 3)
                                                                 .child(
                                                                         Containers.verticalFlow(Sizing.fill(24), Sizing.fill(100))
                                                                                 .child(
@@ -169,13 +169,12 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                                                                         , 0,
                                                                         2
                                                                 )
-                                                                .surface(Surface.DARK_PANEL)
                                                 )
                                                 .horizontalAlignment(HorizontalAlignment.CENTER)
                                                 .verticalAlignment(VerticalAlignment.CENTER)
                                 )
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                .verticalAlignment(VerticalAlignment.CENTER)
+                                .verticalAlignment(VerticalAlignment.TOP)
                 )
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
