@@ -41,8 +41,6 @@ public class PuzzlePayClient implements ClientModInitializer {
     }
 
     public static final HashSet<String> NEEDED_SCOPES = new HashSet<>(Arrays.asList(
-            "messenger:manage",
-            "messenger:read",
             "bank:manage"
     ));
 

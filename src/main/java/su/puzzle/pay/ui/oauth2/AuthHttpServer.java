@@ -8,16 +8,10 @@ import org.apache.http.HttpStatus;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.*;
 import su.puzzle.pay.api.PlasmoApi;
-import su.puzzle.pay.api.exceptions.ApiCallException;
-import su.puzzle.pay.api.exceptions.ApiResponseException;
-import su.puzzle.pay.api.types.TokenInfoResponse;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
 public class AuthHttpServer {
     public HttpServer server;

@@ -5,6 +5,7 @@ import io.wispforest.owo.ui.component.*;
 import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
 import net.minecraft.client.*;
+import net.minecraft.sound.*;
 import net.minecraft.text.*;
 import org.jetbrains.annotations.*;
 import su.puzzle.pay.api.*;
@@ -119,10 +120,9 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
             try {
                 PlasmoApi.transfer(Integer.parseInt(amountString), fromCard.getNormalId(), commentString, props.to().getNormalId()).unwrap();
-                MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.success_message_name"), Text.literal("Перевод был выполнен удачно"));
-                if (props.to().holder_type() == 0) {
-                    PlasmoApi.sendMessage(props.to().holder(), "Вам успешно отправлено " + amountString + "алмазов от игрока " + fromCard.holder());
-                }
+                MinecraftClient.getInstance().setScreen(null);
+                MinecraftClient.getInstance().player.sendMessage(Text.literal(String.format("\n§a✔ Перевод выполнен:§r\n- Отправлено %sалм. на карту §7%s§r (%s) игрока §7%s§r\n", amountString, props.to.getNormalId(), props.to.name(), props.to.holder())));
+                MinecraftClient.getInstance().player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 100, 2);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             } catch (ApiCallException e) {

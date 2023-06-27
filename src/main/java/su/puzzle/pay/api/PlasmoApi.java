@@ -9,6 +9,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.charset.*;
 import java.util.List;
 
 import com.google.common.reflect.TypeToken;
@@ -18,7 +19,6 @@ import com.google.gson.JsonObject;
 import su.puzzle.pay.PuzzlePayMod;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
-import su.puzzle.pay.api.types.Error;
 
 public class PlasmoApi {
     public static final String API_URL = "https://plasmorp.com/api";
@@ -76,27 +76,6 @@ public class PlasmoApi {
         return request("/oauth2/token", "GET", type, null);
     }
 
-    public static Response<MessengerResponse> getChat(String nick) throws ApiCallException {
-        Type type = new TypeToken<Response<MessengerResponse>>() {
-        }.getType();
-        return request("/messenger/chats/user/" + nick, "GET", type);
-    }
-
-    public static void sendMessage(String nick, String content) throws ApiCallException, ApiResponseException {
-        MessengerResponse messengerResponse;
-        try {
-            messengerResponse = getChat(nick).unwrap();
-        } catch (ApiResponseException e) {
-            throw new ApiResponseException(e.error);
-        }
-        if (!messengerResponse.users().isEmpty()) {
-            MessengerRequest req = new MessengerRequest(messengerResponse.id(), content, messengerResponse.users().get(0).id());
-            Type type = new TypeToken<Response<Integer>>() {
-            }.getType();
-            request("/messenger/send", "POST", type, req);
-        }
-    }
-
     public static String request(String endpoint, String method, String requestBody) throws ApiCallException {
         try {
             assertTokenNotNull();
@@ -142,7 +121,7 @@ public class PlasmoApi {
 
     public static String encodeURLQuery(String query) {
         try {
-            return URLEncoder.encode(query, "UTF-8").replace("+", "%20");
+            return URLEncoder.encode(query, StandardCharsets.UTF_8).replace("+", "%20");
         } catch (Exception e) {
             return query;
         }

@@ -8,7 +8,6 @@ import net.fabricmc.loader.api.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
 import net.minecraft.util.*;
-import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.ui.router.Context;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.oauth2.*;
@@ -25,7 +24,7 @@ public class NavigationBar {
         context.screenRouter().routes.forEach((name, route) -> {
             buttons.add(Components.button(Text.translatable(name), button -> {
                 context.screenRouter().route(name);
-            }).active(context.currentScreenName() != name).margins(Insets.left(14)));
+            }).active(!context.currentScreenName().equals(name)).margins(Insets.left(14)));
         });
 
 
