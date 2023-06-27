@@ -32,15 +32,9 @@ public class PuzzlePayClient implements ClientModInitializer {
     }
 
     public static final HashSet<String> NEEDED_SCOPES = new HashSet<>(Arrays.asList(
-            // "bank:balance",
-            // "bank:search",
-            // "bank:history",
-            // "bank:bill",
-            // "bank:transfer",
-            "bank:manage", "bank:banker",
-            // "bank:banker:card",
-            "bank:penalties"
-            // "bank:penalties:card"
+            "messenger:manage",
+            "messenger:read",
+            "bank:manage"
     ));
 
     @Override

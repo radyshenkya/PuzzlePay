@@ -16,8 +16,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import su.puzzle.pay.PuzzlePayMod;
-import su.puzzle.pay.api.exceptions.ApiCallException;
+import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
+import su.puzzle.pay.api.types.Error;
 
 public class PlasmoApi {
     public static final String API_URL = "https://plasmorp.com/api";
@@ -49,8 +50,7 @@ public class PlasmoApi {
         return request("/bank/cards", "GET", type, null);
     }
 
-    public static Response<Object> transfer(int amount, String from, String message, String to)
-            throws ApiCallException {
+    public static Response<Object> transfer(int amount, String from, String message, String to) throws ApiCallException {
         TransferRequest req = new TransferRequest(amount, from, message, to);
         Type type = new TypeToken<Response<Object>>() {
         }.getType();
@@ -74,6 +74,27 @@ public class PlasmoApi {
         Type type = new TypeToken<Response<TokenInfoResponse>>() {
         }.getType();
         return request("/oauth2/token", "GET", type, null);
+    }
+
+    public static Response<MessengerResponse> getChat(String nick) throws ApiCallException {
+        Type type = new TypeToken<Response<MessengerResponse>>() {
+        }.getType();
+        return request("/messenger/chats/user/" + nick, "GET", type);
+    }
+
+    public static void sendMessage(String nick, String content) throws ApiCallException, ApiResponseException {
+        MessengerResponse messengerResponse;
+        try {
+            messengerResponse = getChat(nick).unwrap();
+        } catch (ApiResponseException e) {
+            throw new ApiResponseException(e.error);
+        }
+        if (!messengerResponse.users().isEmpty()) {
+            MessengerRequest req = new MessengerRequest(messengerResponse.id(), content, messengerResponse.users().get(0).id());
+            Type type = new TypeToken<Response<Integer>>() {
+            }.getType();
+            request("/messenger/send", "POST", type, req);
+        }
     }
 
     public static String request(String endpoint, String method, String requestBody) throws ApiCallException {

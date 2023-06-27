@@ -114,6 +114,9 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
             try {
                 PlasmoApi.transfer(Integer.parseInt(amountString), fromCard.getNormalId(), commentString, toCard.getNormalId()).unwrap();
                 MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.success_message_name"), Text.literal("Перевод был выполнен удачно"));
+                if (toCard.holder_type() == 0) {
+                    PlasmoApi.sendMessage(toCard.holder(), "Вам успешно отправлено " + amountString + "алмазов от игрока " + fromCard.holder());
+                }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             } catch (ApiCallException e) {
