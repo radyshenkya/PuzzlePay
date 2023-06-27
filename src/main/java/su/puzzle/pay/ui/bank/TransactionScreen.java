@@ -17,11 +17,10 @@ import su.puzzle.pay.ui.router.*;
 import java.util.*;
 
 public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Route {
-    protected BankCard toCard;
     protected BankCard fromCard;
 
     protected Context context;
-    protected Props props = new Props();
+    protected Props props = new Props(null, 1, "");
 
     public TransactionScreen() {
     }
@@ -64,7 +63,12 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
             });
         });
 
-        InputDropdownComponent toCardInput = new InputDropdownComponent(Sizing.fill(100), Sizing.fill(100), Text.literal("Выберите карту"), false, 16);
+        InputDropdownComponent toCardInput = new InputDropdownComponent(
+                Sizing.fill(100),
+                Sizing.fill(100),
+                props.to() == null ? Text.literal("Выберите карту") : Text.literal(props.to().name() + "\n§8" + props.to().getNormalId() + " — " + props.to().holder() + " — " + props.to().value()),
+                false,
+                16);
 
         toCardInput.onInputChange(text -> {
             if (text.length() < 2) return;
@@ -88,40 +92,42 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
             }
 
             searchResult.forEach(card -> toCardInput.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
-                        toCard = card;
+                        props = new Props(card, props.amount(), props.comment());
                         toCardInput.title(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()));
                     }
             ));
         });
 
         TextBoxComponent amount = Components.textBox(Sizing.fill(100));
+        amount.text(String.valueOf(props.amount()));
         amount.margins(Insets.top(4).add(0, 6, 0, 0));
         amount.horizontalSizing(Sizing.fill(100));
         amount.setMaxLength(6);
 
         TextBoxComponent comment = Components.textBox(Sizing.fill(100));
+        comment.text(String.valueOf(props.comment()));
         comment.margins(Insets.top(4).add(0, 6, 0, 0));
         comment.horizontalSizing(Sizing.fill(100));
         comment.setMaxLength(350);
 
         ButtonComponent transfer = Components.button(Text.translatable("ui.puzzlepay.bank.tab.transactions"), (button) -> {
-            if (toCard == null) return;
-            if (fromCard == toCard) return;
+            if (props.to() == null) return;
+            if (fromCard == props.to()) return;
 
             String commentString = comment.getText();
             String amountString = amount.getText();
 
             try {
-                PlasmoApi.transfer(Integer.parseInt(amountString), fromCard.getNormalId(), commentString, toCard.getNormalId()).unwrap();
+                PlasmoApi.transfer(Integer.parseInt(amountString), fromCard.getNormalId(), commentString, props.to().getNormalId()).unwrap();
                 MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.success_message_name"), Text.literal("Перевод был выполнен удачно"));
-                if (toCard.holder_type() == 0) {
-                    PlasmoApi.sendMessage(toCard.holder(), "Вам успешно отправлено " + amountString + "алмазов от игрока " + fromCard.holder());
+                if (props.to().holder_type() == 0) {
+                    PlasmoApi.sendMessage(props.to().holder(), "Вам успешно отправлено " + amountString + "алмазов от игрока " + fromCard.holder());
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             } catch (ApiCallException e) {
                 e.printStackTrace();
-                MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.causedBy.getMessage()));
+                MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.message));
             } catch (ApiResponseException e) {
                 e.printStackTrace();
                 MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.error_message"), Text.literal(e.error.msg));
@@ -192,7 +198,5 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         route(context, null);
     }
 
-    public record Props() {
-
-    }
+    public record Props(BankCard to, int amount, String comment) { }
 }
