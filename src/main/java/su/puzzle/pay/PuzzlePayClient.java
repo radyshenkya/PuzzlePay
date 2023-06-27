@@ -5,10 +5,19 @@ import org.lwjgl.glfw.GLFW;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.HangingSignBlock;
+import net.minecraft.block.SignBlock;
+import net.minecraft.block.WallHangingSignBlock;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
 import su.puzzle.pay.api.exceptions.*;
+import su.puzzle.pay.api.types.BankCard;
 import su.puzzle.pay.api.types.TokenInfoResponse;
 import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.ui.oauth2.AuthHttpServer;
@@ -83,5 +92,49 @@ public class PuzzlePayClient implements ClientModInitializer {
                 }
             }
         });
+
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (!world.isClient()) {
+                return ActionResult.PASS;
+            }
+
+            BlockState block = world.getBlockState(hitResult.getBlockPos());
+
+            if (block.getBlock() instanceof SignBlock || block.getBlock() instanceof HangingSignBlock || block.getBlock() instanceof WallHangingSignBlock) {
+                SignBlockEntity signBlockEntity = (SignBlockEntity) world.getBlockEntity(hitResult.getBlockPos());
+                if (signBlockEntity.isWaxed()) {
+                    if (tryParseSignPayment(signBlockEntity, player)) {
+                        return ActionResult.SUCCESS;
+                    }
+                }
+            }
+
+            return ActionResult.PASS;
+        });
+    }
+
+    private boolean tryParseSignPayment(SignBlockEntity signBlockEntity, PlayerEntity player) {
+        if (!signBlockEntity.getTextFacing(player).getMessage(0, false).getString().startsWith("PuzzlePay")) {
+            return false;
+        }
+
+        String cardNumber = signBlockEntity.getTextFacing(player).getMessage(1, false).getString();
+        String amount = signBlockEntity.getTextFacing(player).getMessage(2, false).getString();
+        String comment = signBlockEntity.getTextFacing(player).getMessage(3, false).getString();
+
+        if (!cardNumber.startsWith("EB-")) return false;
+
+        try {
+            int parsedAmount = Integer.parseInt(amount);
+            BankCard to = PlasmoApi.searchCards(cardNumber).unwrap().get(0);
+
+            System.out.println(to);
+            
+            screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
