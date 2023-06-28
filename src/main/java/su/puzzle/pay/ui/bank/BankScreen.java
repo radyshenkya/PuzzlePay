@@ -260,6 +260,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
                                 .verticalAlignment(VerticalAlignment.TOP)
                 )
+                // .child(NavigationBar.shadow())
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
 

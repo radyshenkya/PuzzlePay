@@ -9,6 +9,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.*;
 import org.jetbrains.annotations.*;
 import su.puzzle.pay.PuzzlePayClient;
+import su.puzzle.pay.api.PlasmoApi;
 
 public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
     public Oauth2Screen() {}
@@ -39,8 +40,9 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
                                         Containers.horizontalFlow(Sizing.content(), Sizing.content())
                                                 .child(
                                                         Components.button(Text.translatable("ui.puzzlepay.button.link"), button -> {
-                                                                    PuzzlePayClient.server.start();
-                                                                    Util.getOperatingSystem().open("https://puzzlemc.site/pay/oauth2");
+                                                                    int port = generateFreePort();
+                                                                    PuzzlePayClient.server.start(port);
+                                                                    Util.getOperatingSystem().open(getOauthLink(port));
                                                                     MinecraftClient.getInstance().setScreen(new Oauth2WaitScreen());
                                                                 })
                                                                 .horizontalSizing(Sizing.fixed(120))
@@ -67,5 +69,22 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
                 .horizontalAlignment(HorizontalAlignment.CENTER)
                 .verticalAlignment(VerticalAlignment.CENTER)
                 .surface(Surface.VANILLA_TRANSLUCENT);
+    }
+
+    protected int generateFreePort() {
+        for (int i = 6969; i < AuthHttpServer.MAX_PORT_NUMBER; i++) {
+            if (AuthHttpServer.isPortFree(i)) return i;
+        }
+
+        return 6969;
+    }
+
+    protected String getOauthLink(int port) {
+        String link = "https://plasmorp.com/oauth2?client_id=dZkmuEPjmuX5pkvM3Sz2FLXKCS34GaF4KFnfPsE5QUWjEjbS&redirect_uri=http://localhost:" + port + "/auth&response_type=token&scope=";
+        String scopes = String.join(" ", PuzzlePayClient.NEEDED_SCOPES);
+
+        link += PlasmoApi.encodeURLQuery(scopes);
+
+        return link;
     }
 }
