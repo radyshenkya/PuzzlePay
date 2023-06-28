@@ -78,14 +78,18 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         toCardInput.onInputChange(text -> {
             if (text.length() < 2) return;
 
+            toCardInput.removeEntries();
+
+            for (int i = 0; i < 5; i++){
+                toCardInput.button(Text.literal("Поиск\n§8Поиск"), (btn) -> {});
+            }
+
             PuzzlePayClient.asyncTasksService.addTask(() -> {
                 return PlasmoApi.searchCards(text).unwrap();
             }, (result) -> {
                 List<BankCard> searchResult = (List<BankCard>) result;
 
                 toCardInput.removeEntries();
-
-                System.out.println(searchResult.size());
 
                 if (searchResult.size() >= MAX_CARDS_IN_SEARCH) { 
                     searchResult.subList(MAX_CARDS_IN_SEARCH, searchResult.size()).clear();
