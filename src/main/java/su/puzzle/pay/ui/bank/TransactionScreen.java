@@ -56,7 +56,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
             }
         }
 
-        CustomDropdownComponent cardList = new CustomDropdownComponent(Sizing.fill(100), Sizing.fill(100),
+        CustomDropdownComponent cardList = new CustomDropdownComponent(Sizing.fill(100), Sizing.content(),
                 Text.literal(this.fromCard == null ? "Выберите карту"
                         : this.fromCard.name() + "\n§8" + this.fromCard.getNormalId() + " — " + this.fromCard.holder() + " — " + this.fromCard.value()),
                 false);
@@ -70,7 +70,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
         InputDropdownComponent toCardInput = new InputDropdownComponent(
                 Sizing.fill(100),
-                Sizing.fill(100),
+                Sizing.content(),
                 props.to() == null ? Text.literal("Выберите карту") : Text.literal(props.to().name() + "\n§8" + props.to().getNormalId() + " — " + props.to().holder() + " — " + props.to().value()),
                 false,
                 16);
@@ -166,7 +166,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                                 .child(
                                         Containers.verticalFlow(Sizing.fill(72), Sizing.fill(80))
                                                 .child(
-                                                        Containers.verticalFlow(Sizing.fill(65), Sizing.fill(42))
+                                                        Containers.verticalFlow(Sizing.fill(70), Sizing.fill(42))
                                                                 .child(Components.label(Text.literal("Сумма")))
                                                                 .child(amount)
                                                                 .child(Components.label(Text.literal("Комментарий")))
@@ -175,30 +175,40 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                                                                 .verticalAlignment(VerticalAlignment.CENTER)
                                                 )
                                                 .child(
-                                                        Containers.grid(Sizing.fill(72), Sizing.fill(38), 1, 2)
+                                                        Containers.horizontalFlow(Sizing.fill(70), Sizing.fill(38))
                                                                 .child(
-                                                                        Containers.verticalFlow(Sizing.fill(42), Sizing.fill(100))
+                                                                        Containers.verticalFlow(Sizing.fill(45), Sizing.content())
                                                                                 .child(
-                                                                                        cardList
+                                                                                        Components.label(Text.literal("Откуда"))
+                                                                                                .margins(Insets.left(2))
                                                                                 )
-                                                                        , 0,
-                                                                        0
+                                                                                .child(
+                                                                                        cardList.margins(Insets.top(2))
+                                                                                )
                                                                 )
                                                                 .child(
-                                                                        Containers.verticalFlow(Sizing.fill(42), Sizing.fill(100))
+                                                                        Containers.verticalFlow(Sizing.fill(10), Sizing.content())
                                                                                 .child(
-                                                                                        toCardInput
+                                                                                        Components.label(Text.literal("→"))
+                                                                                                .margins(Insets.top(14))
                                                                                 )
-                                                                        , 0,
-                                                                        1
+                                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
                                                                 )
-                                                                .margins(Insets.top(8))
+                                                                .child(
+                                                                        Containers.verticalFlow(Sizing.fill(45), Sizing.content())
+                                                                                .child(
+                                                                                        Components.label(Text.literal("Куда"))
+                                                                                                .margins(Insets.left(2))
+                                                                                )
+                                                                                .child(
+                                                                                        toCardInput.margins(Insets.top(2))
+                                                                                )
+                                                                )
+                                                                .margins(Insets.top(6))
                                                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                                                .verticalAlignment(VerticalAlignment.TOP)
                                                 )
                                                 .margins(Insets.top(16))
                                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                                .verticalAlignment(VerticalAlignment.TOP)
                                 )
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
                                 .verticalAlignment(VerticalAlignment.TOP)
