@@ -46,11 +46,12 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
         cards.cards().forEach((card) -> {
             cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
                 PuzzlePayClient.asyncTasksService.addTask(() -> {
-                        PlasmoApi.updateUserActiveCard(card);
-                        return null;
-                    }, (result) -> {
-                        context.screenRouter().route(context.currentScreenName());
-                    }, (exception) -> {}
+                            PlasmoApi.updateUserActiveCard(card);
+                            return null;
+                        }, (result) -> {
+                            context.screenRouter().route(context.currentScreenName());
+                        }, (exception) -> {
+                        }
                 );
             });
         });
@@ -139,15 +140,15 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                                     .child(
                                             Components.label(Text.translatable("ui.puzzlepay.bank.tab.no_transactions_message"))
                                                     .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                                    .horizontalSizing(Sizing.fill(80)))
+                                                    .horizontalSizing(Sizing.fill(80))
+                                    )
                                     .horizontalAlignment(HorizontalAlignment.CENTER)
                                     .verticalAlignment(VerticalAlignment.CENTER)
                     );
                 }
             }
             if ((history.total() > this.count) && (this.count < 100)) {
-                layout.child(
-                        button);
+                layout.child(button);
             }
         }, (exception) -> {
 
@@ -162,10 +163,13 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
 
     @Override
     protected void build(FlowLayout rootComponent) {
-        rootComponent.child(
+        rootComponent
+                .child(
                         Containers.verticalFlow(Sizing.content(), Sizing.content())
                                 .child(
-                                        new NavigationBar(context).navbar))
+                                        new NavigationBar(context).navbar
+                                )
+                )
                 .child(
                         Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 2)
                                 .child(
@@ -234,7 +238,8 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                                                                 .verticalAlignment(VerticalAlignment.TOP)
                                                 ),
                                         0,
-                                        0)
+                                        0
+                                )
                                 .child(
                                         Containers.verticalFlow(Sizing.fill(45), Sizing.fill(100))
                                                 .child(
