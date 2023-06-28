@@ -7,6 +7,8 @@ import io.wispforest.owo.ui.core.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
 import org.jetbrains.annotations.*;
+
+import su.puzzle.pay.PuzzlePayClient;
 import su.puzzle.pay.api.*;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
@@ -25,8 +27,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
     protected Props props;
 
     public void getNextHistory(FlowLayout layout) throws ApiCallException, ApiResponseException {
-        ButtonComponent button = Components.button(Text.literal("Показать больше..."), onClick -> {
-        });
+        ButtonComponent button = Components.button(Text.literal("Показать больше..."), onClick -> { });
 
         button.onPress(buttonComponent -> {
             try {
@@ -38,69 +39,76 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
             }
         });
         button.horizontalSizing(Sizing.fill(80)).margins(Insets.of(6));
-        BankCardHistoryResponse history = PlasmoApi.getCardHistory(this.thisCard, this.count).unwrap();
 
-        if (history.total() >= 1 && this.count <= 100) {
-            history.list().subList(this.count - 10, Math.min(this.count, history.total()))
+        PuzzlePayClient.asyncTasksService.addTask(() -> {
+            return PlasmoApi.getCardHistory(this.thisCard, this.count).unwrap();
+        }, (result) -> {
+            BankCardHistoryResponse history = (BankCardHistoryResponse) result;
+            if (history.total() >= 1 && this.count <= 100) {
+                history.list().subList(this.count - 10, Math.min(this.count, history.total()))
                     .forEach((bankCardHistory) -> {
                         layout.child(
-                                        Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
-                                                .child(
-                                                        Containers.verticalFlow(Sizing.fill(80), Sizing.content())
-                                                                .child(
-                                                                        Components.label(Text.literal(
-                                                                                bankCardHistory.card().holder().isBlank()
-                                                                                        ? "Удален"
-                                                                                        : bankCardHistory.card().holder())))
-                                                                .child(
-                                                                        Components.label(Text.literal(bankCardHistory.card()
-                                                                                .getNormalId()
-                                                                                + " — "
-                                                                                + (bankCardHistory.card().name().isBlank()
-                                                                                ? "Удалена"
-                                                                                : bankCardHistory.card().name()))))
-                                                                .child(
-                                                                        !bankCardHistory.message().isBlank()
-                                                                                ? Components.label(Text.literal(
-                                                                                "§8" + bankCardHistory.message()))
-                                                                                : Components.box(Sizing.fixed(0),
-                                                                                Sizing.fixed(0)))
-                                                                .horizontalAlignment(HorizontalAlignment.LEFT)
-                                                                .verticalAlignment(VerticalAlignment.CENTER))
-                                                .child(
-                                                        Containers.verticalFlow(Sizing.fill(20), Sizing.content())
-                                                                .child(
-                                                                        Components
-                                                                                .label(Text.literal(bankCardHistory.amount() < 0
-                                                                                        ? "§c" + bankCardHistory.amount()
-                                                                                        : "§a" + bankCardHistory.amount())))
-                                                                .horizontalAlignment(HorizontalAlignment.RIGHT)
-                                                                .verticalAlignment(VerticalAlignment.CENTER))
-                                                .margins(Insets.of(6))
-                                                .horizontalAlignment(HorizontalAlignment.CENTER)
-                                                .verticalAlignment(VerticalAlignment.CENTER))
+                                Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
                                 .child(
-                                        Components.box(Sizing.fill(80), Sizing.fixed(1))
-                                                .color(Color.ofArgb(0x4bffffff)));
+                                    Containers.verticalFlow(Sizing.fill(80), Sizing.content())
+                                    .child(
+                                        Components.label(Text.literal(
+                                                bankCardHistory.card().holder().isBlank()
+                                                ? "Удален"
+                                                : bankCardHistory.card().holder())))
+                                    .child(
+                                        Components.label(Text.literal(bankCardHistory.card()
+                                                .getNormalId()
+                                                + " — "
+                                                + (bankCardHistory.card().name().isBlank()
+                                                    ? "Удалена"
+                                                    : bankCardHistory.card().name()))))
+                                    .child(
+                                        !bankCardHistory.message().isBlank()
+                                        ? Components.label(Text.literal(
+                                                "§8" + bankCardHistory.message()))
+                                        : Components.box(Sizing.fixed(0),
+                                            Sizing.fixed(0)))
+                                    .horizontalAlignment(HorizontalAlignment.LEFT)
+                                    .verticalAlignment(VerticalAlignment.CENTER))
+                                    .child(
+                                            Containers.verticalFlow(Sizing.fill(20), Sizing.content())
+                                            .child(
+                                                Components
+                                                .label(Text.literal(bankCardHistory.amount() < 0
+                                                        ? "§c" + bankCardHistory.amount()
+                                                        : "§a" + bankCardHistory.amount())))
+                                            .horizontalAlignment(HorizontalAlignment.RIGHT)
+                                            .verticalAlignment(VerticalAlignment.CENTER))
+                                    .margins(Insets.of(6))
+                                    .horizontalAlignment(HorizontalAlignment.CENTER)
+                                    .verticalAlignment(VerticalAlignment.CENTER))
+                                    .child(
+                                            Components.box(Sizing.fill(80), Sizing.fixed(1))
+                                            .color(Color.ofArgb(0x4bffffff)));
                     });
-        } else {
-            if (history.total() <= 0) {
-                layout.child(
-                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
-                                .child(
-                                        Components
-                                                .label(Text
-                                                        .translatable("ui.puzzlepay.bank.tab.no_transactions_message"))
-                                                .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                                .horizontalSizing(Sizing.fill(80)))
-                                .horizontalAlignment(HorizontalAlignment.CENTER)
-                                .verticalAlignment(VerticalAlignment.CENTER));
+            } else {
+                if (history.total() <= 0) {
+                    layout.child(
+                            Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                            .child(
+                                Components
+                                .label(Text
+                                    .translatable("ui.puzzlepay.bank.tab.no_transactions_message"))
+                                .horizontalTextAlignment(HorizontalAlignment.CENTER)
+                                .horizontalSizing(Sizing.fill(80)))
+                            .horizontalAlignment(HorizontalAlignment.CENTER)
+                            .verticalAlignment(VerticalAlignment.CENTER));
+                }
             }
-        }
-        if ((history.total() > this.count) && (this.count < 100)) {
-            layout.child(
-                    button);
-        }
+            if ((history.total() > this.count) && (this.count < 100)) {
+                layout.child(
+                        button);
+            }
+        }, (exception) -> {
+
+        });
+
     }
 
     public BankScreen() {
@@ -123,12 +131,12 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
         cardList.margins(Insets.both(0, 8));
         cards.cards().forEach((card) -> {
             cardList.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
-                try {
+                PuzzlePayClient.asyncTasksService.addTask(() -> {
                     PlasmoApi.updateUserActiveCard(card);
+                    return null;
+                }, (result) -> {
                     context.screenRouter().route(context.currentScreenName());
-                } catch (ApiCallException e) {
-                    throw new RuntimeException(e);
-                }
+                }, (exc) -> { });
             });
         });
 
