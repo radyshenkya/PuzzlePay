@@ -73,7 +73,7 @@ public class PuzzlePayClient implements ClientModInitializer {
     }
 
     private void registerKeys() {
-        transferGuiKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.puzzlepay.open_transfer_gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "category.puzzlepay.puzzlepay"));
+        transferGuiKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.puzzlepay.open_bank_screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "Puzzle Pay"));
     }
 
     private void registerCallbacks() {
