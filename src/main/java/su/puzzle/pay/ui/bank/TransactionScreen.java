@@ -156,7 +156,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         rootComponent.child(
                         Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
                                 .child(
-                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(30))
+                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(20))
                                                 .child(
                                                         new NavigationBar(context).navbar
                                                 )
@@ -164,11 +164,20 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                                                 .verticalAlignment(VerticalAlignment.TOP)
                                 )
                                 .child(
-                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(40))
+                                        Containers.verticalFlow(Sizing.fill(72), Sizing.fill(80))
                                                 .child(
-                                                        Containers.grid(Sizing.fill(72), Sizing.fill(100), 1, 3)
+                                                        Containers.verticalFlow(Sizing.fill(65), Sizing.fill(42))
+                                                                .child(Components.label(Text.literal("Сумма")))
+                                                                .child(amount)
+                                                                .child(Components.label(Text.literal("Комментарий")))
+                                                                .child(comment)
+                                                                .child(transfer)
+                                                                .verticalAlignment(VerticalAlignment.CENTER)
+                                                )
+                                                .child(
+                                                        Containers.grid(Sizing.fill(72), Sizing.fill(38), 1, 2)
                                                                 .child(
-                                                                        Containers.verticalFlow(Sizing.fill(24), Sizing.fill(100))
+                                                                        Containers.verticalFlow(Sizing.fill(42), Sizing.fill(100))
                                                                                 .child(
                                                                                         cardList
                                                                                 )
@@ -176,27 +185,20 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                                                                         0
                                                                 )
                                                                 .child(
-                                                                        Containers.verticalFlow(Sizing.fill(24), Sizing.fill(100))
-                                                                                .child(Components.label(Text.literal("Сумма")))
-                                                                                .child(amount)
-                                                                                .child(Components.label(Text.literal("Комментарий")))
-                                                                                .child(comment)
-                                                                                .child(transfer)
-                                                                                .verticalAlignment(VerticalAlignment.CENTER)
-                                                                        , 0,
-                                                                        1
-                                                                )
-                                                                .child(
-                                                                        Containers.verticalFlow(Sizing.fill(24), Sizing.fill(100))
+                                                                        Containers.verticalFlow(Sizing.fill(42), Sizing.fill(100))
                                                                                 .child(
                                                                                         toCardInput
                                                                                 )
                                                                         , 0,
-                                                                        2
+                                                                        1
                                                                 )
+                                                                .margins(Insets.top(8))
+                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                                .verticalAlignment(VerticalAlignment.TOP)
                                                 )
+                                                .margins(Insets.top(16))
                                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                                .verticalAlignment(VerticalAlignment.CENTER)
+                                                .verticalAlignment(VerticalAlignment.TOP)
                                 )
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
                                 .verticalAlignment(VerticalAlignment.TOP)

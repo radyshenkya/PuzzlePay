@@ -16,7 +16,6 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
-import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.BankCard;
 import su.puzzle.pay.api.types.TokenInfoResponse;
 import su.puzzle.pay.api.AsyncTasksService;
@@ -29,7 +28,6 @@ import su.puzzle.pay.ui.router.ScreenRouter;
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
 public class PuzzlePayClient implements ClientModInitializer {
@@ -94,10 +92,6 @@ public class PuzzlePayClient implements ClientModInitializer {
                 }, (result) -> {
                     HashSet<String> scopes = new HashSet<>(((TokenInfoResponse) result).scopes());
 
-                    scopes.forEach(System.out::println);
-
-                    System.out.println(screenRouter.routes.size());
-
                     if (scopes.containsAll(NEEDED_SCOPES) && NEEDED_SCOPES.containsAll(scopes))
                         screenRouter.route(ScreenRouteNames.MAIN);
                     else MinecraftClient.getInstance().setScreen(new Oauth2Screen());
@@ -141,8 +135,6 @@ public class PuzzlePayClient implements ClientModInitializer {
         try {
             int parsedAmount = Integer.parseInt(amount);
             BankCard to = PlasmoApi.searchCards(cardNumber).unwrap().get(0);
-
-            System.out.println(to);
             
             screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
 
