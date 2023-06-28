@@ -50,12 +50,12 @@ public class NavigationBar {
                                 .child(
                                         Containers.horizontalFlow(Sizing.fill(25), Sizing.content())
                                                 .child(
-                                                        Components.button(Text.literal("↓").formatted(Formatting.UNDERLINE), button -> {
+                                                        Components.button(Text.literal("⟳"), button -> {
                                                             context.screenRouter().route(context.currentScreenName());
                                                         }).sizing(Sizing.fixed(20))
                                                 )
                                                 .child(
-                                                        Components.button(Text.literal("Auth"), button -> {
+                                                        Components.button(Text.literal("\uD83D\uDD12"), button -> {
                                                             MinecraftClient.getInstance().setScreen(new Oauth2Screen());
                                                         }).sizing(Sizing.fixed(20)).margins(Insets.left(4))
                                                 )

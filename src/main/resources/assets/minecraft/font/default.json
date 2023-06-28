@@ -1,0 +1,22 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "puzzlepay:icon/lock.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\uD83D\uDD12"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "puzzlepay:icon/reload.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "⟳"
+      ]
+    }
+  ]
+}
