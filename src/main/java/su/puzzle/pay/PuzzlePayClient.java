@@ -19,6 +19,7 @@ import net.minecraft.util.ActionResult;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.BankCard;
 import su.puzzle.pay.api.types.TokenInfoResponse;
+import su.puzzle.pay.api.AsyncTasksService;
 import su.puzzle.pay.api.PlasmoApi;
 import su.puzzle.pay.ui.oauth2.AuthHttpServer;
 import su.puzzle.pay.ui.oauth2.Oauth2Screen;
@@ -28,10 +29,13 @@ import su.puzzle.pay.ui.router.ScreenRouter;
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 
 public class PuzzlePayClient implements ClientModInitializer {
     public static final su.puzzle.pay.PuzzlePayConfig config = su.puzzle.pay.PuzzlePayConfig.createAndLoad();
     private static KeyBinding transferGuiKeyBinding;
+    public static final AsyncTasksService asyncTasksService = new AsyncTasksService(Executors.newCachedThreadPool());
     public static AuthHttpServer server;
     public static ScreenRouter screenRouter;
 
@@ -74,20 +78,32 @@ public class PuzzlePayClient implements ClientModInitializer {
 
     private void registerCallbacks() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (transferGuiKeyBinding.wasPressed()) {
-                try {
-                    TokenInfoResponse tokenCheck = PlasmoApi.getTokenInfo().unwrap();
+            try { 
+                asyncTasksService.updateTasks();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                    HashSet<String> scopes = new HashSet<>(tokenCheck.scopes());
+            asyncTasksService.removeDone();
+        });
+
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            while (transferGuiKeyBinding.wasPressed()) {
+                asyncTasksService.addTask(() -> {
+                    return PlasmoApi.getTokenInfo().unwrap();
+                }, (result) -> {
+                    HashSet<String> scopes = new HashSet<>(((TokenInfoResponse) result).scopes());
 
                     scopes.forEach(System.out::println);
+
+                    System.out.println(screenRouter.routes.size());
 
                     if (scopes.containsAll(NEEDED_SCOPES) && NEEDED_SCOPES.containsAll(scopes))
                         screenRouter.route(ScreenRouteNames.MAIN);
                     else MinecraftClient.getInstance().setScreen(new Oauth2Screen());
-                } catch (ApiResponseException | ApiCallException e) {
+                }, (exception) -> {
                     MinecraftClient.getInstance().setScreen(new Oauth2Screen());
-                }
+                });
             }
         });
 
@@ -130,9 +146,10 @@ public class PuzzlePayClient implements ClientModInitializer {
             
             screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
 
-            return true;
         } catch (Exception e) {
-            return false;
+            MinecraftClient.getInstance().setScreen(new Oauth2Screen());
         }
+
+        return true;
     }
 }

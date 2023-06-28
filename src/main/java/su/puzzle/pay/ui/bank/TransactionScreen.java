@@ -8,6 +8,8 @@ import net.minecraft.client.*;
 import net.minecraft.sound.*;
 import net.minecraft.text.*;
 import org.jetbrains.annotations.*;
+
+import su.puzzle.pay.PuzzlePayClient;
 import su.puzzle.pay.api.*;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
@@ -22,6 +24,8 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
     protected Context context;
     protected Props props = new Props(null, 1, "");
+
+    private static final int MAX_CARDS_IN_SEARCH = 50;
 
     public TransactionScreen() {
     }
@@ -74,30 +78,37 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         toCardInput.onInputChange(text -> {
             if (text.length() < 2) return;
 
-            toCardInput.removeEntries();
-            List<BankCard> searchResult;
+            PuzzlePayClient.asyncTasksService.addTask(() -> {
+                return PlasmoApi.searchCards(text).unwrap();
+            }, (result) -> {
+                List<BankCard> searchResult = (List<BankCard>) result;
 
-            try {
-                searchResult = PlasmoApi.searchCards(text).unwrap();
-                searchResult.removeIf(card -> card == this.fromCard);
-            } catch (ApiCallException | ApiResponseException e) {
-                toCardInput.button(Text.literal("Ошибка обращения к серверу Plasmo RP"), onClick -> {
-                });
-                return;
-            }
+                toCardInput.removeEntries();
 
-            if (searchResult.size() == 0) {
-                toCardInput.button(Text.literal("По данному запросу ничего не найдено"), onClick -> {
-                });
-                return;
-            }
+                System.out.println(searchResult.size());
 
-            searchResult.forEach(card -> toCardInput.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
-                        props = new Props(card, props.amount(), props.comment());
-                        toCardInput.title(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()));
-                    }
-            ));
+                if (searchResult.size() >= MAX_CARDS_IN_SEARCH) { 
+                    searchResult.subList(MAX_CARDS_IN_SEARCH, searchResult.size()).clear();
+                    toCardInput.button(Text.literal("Найдено слишком много карт, чтобы отобразить их все"), onClick -> { });
+                }
+
+
+                if (searchResult.size() == 0) {
+                    toCardInput.button(Text.literal("По данному запросу ничего не найдено"), onClick -> { });
+                    return;
+                }
+
+                searchResult.forEach(card -> toCardInput.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
+                    props = new Props(card, props.amount(), props.comment());
+                    toCardInput.title(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()));
+                }
+                ));
+            }, (exception) -> {
+                toCardInput.removeEntries();
+                toCardInput.button(Text.literal("Ошибка обращения к серверу Plasmo RP"), onClick -> { });
+            });
         });
+
 
         TextBoxComponent amount = Components.textBox(Sizing.fill(100));
         amount.text(String.valueOf(props.amount()));
