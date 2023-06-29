@@ -40,9 +40,10 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
                                         Containers.horizontalFlow(Sizing.content(), Sizing.content())
                                                 .child(
                                                         Components.button(Text.translatable("ui.puzzlepay.button.link"), button -> {
-                                                                    int port = generateFreePort();
-                                                                    PuzzlePayClient.server.start(port);
-                                                                    Util.getOperatingSystem().open(getOauthLink(port));
+                                                                    // TODO: Заменить на рандомный порт
+                                                                    // int port = generateFreePort();
+                                                                    PuzzlePayClient.server.start(6969);
+                                                                    Util.getOperatingSystem().open(getOauthLink(6969));
                                                                     MinecraftClient.getInstance().setScreen(new Oauth2WaitScreen());
                                                                 })
                                                                 .horizontalSizing(Sizing.fixed(120))
@@ -80,10 +81,12 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
     }
 
     protected String getOauthLink(int port) {
-        String link = "https://plasmorp.com/oauth2?client_id=dZkmuEPjmuX5pkvM3Sz2FLXKCS34GaF4KFnfPsE5QUWjEjbS&redirect_uri=http://localhost:" + port + "/auth&response_type=token&scope=";
-        String scopes = String.join(" ", PuzzlePayClient.NEEDED_SCOPES);
+       // String link = "https://plasmorp.com/oauth2?client_id=dZkmuEPjmuX5pkvM3Sz2FLXKCS34GaF4KFnfPsE5QUWjEjbS&redirect_uri=http://localhost:" + port + "/auth&response_type=token&scope=";
+       // String scopes = String.join(" ", PuzzlePayClient.NEEDED_SCOPES);
 
-        link += PlasmoApi.encodeURLQuery(scopes);
+       // link += PlasmoApi.encodeURLQuery(scopes);
+
+        String link = "https://puzzlemc.site/pay/oauth2";
 
         return link;
     }

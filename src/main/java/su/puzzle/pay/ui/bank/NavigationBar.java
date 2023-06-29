@@ -74,7 +74,7 @@ public class NavigationBar {
     }
 
     public static Component shadow() {
-        FlowLayout shadow = Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(10));
+        FlowLayout shadow = Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(5));
 
         shadow.surface((drawContext, component) -> {
             drawContext.drawGradientRect(component.x(), component.y(), component.width(), component.height(),

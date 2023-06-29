@@ -143,9 +143,13 @@ public class PuzzlePayClient implements ClientModInitializer {
 
                 screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
             }, (exception) -> {
-                if (exception instanceof ApiResponseException || exception instanceof ApiCallException) {
+                try {
+                    throw exception;
+                } catch (ApiResponseException | ApiCallException e) {
                     MinecraftClient.getInstance().setScreen(new Oauth2Screen());
-                } else { }
+                } catch (Exception e) {
+
+                }
             });
 
         return true;

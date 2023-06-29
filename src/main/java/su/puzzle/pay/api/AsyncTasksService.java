@@ -1,6 +1,7 @@
 package su.puzzle.pay.api;
 
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -27,6 +28,9 @@ public class AsyncTasksService {
 
             try {
                 task.callback().onEnd(task.task().get());
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                task.exceptionCallback().onEnd((Exception) e.getCause());
             } catch (Exception e) {
                 e.printStackTrace();
                 task.exceptionCallback().onEnd(e);
