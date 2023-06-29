@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 public class AsyncTasksService {
     protected ExecutorService threadpool;
     protected LinkedList<AsyncTask> tasks = new LinkedList<AsyncTask>();
+    protected LinkedList<AsyncTask> newTasks = new LinkedList<AsyncTask>();
 
     public AsyncTasksService(ExecutorService threadpool) {
         this.threadpool = threadpool;
@@ -14,10 +15,13 @@ public class AsyncTasksService {
 
     public void addTask(Task task, TaskCallback callback, TaskExceptionCallback exceptionCallback) {
         Future<Object> future = threadpool.submit(() -> { return task.run();} );
-        tasks.add(new AsyncTask(future, callback, exceptionCallback));
+        newTasks.add(new AsyncTask(future, callback, exceptionCallback));
     }
 
     public void updateTasks() {
+        tasks.addAll(newTasks);
+        newTasks.clear();
+
         for (AsyncTask task : tasks) {
             if (!task.isDone()) continue;
 

@@ -96,6 +96,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                     toCardInput.button(Text.literal("Найдено слишком много карт, чтобы отобразить их все"), onClick -> { });
                 }
 
+                searchResult.removeIf((card) -> card.id() == fromCard.id());
 
                 if (searchResult.size() == 0) {
                     toCardInput.button(Text.literal("По данному запросу ничего не найдено"), onClick -> { });
@@ -128,12 +129,14 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
         ButtonComponent transfer = Components.button(Text.translatable("ui.puzzlepay.bank.tab.transactions"), (button) -> {
             if (props.to() == null) return;
-            if (fromCard == props.to()) return;
+            if (fromCard.id() == props.to().id()) return;
 
             String commentString = comment.getText();
             String amountString = amount.getText();
 
             try {
+                if (Integer.parseInt(amountString)  <= 0) return;
+
                 PlasmoApi.transfer(Integer.parseInt(amountString), fromCard.getNormalId(), commentString, props.to().getNormalId()).unwrap();
                 PlasmoApi.updateUserActiveCard(fromCard);
                 MinecraftClient.getInstance().setScreen(null);
@@ -153,67 +156,51 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
         transfer.horizontalSizing(Sizing.fill(100));
 
+        rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
         rootComponent.child(
-                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+            Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                .child(new NavigationBar(context).navbar)
+                .child(
+                    Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                        .child(
+                            Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
                                 .child(
-                                        Containers.verticalFlow(Sizing.fill(100), Sizing.fill(20))
-                                                .child(
-                                                        new NavigationBar(context).navbar
-                                                )
-                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                    Containers.verticalFlow(Sizing.fill(40), Sizing.content())
+                                        // Top margin
+                                        .child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(20)))
+                                        // Transfer components
+                                        .child(Components.label(Text.literal("Сумма")))
+                                        .child(amount)
+                                        .child(Components.label(Text.literal("Комментарий")))
+                                        .child(comment)
+                                        .child(transfer)
+                                        // Card selection titles
+                                        .child(
+                                            Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                                                .child(Components.label(Text.literal("Откуда")).horizontalSizing(Sizing.fill(45)))
+                                                .child(Containers.horizontalFlow(Sizing.fill(10), Sizing.fixed(0)))
+                                                .child(Components.label(Text.literal("Куда")).horizontalSizing(Sizing.fill(45)))
+                                                .padding(Insets.top(10))
                                                 .verticalAlignment(VerticalAlignment.TOP)
-                                )
-                                .child(
-                                        Containers.verticalFlow(Sizing.fill(72), Sizing.fill(80))
-                                                .child(
-                                                        Containers.verticalFlow(Sizing.fill(70), Sizing.fill(42))
-                                                                .child(Components.label(Text.literal("Сумма")))
-                                                                .child(amount)
-                                                                .child(Components.label(Text.literal("Комментарий")))
-                                                                .child(comment)
-                                                                .child(transfer)
-                                                                .verticalAlignment(VerticalAlignment.CENTER)
+                                        )
+                                        // Dropdowns
+                                        .child(
+                                            Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                                                .child(cardList.horizontalSizing(Sizing.fill(45)))
+                                                .child(Components.label(Text.literal("→"))
+                                                    .verticalTextAlignment(VerticalAlignment.CENTER)
+                                                    .horizontalTextAlignment(HorizontalAlignment.CENTER)
+                                                    .sizing(Sizing.fill(10), Sizing.fixed(32))
                                                 )
-                                                .child(
-                                                        Containers.horizontalFlow(Sizing.fill(70), Sizing.fill(38))
-                                                                .child(
-                                                                        Containers.verticalFlow(Sizing.fill(45), Sizing.content())
-                                                                                .child(
-                                                                                        Components.label(Text.literal("Откуда"))
-                                                                                                .margins(Insets.left(2))
-                                                                                )
-                                                                                .child(
-                                                                                        cardList.margins(Insets.top(2))
-                                                                                )
-                                                                )
-                                                                .child(
-                                                                        Containers.verticalFlow(Sizing.fill(10), Sizing.content())
-                                                                                .child(
-                                                                                        Components.label(Text.literal("→"))
-                                                                                                .margins(Insets.top(14))
-                                                                                )
-                                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
-                                                                )
-                                                                .child(
-                                                                        Containers.verticalFlow(Sizing.fill(45), Sizing.content())
-                                                                                .child(
-                                                                                        Components.label(Text.literal("Куда"))
-                                                                                                .margins(Insets.left(2))
-                                                                                )
-                                                                                .child(
-                                                                                        toCardInput.margins(Insets.top(2))
-                                                                                )
-                                                                )
-                                                                .margins(Insets.top(6))
-                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
-                                                )
-                                                .margins(Insets.top(16))
-                                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                .child(toCardInput.horizontalSizing(Sizing.fill(45)))
+                                                .padding(Insets.top(5))
+                                                .verticalAlignment(VerticalAlignment.TOP)
+                                        )
                                 )
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                .verticalAlignment(VerticalAlignment.TOP)
+                        )
                 )
-                .surface(Surface.VANILLA_TRANSLUCENT);
+        );
     }
 
     @Override

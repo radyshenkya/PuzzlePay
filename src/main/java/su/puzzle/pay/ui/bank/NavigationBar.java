@@ -7,7 +7,6 @@ import io.wispforest.owo.ui.core.Insets;
 import net.fabricmc.loader.api.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
-import net.minecraft.util.*;
 import su.puzzle.pay.ui.router.Context;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.oauth2.*;
@@ -75,7 +74,7 @@ public class NavigationBar {
     }
 
     public static Component shadow() {
-        FlowLayout shadow = Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(20));
+        FlowLayout shadow = Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(10));
 
         shadow.surface((drawContext, component) -> {
             drawContext.drawGradientRect(component.x(), component.y(), component.width(), component.height(),
@@ -83,7 +82,7 @@ public class NavigationBar {
         });
 
         shadow.positioning(Positioning.across(0, 100));
-        shadow.zIndex(100);
+        shadow.zIndex(0);
 
         return shadow;
     }

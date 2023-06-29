@@ -164,12 +164,7 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
     @Override
     protected void build(FlowLayout rootComponent) {
         rootComponent
-                .child(
-                        Containers.verticalFlow(Sizing.content(), Sizing.content())
-                                .child(
-                                        new NavigationBar(context).navbar
-                                )
-                )
+                .child(new NavigationBar(context).navbar)
                 .child(
                         Containers.grid(Sizing.fill(100), Sizing.fill(100), 1, 2)
                                 .child(
