@@ -63,6 +63,12 @@ public class PlasmoApi {
         return request("/bank/cards/" + card.getNormalId() + "/history?count=" + count, "GET", type);
     }
 
+    public static Response<BankCardHistoryResponse> getCardHistory(BankCard card, int count, int to) throws ApiCallException {
+        Type type = new TypeToken<Response<BankCardHistoryResponse>>() {
+        }.getType();
+        return request("/bank/cards/" + card.getNormalId() + "/history?count=" + count, "GET", type);
+    }
+
     public static void updateUserActiveCard(BankCard card) throws ApiCallException {
         PatchCard req = new PatchCard(card.getNormalId());
         Type type = new TypeToken<Response<Object>>() {
@@ -88,7 +94,7 @@ public class PlasmoApi {
 
             HttpResponse<String> response = httpClient.send(request.build(), BodyHandlers.ofString());
 
-            //System.out.println(response.body());
+            System.out.println(response.body());
 
             return response.body();
         } catch (Exception e) {

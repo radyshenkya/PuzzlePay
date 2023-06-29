@@ -20,6 +20,8 @@ import su.puzzle.pay.api.types.BankCard;
 import su.puzzle.pay.api.types.TokenInfoResponse;
 import su.puzzle.pay.api.AsyncTasksService;
 import su.puzzle.pay.api.PlasmoApi;
+import su.puzzle.pay.api.exceptions.ApiCallException;
+import su.puzzle.pay.api.exceptions.ApiResponseException;
 import su.puzzle.pay.ui.oauth2.AuthHttpServer;
 import su.puzzle.pay.ui.oauth2.Oauth2Screen;
 import su.puzzle.pay.ui.bank.*;
@@ -132,15 +134,23 @@ public class PuzzlePayClient implements ClientModInitializer {
 
         if (!cardNumber.startsWith("EB-")) return false;
 
-        try {
-            int parsedAmount = Integer.parseInt(amount);
-            BankCard to = PlasmoApi.searchCards(cardNumber).unwrap().get(0);
-            
-            screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
+        asyncTasksService.addTask(() -> { return PlasmoApi.searchCards(cardNumber).unwrap().get(0); },
+            (result) -> {
+                BankCard to = (BankCard) result;
+                int parsedAmount = Integer.parseInt(amount);
 
-        } catch (Exception e) {
-            MinecraftClient.getInstance().setScreen(new Oauth2Screen());
-        }
+                if (to == null) { return; }
+
+                screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
+            }, (exception) -> {
+                try {
+                    throw exception;
+                } catch (ApiResponseException | ApiCallException e) {
+                    MinecraftClient.getInstance().setScreen(new Oauth2Screen());
+                } catch (Exception e) {
+
+                }
+            });
 
         return true;
     }

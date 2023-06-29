@@ -7,7 +7,6 @@ import io.wispforest.owo.ui.core.Insets;
 import net.fabricmc.loader.api.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
-import net.minecraft.util.*;
 import su.puzzle.pay.ui.router.Context;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.oauth2.*;
@@ -17,6 +16,9 @@ import java.util.List;
 
 public class NavigationBar {
     public Component navbar;
+    
+    private static final int GRADIENT_START = 0xFF000000;
+    private static final int GRADIENT_END = 0x00000000;
 
     public NavigationBar(Context context) {
         List<Component> buttons = new ArrayList<>();
@@ -65,7 +67,23 @@ public class NavigationBar {
                                 .margins(Insets.horizontal(14))
                                 .verticalAlignment(VerticalAlignment.CENTER)
                 )
+                .child(shadow())
+                .allowOverflow(true)
                 .surface(Surface.OPTIONS_BACKGROUND)
                 .verticalAlignment(VerticalAlignment.CENTER);
+    }
+
+    public static Component shadow() {
+        FlowLayout shadow = Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(5));
+
+        shadow.surface((drawContext, component) -> {
+            drawContext.drawGradientRect(component.x(), component.y(), component.width(), component.height(),
+                    GRADIENT_START, GRADIENT_START, GRADIENT_END, GRADIENT_END);
+        });
+
+        shadow.positioning(Positioning.across(0, 100));
+        shadow.zIndex(0);
+
+        return shadow;
     }
 }
