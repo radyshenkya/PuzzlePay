@@ -176,12 +176,6 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                                                                                 .child(
                                                                                         Containers.verticalFlow(Sizing.fill(100), Sizing.content())
                                                                                                 .child(
-                                                                                                        Components.label(Text.literal("Карта " + thisCard.getNormalId()))
-                                                                                                                .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                                                                                                .horizontalSizing(Sizing.fill(100))
-                                                                                                                .margins(Insets.both(0, 8))
-                                                                                                )
-                                                                                                .child(
                                                                                                         Containers.grid(Sizing.fill(100), Sizing.content(), 1, 2)
                                                                                                                 .child(
                                                                                                                         Containers.verticalFlow(Sizing.fill(50), Sizing.content())
@@ -204,16 +198,16 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                                                                                                                 .child(
                                                                                                                         Containers.verticalFlow(Sizing.fill(50), Sizing.content())
                                                                                                                                 .child(
-                                                                                                                                        Components.label(Text.literal(thisCard.name())).horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                                                                                                                        Components.label(thisCard == null ? Text.translatable("ui.puzzlepay.bank.tab.choose_card") : Text.literal(thisCard.name())).horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                                                                                                                 )
                                                                                                                                 .child(
-                                                                                                                                        Components.label(Text.literal(String.valueOf(thisCard.value()))).horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                                                                                                                        Components.label(thisCard == null ? Text.translatable("ui.puzzlepay.bank.tab.choose_card") : Text.literal(String.valueOf(thisCard.value()))).horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                                                                                                                 )
                                                                                                                                 .child(
-                                                                                                                                        Components.label(Text.literal(thisCard.getNormalId())).horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                                                                                                                        Components.label(thisCard == null ? Text.translatable("ui.puzzlepay.bank.tab.choose_card") : Text.literal(thisCard.getNormalId())).horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                                                                                                                 )
                                                                                                                                 .child(
-                                                                                                                                        Components.label(Text.literal(thisCard.holder())).horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                                                                                                                        Components.label(thisCard == null ? Text.translatable("ui.puzzlepay.bank.tab.choose_card") : Text.literal(thisCard.holder())).horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                                                                                                                 )
                                                                                                                                 .horizontalAlignment(HorizontalAlignment.RIGHT)
                                                                                                                         , 0,
@@ -241,8 +235,12 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                                                         Containers.verticalFlow(Sizing.fill(100), Sizing.fill(80))
                                                                 .child(
                                                                         thisCard == null
-                                                                                ? Components.label(Text.translatable(
-                                                                                "ui.puzzlepay.bank.tab.choose_card"))
+                                                                                ? Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                                                                                    .child(
+                                                                                            Components.label(Text.translatable("ui.puzzlepay.bank.tab.choose_card"))
+                                                                                    )
+                                                                                    .verticalAlignment(VerticalAlignment.CENTER)
+                                                                                    .horizontalAlignment(HorizontalAlignment.CENTER)
                                                                                 : historyScroll
                                                                 )
                                                                 .horizontalAlignment(HorizontalAlignment.CENTER)

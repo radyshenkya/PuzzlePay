@@ -3,7 +3,6 @@ package su.puzzle.pay.ui.oauth2;
 import com.sun.net.httpserver.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
-import net.minecraft.util.Identifier;
 import org.apache.http.HttpStatus;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.*;
@@ -11,7 +10,6 @@ import su.puzzle.pay.api.PlasmoApi;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 
 public class AuthHttpServer {
     public HttpServer server;
@@ -47,24 +45,6 @@ public class AuthHttpServer {
                     .execute(() -> MessageScreen.openMessage(Text.translatable("ui.puzzlepay.text.success_message_name"),
                                     Text.translatable("ui.puzzlepay.text.oauth2.success")));
             server.stop(0);
-        });
-
-        server.createContext("/auth", httpExchange -> {
-            if (!"GET".equals(httpExchange.getRequestMethod())) {
-                sendResponseString(httpExchange, HttpStatus.SC_METHOD_NOT_ALLOWED, "Method not allowed");
-            }
-
-            try {
-                InputStream is = MinecraftClient.getInstance().getResourceManager()
-                        .getResource(new Identifier("puzzlepay", "url_rebuild.html")).get().getInputStream();
-                sendResponseString(httpExchange, HttpStatus.SC_OK,
-                        new String(is.readAllBytes(), StandardCharsets.UTF_8));
-                is.close();
-            } catch (Exception e) {
-                PuzzlePayMod.LOGGER.warn(e.getMessage());
-                sendResponseString(httpExchange, HttpStatus.SC_INTERNAL_SERVER_ERROR, "Internal server error");
-                server.stop(0);
-            }
         });
 
         server.start();

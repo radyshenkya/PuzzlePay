@@ -8,8 +8,7 @@ import net.minecraft.client.*;
 import net.minecraft.sound.*;
 import net.minecraft.text.*;
 import org.jetbrains.annotations.*;
-
-import su.puzzle.pay.PuzzlePayClient;
+import su.puzzle.pay.*;
 import su.puzzle.pay.api.*;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
@@ -20,12 +19,10 @@ import su.puzzle.pay.ui.router.*;
 import java.util.*;
 
 public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Route {
+    private static final int MAX_CARDS_IN_SEARCH = 50;
     protected BankCard fromCard;
-
     protected Context context;
     protected Props props = new Props(null, 1, "");
-
-    private static final int MAX_CARDS_IN_SEARCH = 50;
 
     public TransactionScreen() {
     }
@@ -57,8 +54,14 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         }
 
         CustomDropdownComponent cardList = new CustomDropdownComponent(Sizing.fill(100), Sizing.content(),
-                Text.literal(this.fromCard == null ? "Выберите карту"
-                        : this.fromCard.name() + "\n§8" + this.fromCard.getNormalId() + " — " + this.fromCard.holder() + " — " + this.fromCard.value()),
+                this.fromCard == null ? Text.translatable("ui.puzzlepay.bank.tab.choose_card")
+                        :
+                        Text.literal(
+                                this.fromCard.name() + "\n§8" +
+                                        this.fromCard.getNormalId() + " — " +
+                                        this.fromCard.holder() + " — " +
+                                        this.fromCard.value()
+                        ),
                 false);
 
         cards.cards().forEach((card) -> {
@@ -71,7 +74,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         InputDropdownComponent toCardInput = new InputDropdownComponent(
                 Sizing.fill(100),
                 Sizing.content(),
-                props.to() == null ? Text.literal("Выберите карту") : Text.literal(props.to().name() + "\n§8" + props.to().getNormalId() + " — " + props.to().holder() + " — " + props.to().value()),
+                props.to() == null ? Text.translatable("ui.puzzlepay.bank.tab.choose_card") : Text.literal(props.to().name() + "\n§8" + props.to().getNormalId() + " — " + props.to().holder() + " — " + props.to().getStringValue().getString()),
                 false,
                 16);
 
@@ -80,8 +83,9 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
             toCardInput.removeEntries();
 
-            for (int i = 0; i < 5; i++){
-                toCardInput.button(Text.literal("Поиск\n§8Поиск"), (btn) -> {});
+            for (int i = 0; i < 5; i++) {
+                toCardInput.button(Text.literal("Поиск\n§8Поиск"), (btn) -> {
+                });
             }
 
             PuzzlePayClient.asyncTasksService.addTask(() -> {
@@ -91,26 +95,29 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
                 toCardInput.removeEntries();
 
-                if (searchResult.size() >= MAX_CARDS_IN_SEARCH) { 
+                if (searchResult.size() >= MAX_CARDS_IN_SEARCH) {
                     searchResult.subList(MAX_CARDS_IN_SEARCH, searchResult.size()).clear();
-                    toCardInput.button(Text.literal("Найдено слишком много карт, чтобы отобразить их все"), onClick -> { });
+                    toCardInput.button(Text.literal("Найдено слишком много карт, чтобы отобразить их все"), onClick -> {
+                    });
                 }
 
                 searchResult.removeIf((card) -> card.id() == fromCard.id());
 
                 if (searchResult.size() == 0) {
-                    toCardInput.button(Text.literal("По данному запросу ничего не найдено"), onClick -> { });
+                    toCardInput.button(Text.literal("По данному запросу ничего не найдено"), onClick -> {
+                    });
                     return;
                 }
 
                 searchResult.forEach(card -> toCardInput.button(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()), button -> {
-                    props = new Props(card, props.amount(), props.comment());
-                    toCardInput.title(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()));
-                }
+                            props = new Props(card, props.amount(), props.comment());
+                            toCardInput.title(Text.literal(card.name() + "\n§8" + card.getNormalId() + " — " + card.holder() + " — " + card.value()));
+                        }
                 ));
             }, (exception) -> {
                 toCardInput.removeEntries();
-                toCardInput.button(Text.literal("Ошибка обращения к серверу Plasmo RP"), onClick -> { });
+                toCardInput.button(Text.literal("Ошибка обращения к серверу Plasmo RP"), onClick -> {
+                });
             });
         });
 
@@ -135,7 +142,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
             String amountString = amount.getText();
 
             try {
-                if (Integer.parseInt(amountString)  <= 0) return;
+                if (Integer.parseInt(amountString) <= 0) return;
 
                 PlasmoApi.transfer(Integer.parseInt(amountString), fromCard.getNormalId(), commentString, props.to().getNormalId()).unwrap();
                 PlasmoApi.updateUserActiveCard(fromCard);
@@ -158,48 +165,48 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
         rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
         rootComponent.child(
-            Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
-                .child(new NavigationBar(context).navbar)
-                .child(
-                    Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                        .child(new NavigationBar(context).navbar)
                         .child(
-                            Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
-                                .child(
-                                    Containers.verticalFlow(Sizing.fill(40), Sizing.content())
-                                        // Top margin
-                                        .child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(20)))
-                                        // Transfer components
-                                        .child(Components.label(Text.literal("Сумма")))
-                                        .child(amount)
-                                        .child(Components.label(Text.literal("Комментарий")))
-                                        .child(comment)
-                                        .child(transfer)
-                                        // Card selection titles
+                                Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
                                         .child(
-                                            Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
-                                                .child(Components.label(Text.literal("Откуда")).horizontalSizing(Sizing.fill(45)))
-                                                .child(Containers.horizontalFlow(Sizing.fill(10), Sizing.fixed(0)))
-                                                .child(Components.label(Text.literal("Куда")).horizontalSizing(Sizing.fill(45)))
-                                                .padding(Insets.top(10))
-                                                .verticalAlignment(VerticalAlignment.TOP)
+                                                Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
+                                                        .child(
+                                                                Containers.verticalFlow(Sizing.fill(40), Sizing.content())
+                                                                        // Top margin
+                                                                        .child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(20)))
+                                                                        // Transfer components
+                                                                        .child(Components.label(Text.literal("Сумма")))
+                                                                        .child(amount)
+                                                                        .child(Components.label(Text.literal("Комментарий")))
+                                                                        .child(comment)
+                                                                        .child(transfer)
+                                                                        // Card selection titles
+                                                                        .child(
+                                                                                Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                                                                                        .child(Components.label(Text.literal("Откуда")).horizontalSizing(Sizing.fill(45)))
+                                                                                        .child(Containers.horizontalFlow(Sizing.fill(10), Sizing.fixed(0)))
+                                                                                        .child(Components.label(Text.literal("Куда")).horizontalSizing(Sizing.fill(45)))
+                                                                                        .padding(Insets.top(10))
+                                                                                        .verticalAlignment(VerticalAlignment.TOP)
+                                                                        )
+                                                                        // Dropdowns
+                                                                        .child(
+                                                                                Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                                                                                        .child(cardList.horizontalSizing(Sizing.fill(45)))
+                                                                                        .child(Components.label(Text.literal("→"))
+                                                                                                .verticalTextAlignment(VerticalAlignment.CENTER)
+                                                                                                .horizontalTextAlignment(HorizontalAlignment.CENTER)
+                                                                                                .sizing(Sizing.fill(10), Sizing.fixed(24))
+                                                                                        )
+                                                                                        .child(toCardInput.horizontalSizing(Sizing.fill(45)))
+                                                                                        .padding(Insets.top(5))
+                                                                                        .verticalAlignment(VerticalAlignment.TOP)
+                                                                        )
+                                                        )
+                                                        .horizontalAlignment(HorizontalAlignment.CENTER)
                                         )
-                                        // Dropdowns
-                                        .child(
-                                            Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
-                                                .child(cardList.horizontalSizing(Sizing.fill(45)))
-                                                .child(Components.label(Text.literal("→"))
-                                                    .verticalTextAlignment(VerticalAlignment.CENTER)
-                                                    .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                                    .sizing(Sizing.fill(10), Sizing.fixed(32))
-                                                )
-                                                .child(toCardInput.horizontalSizing(Sizing.fill(45)))
-                                                .padding(Insets.top(5))
-                                                .verticalAlignment(VerticalAlignment.TOP)
-                                        )
-                                )
-                                .horizontalAlignment(HorizontalAlignment.CENTER)
                         )
-                )
         );
     }
 
@@ -213,5 +220,6 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
         route(context, null);
     }
 
-    public record Props(BankCard to, int amount, String comment) { }
+    public record Props(BankCard to, int amount, String comment) {
+    }
 }

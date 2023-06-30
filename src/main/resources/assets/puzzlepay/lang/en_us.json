@@ -13,5 +13,6 @@
     "ui.puzzlepay.bank.tab.transactions": " ⇄ Transfer ",
     "ui.puzzlepay.bank.tab.no_transactions_message": "There is nothing to show.",
     "ui.puzzlepay.bank.tab.choose_card": "Choose card",
+    "ui.puzzlepay.bank.tab.hidden": "Hidden",
     "key.puzzlepay.open_bank_screen": "Open bank screen"
 }

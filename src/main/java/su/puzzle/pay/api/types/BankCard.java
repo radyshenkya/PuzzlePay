@@ -1,5 +1,7 @@
 package su.puzzle.pay.api.types;
 
+import net.minecraft.text.*;
+
 public record BankCard(
         String bank,
         String bank_code,
@@ -17,5 +19,13 @@ public record BankCard(
 ) {
     public String getNormalId() {
         return "EB-" + String.format("%04d", id);
+    }
+
+    public Text getStringValue() {
+        if (value_hidden) {
+            return Text.translatable("ui.puzzlepay.bank.tab.hidden");
+        } else {
+            return Text.literal(String.valueOf(value));
+        }
     }
 }
