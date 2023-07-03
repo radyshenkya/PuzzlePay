@@ -8,11 +8,11 @@ import net.minecraft.client.*;
 import net.minecraft.text.*;
 import net.minecraft.util.*;
 import org.jetbrains.annotations.*;
-import su.puzzle.pay.PuzzlePayClient;
-import su.puzzle.pay.api.PlasmoApi;
+import su.puzzle.pay.*;
 
 public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
-    public Oauth2Screen() {}
+    public Oauth2Screen() {
+    }
 
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
@@ -81,10 +81,10 @@ public class Oauth2Screen extends BaseOwoScreen<FlowLayout> {
     }
 
     protected String getOauthLink(int port) {
-       // String link = "https://plasmorp.com/oauth2?client_id=dZkmuEPjmuX5pkvM3Sz2FLXKCS34GaF4KFnfPsE5QUWjEjbS&redirect_uri=http://localhost:" + port + "/auth&response_type=token&scope=";
-       // String scopes = String.join(" ", PuzzlePayClient.NEEDED_SCOPES);
+        // String link = "https://plasmorp.com/oauth2?client_id=dZkmuEPjmuX5pkvM3Sz2FLXKCS34GaF4KFnfPsE5QUWjEjbS&redirect_uri=http://localhost:" + port + "/auth&response_type=token&scope=";
+        // String scopes = String.join(" ", PuzzlePayClient.NEEDED_SCOPES);
 
-       // link += PlasmoApi.encodeURLQuery(scopes);
+        // link += PlasmoApi.encodeURLQuery(scopes);
 
         String link = "https://puzzlemc.site/pay/oauth2";
 

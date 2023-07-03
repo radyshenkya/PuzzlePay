@@ -4,21 +4,24 @@ import io.wispforest.owo.ui.base.*;
 import io.wispforest.owo.ui.component.*;
 import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.*;
+import net.minecraft.text.*;
 import net.minecraft.util.*;
-import su.puzzle.pay.ui.router.Context;
-import su.puzzle.pay.ui.router.Route;
-
 import org.jetbrains.annotations.*;
+import su.puzzle.pay.ui.router.*;
 
 public class MessageScreen extends BaseOwoScreen<FlowLayout> implements Route {
     protected Props props;
 
-    public MessageScreen() {}
+    public MessageScreen() {
+    }
 
     public MessageScreen(Props props) {
         this.props = props;
+    }
+
+    public static void openMessage(Text title, Text message) {
+        new MessageScreen().route(null, new Props(title, message));
     }
 
     @Override
@@ -29,44 +32,41 @@ public class MessageScreen extends BaseOwoScreen<FlowLayout> implements Route {
     @Override
     protected void build(FlowLayout rootComponent) {
         rootComponent.child(
-                Containers.verticalFlow(Sizing.fill(60), Sizing.content())
-                        .child(
-                                Components.label(props.title())
-                                        .shadow(true)
-                        )
-                        .child(
-                                Components.label(props.message())
-                                        .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                        .color(Color.ofRgb(Colors.GRAY))
-                                        .margins(Insets.top(5))
-                        )
-                        .child(
-                                Components.button(Text.translatable("ui.puzzlepay.button.ok"), button -> {
-                                    MinecraftClient.getInstance().setScreen(null);
-                                }).margins(Insets.top(5)).horizontalSizing(Sizing.fill(100))
-                        )
-                        .padding(Insets.of(15))
-                        .horizontalAlignment(HorizontalAlignment.CENTER)
-                        .verticalAlignment(VerticalAlignment.CENTER)
+                        Containers.verticalFlow(Sizing.fill(60), Sizing.content())
+                                .child(
+                                        Components.label(props.title())
+                                                .shadow(true)
+                                )
+                                .child(
+                                        Components.label(props.message())
+                                                .horizontalTextAlignment(HorizontalAlignment.CENTER)
+                                                .color(Color.ofRgb(Colors.GRAY))
+                                                .margins(Insets.top(5))
+                                )
+                                .child(
+                                        Components.button(Text.translatable("ui.puzzlepay.button.ok"), button -> {
+                                            MinecraftClient.getInstance().setScreen(null);
+                                        }).margins(Insets.top(5)).horizontalSizing(Sizing.fill(100))
+                                )
+                                .padding(Insets.of(15))
+                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                .verticalAlignment(VerticalAlignment.CENTER)
                 )
                 .horizontalAlignment(HorizontalAlignment.CENTER)
                 .verticalAlignment(VerticalAlignment.CENTER)
                 .surface(Surface.VANILLA_TRANSLUCENT);
     }
 
-    public static void openMessage(Text title, Text message) {
-        new MessageScreen().route(null, new Props(title, message));
+    @Override
+    public void route(Context context, Object props) {
+        MinecraftClient.getInstance().setScreen(new MessageScreen((Props) props));
     }
 
-	@Override
-	public void route(Context context, Object props) {
-        MinecraftClient.getInstance().setScreen(new MessageScreen((Props) props));
-	}
+    @Override
+    public void route(Context context) {
+        throw new UnsupportedOperationException("Unimplemented method 'route'");
+    }
 
-	@Override
-	public void route(Context context) {
-		throw new UnsupportedOperationException("Unimplemented method 'route'");
-	}
-
-    public record Props(Text title, Text message) {}
+    public record Props(Text title, Text message) {
+    }
 }

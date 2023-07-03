@@ -10,7 +10,8 @@ import org.jetbrains.annotations.*;
 import su.puzzle.pay.*;
 
 public class Oauth2WaitScreen extends BaseOwoScreen<FlowLayout> {
-    public Oauth2WaitScreen() {}
+    public Oauth2WaitScreen() {
+    }
 
     @Override
     public boolean shouldCloseOnEsc() {
@@ -25,20 +26,20 @@ public class Oauth2WaitScreen extends BaseOwoScreen<FlowLayout> {
     @Override
     protected void build(FlowLayout rootComponent) {
         rootComponent.child(
-                Containers.verticalFlow(Sizing.fill(60), Sizing.content())
-                        .child(
-                                Components.label(Text.translatable("ui.puzzlepay.text.oauth2.wait_title"))
-                                        .shadow(true)
-                        )
-                        .child(
-                                Components.button(Text.translatable("ui.puzzlepay.button.cancel"), button -> {
-                                    PuzzlePayClient.server.stop();
-                                    MinecraftClient.getInstance().setScreen(null);
-                                }).margins(Insets.top(5)).horizontalSizing(Sizing.fixed(100))
-                        )
-                        .padding(Insets.of(15))
-                        .horizontalAlignment(HorizontalAlignment.CENTER)
-                        .verticalAlignment(VerticalAlignment.CENTER)
+                        Containers.verticalFlow(Sizing.fill(60), Sizing.content())
+                                .child(
+                                        Components.label(Text.translatable("ui.puzzlepay.text.oauth2.wait_title"))
+                                                .shadow(true)
+                                )
+                                .child(
+                                        Components.button(Text.translatable("ui.puzzlepay.button.cancel"), button -> {
+                                            PuzzlePayClient.server.stop();
+                                            MinecraftClient.getInstance().setScreen(null);
+                                        }).margins(Insets.top(5)).horizontalSizing(Sizing.fixed(100))
+                                )
+                                .padding(Insets.of(15))
+                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                .verticalAlignment(VerticalAlignment.CENTER)
                 )
                 .horizontalAlignment(HorizontalAlignment.CENTER)
                 .verticalAlignment(VerticalAlignment.CENTER)

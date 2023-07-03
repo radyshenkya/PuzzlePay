@@ -1,52 +1,37 @@
 package su.puzzle.pay;
 
-import org.lwjgl.glfw.GLFW;
-
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HangingSignBlock;
-import net.minecraft.block.SignBlock;
-import net.minecraft.block.WallHangingSignBlock;
-import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import su.puzzle.pay.api.types.BankCard;
-import su.puzzle.pay.api.types.TokenInfoResponse;
-import su.puzzle.pay.api.AsyncTasksService;
-import su.puzzle.pay.api.PlasmoApi;
-import su.puzzle.pay.api.exceptions.ApiCallException;
-import su.puzzle.pay.api.exceptions.ApiResponseException;
-import su.puzzle.pay.ui.oauth2.AuthHttpServer;
-import su.puzzle.pay.ui.oauth2.Oauth2Screen;
+import net.fabricmc.api.*;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
+import net.fabricmc.fabric.api.client.keybinding.v1.*;
+import net.fabricmc.fabric.api.event.player.*;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.*;
+import net.minecraft.client.*;
+import net.minecraft.client.option.*;
+import net.minecraft.client.util.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.util.*;
+import org.lwjgl.glfw.*;
+import su.puzzle.pay.api.*;
+import su.puzzle.pay.api.exceptions.*;
+import su.puzzle.pay.api.types.*;
 import su.puzzle.pay.ui.bank.*;
-import su.puzzle.pay.ui.router.ScreenRouter;
+import su.puzzle.pay.ui.oauth2.*;
+import su.puzzle.pay.ui.router.*;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class PuzzlePayClient implements ClientModInitializer {
     public static final su.puzzle.pay.PuzzlePayConfig config = su.puzzle.pay.PuzzlePayConfig.createAndLoad();
-    private static KeyBinding transferGuiKeyBinding;
     public static final AsyncTasksService asyncTasksService = new AsyncTasksService(Executors.newCachedThreadPool());
-    public static AuthHttpServer server;
-    public static ScreenRouter screenRouter;
-
-    public static class ScreenRouteNames {
-        public static final String MAIN = "ui.puzzlepay.bank.tab.main";
-        public static final String TRANSACTION = "ui.puzzlepay.bank.tab.transactions";
-    }
-
     public static final HashSet<String> NEEDED_SCOPES = new HashSet<>(Arrays.asList(
             "bank:manage"
     ));
+    public static AuthHttpServer server;
+    public static ScreenRouter screenRouter;
+    private static KeyBinding transferGuiKeyBinding;
 
     @Override
     public void onInitializeClient() {
@@ -78,7 +63,7 @@ public class PuzzlePayClient implements ClientModInitializer {
 
     private void registerCallbacks() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            try { 
+            try {
                 asyncTasksService.updateTasks();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -134,24 +119,33 @@ public class PuzzlePayClient implements ClientModInitializer {
 
         if (!cardNumber.startsWith("EB-")) return false;
 
-        asyncTasksService.addTask(() -> { return PlasmoApi.searchCards(cardNumber).unwrap().get(0); },
-            (result) -> {
-                BankCard to = (BankCard) result;
-                int parsedAmount = Integer.parseInt(amount);
+        asyncTasksService.addTask(() -> {
+                    return PlasmoApi.searchCards(cardNumber).unwrap().get(0);
+                },
+                (result) -> {
+                    BankCard to = (BankCard) result;
+                    int parsedAmount = Integer.parseInt(amount);
 
-                if (to == null) { return; }
+                    if (to == null) {
+                        return;
+                    }
 
-                screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
-            }, (exception) -> {
-                try {
-                    throw exception;
-                } catch (ApiResponseException | ApiCallException e) {
-                    MinecraftClient.getInstance().setScreen(new Oauth2Screen());
-                } catch (Exception e) {
+                    screenRouter.route(ScreenRouteNames.TRANSACTION, new TransactionScreen.Props(to, parsedAmount, comment));
+                }, (exception) -> {
+                    try {
+                        throw exception;
+                    } catch (ApiResponseException | ApiCallException e) {
+                        MinecraftClient.getInstance().setScreen(new Oauth2Screen());
+                    } catch (Exception e) {
 
-                }
-            });
+                    }
+                });
 
         return true;
+    }
+
+    public static class ScreenRouteNames {
+        public static final String MAIN = "ui.puzzlepay.bank.tab.main";
+        public static final String TRANSACTION = "ui.puzzlepay.bank.tab.transactions";
     }
 }

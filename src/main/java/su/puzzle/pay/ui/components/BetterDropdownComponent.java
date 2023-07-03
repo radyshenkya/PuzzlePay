@@ -73,6 +73,15 @@ public class BetterDropdownComponent extends FlowLayout {
         return dropdown;
     }
 
+    protected static void drawIconFromTexture(OwoUIDrawContext context, ParentComponent dropdown, int y, int u, int v) {
+        context.drawTexture(ICONS_TEXTURE,
+                dropdown.x() + dropdown.width() - dropdown.padding().get().right() - 10, y,
+                u, v,
+                9, 9,
+                32, 32
+        );
+    }
+
     @Override
     public ParentComponent surface(Surface surface) {
         return this.entries.surface(surface);
@@ -189,15 +198,6 @@ public class BetterDropdownComponent extends FlowLayout {
                 }
             }
         }
-    }
-
-    protected static void drawIconFromTexture(OwoUIDrawContext context, ParentComponent dropdown, int y, int u, int v) {
-        context.drawTexture(ICONS_TEXTURE,
-                dropdown.x() + dropdown.width() - dropdown.padding().get().right() - 10, y,
-                u, v,
-                9, 9,
-                32, 32
-        );
     }
 
     protected interface ResizeableComponent {

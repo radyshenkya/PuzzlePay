@@ -1,14 +1,11 @@
 package su.puzzle.pay.ui.components;
 
-import java.util.function.Consumer;
-
-import io.wispforest.owo.ui.component.Components;
-import io.wispforest.owo.ui.component.LabelComponent;
-import io.wispforest.owo.ui.container.Containers;
-import io.wispforest.owo.ui.container.FlowLayout;
-import io.wispforest.owo.ui.container.ScrollContainer;
+import io.wispforest.owo.ui.component.*;
+import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
+
+import java.util.function.*;
 
 public class CustomDropdownComponent extends FlowLayout {
     private static final String EXPANDED_DROPDOWN_CHAR = "⏶ ";

@@ -236,11 +236,11 @@ public class BankScreen extends BaseOwoScreen<FlowLayout> implements Route {
                                                                 .child(
                                                                         thisCard == null
                                                                                 ? Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100))
-                                                                                    .child(
-                                                                                            Components.label(Text.translatable("ui.puzzlepay.bank.tab.choose_card"))
-                                                                                    )
-                                                                                    .verticalAlignment(VerticalAlignment.CENTER)
-                                                                                    .horizontalAlignment(HorizontalAlignment.CENTER)
+                                                                                .child(
+                                                                                        Components.label(Text.translatable("ui.puzzlepay.bank.tab.choose_card"))
+                                                                                )
+                                                                                .verticalAlignment(VerticalAlignment.CENTER)
+                                                                                .horizontalAlignment(HorizontalAlignment.CENTER)
                                                                                 : historyScroll
                                                                 )
                                                                 .horizontalAlignment(HorizontalAlignment.CENTER)

@@ -1,6 +1,6 @@
 package su.puzzle.pay.ui.router;
 
-import java.util.LinkedHashMap;
+import java.util.*;
 
 public class ScreenRouter {
     public LinkedHashMap<String, Route> routes = new LinkedHashMap<>();

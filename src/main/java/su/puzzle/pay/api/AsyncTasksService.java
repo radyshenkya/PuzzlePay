@@ -1,9 +1,7 @@
 package su.puzzle.pay.api;
 
-import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class AsyncTasksService {
     protected ExecutorService threadpool;
@@ -15,7 +13,7 @@ public class AsyncTasksService {
     }
 
     public void addTask(Task task, TaskCallback callback, TaskExceptionCallback exceptionCallback) {
-        Future<Object> future = threadpool.submit(() -> { return task.run();} );
+        Future<Object> future = threadpool.submit(task::run);
         newTasks.add(new AsyncTask(future, callback, exceptionCallback));
     }
 
@@ -39,24 +37,26 @@ public class AsyncTasksService {
     }
 
     public void removeDone() {
-        tasks.removeIf((task) -> task.isDone());
+        tasks.removeIf(AsyncTask::isDone);
+    }
+
+    public interface Task {
+        Object run() throws Exception;
+    }
+
+    ;
+
+    public interface TaskCallback {
+        void onEnd(Object result);
+    }
+
+    public interface TaskExceptionCallback {
+        void onEnd(Exception e);
     }
 
     protected record AsyncTask(Future<Object> task, TaskCallback callback, TaskExceptionCallback exceptionCallback) {
         public boolean isDone() {
             return task.isDone();
         }
-    };
-
-    public interface Task {
-        public Object run() throws Exception;
-    }
-
-    public interface TaskCallback {
-        public void onEnd(Object result);
-    }
-
-    public interface TaskExceptionCallback {
-        public void onEnd(Exception e);
     }
 }

@@ -1,13 +1,9 @@
 package su.puzzle.pay.ui.components;
 
-import net.minecraft.text.Text;
-
-import io.wispforest.owo.ui.component.Components;
-import io.wispforest.owo.ui.component.TextBoxComponent;
-import io.wispforest.owo.ui.component.TextBoxComponent.OnChanged;
-import io.wispforest.owo.ui.core.Insets;
-import io.wispforest.owo.ui.core.Positioning;
-import io.wispforest.owo.ui.core.Sizing;
+import io.wispforest.owo.ui.component.*;
+import io.wispforest.owo.ui.component.TextBoxComponent.*;
+import io.wispforest.owo.ui.core.*;
+import net.minecraft.text.*;
 
 public class InputDropdownComponent extends CustomDropdownComponent {
     protected TextBoxComponent textBox;

@@ -1,8 +1,7 @@
 package su.puzzle.pay;
 
-import net.fabricmc.api.ModInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.fabricmc.api.*;
+import org.slf4j.*;
 
 public class PuzzlePayMod implements ModInitializer {
     public static final String MOD_ID = "puzzlepay";

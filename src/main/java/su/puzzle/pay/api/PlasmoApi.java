@@ -1,31 +1,24 @@
 package su.puzzle.pay.api;
 
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpRequest.Builder;
-import java.net.http.HttpResponse.BodyHandlers;
-import java.nio.charset.*;
-import java.util.List;
-
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import su.puzzle.pay.PuzzlePayMod;
+import com.google.common.reflect.*;
+import com.google.gson.*;
+import su.puzzle.pay.*;
 import su.puzzle.pay.api.exceptions.*;
 import su.puzzle.pay.api.types.*;
 
+import java.lang.reflect.*;
+import java.net.*;
+import java.net.http.*;
+import java.net.http.HttpRequest.*;
+import java.net.http.HttpResponse.*;
+import java.nio.charset.*;
+import java.util.*;
+
 public class PlasmoApi {
     public static final String API_URL = "https://plasmorp.com/api";
-    public static String token = null;
     private static final Gson gson = new Gson();
-
     private static final HttpClient httpClient = HttpClient.newHttpClient();
+    public static String token = null;
 
     public static void setToken(String token) {
         PlasmoApi.token = token;

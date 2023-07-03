@@ -1,7 +1,6 @@
 package su.puzzle.pay.api.types;
 
-import su.puzzle.pay.PuzzlePayMod;
-import su.puzzle.pay.api.exceptions.ApiResponseException;
+import su.puzzle.pay.api.exceptions.*;
 
 public class Response<T> {
     public T data;

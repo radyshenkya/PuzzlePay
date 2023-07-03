@@ -3,26 +3,23 @@ package su.puzzle.pay.ui.bank;
 import io.wispforest.owo.ui.component.*;
 import io.wispforest.owo.ui.container.*;
 import io.wispforest.owo.ui.core.*;
-import io.wispforest.owo.ui.core.Insets;
 import net.fabricmc.loader.api.*;
 import net.minecraft.client.*;
 import net.minecraft.text.*;
-import su.puzzle.pay.ui.router.Context;
 import su.puzzle.pay.*;
 import su.puzzle.pay.ui.oauth2.*;
+import su.puzzle.pay.ui.router.*;
 
 import java.util.*;
-import java.util.List;
 
 public class NavigationBar {
-    public Component navbar;
-    
     private static final int GRADIENT_START = 0xFF000000;
     private static final int GRADIENT_END = 0x00000000;
+    public Component navbar;
 
     public NavigationBar(Context context) {
         List<Component> buttons = new ArrayList<>();
-        
+
         context.screenRouter().routes.forEach((name, route) -> {
             buttons.add(Components.button(Text.translatable(name), button -> {
                 context.screenRouter().route(name);
