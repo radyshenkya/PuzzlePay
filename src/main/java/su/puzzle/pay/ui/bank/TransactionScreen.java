@@ -101,7 +101,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
                     });
                 }
 
-                searchResult.removeIf((card) -> card.id() == fromCard.id());
+                if (fromCard != null) searchResult.removeIf((card) -> card.id() == fromCard.id());
 
                 if (searchResult.size() == 0) {
                     toCardInput.button(Text.literal("По данному запросу ничего не найдено"), onClick -> {
@@ -136,6 +136,7 @@ public class TransactionScreen extends BaseOwoScreen<FlowLayout> implements Rout
 
         ButtonComponent transfer = Components.button(Text.translatable("ui.puzzlepay.bank.tab.transactions"), (button) -> {
             if (props.to() == null) return;
+            if (fromCard == null) return;
             if (fromCard.id() == props.to().id()) return;
 
             String commentString = comment.getText();
